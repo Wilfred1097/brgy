@@ -8,7 +8,7 @@
     <meta name="description" content="Admiro admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities."/>
     <meta name="keywords" content="admin template, Admiro admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app"/>
     <meta name="author" content="pixelstrap"/>
-    <title>Bulatok - User Management</title>
+    <title>Bulatok - File Management</title>
     <!-- Favicon icon-->
     <link rel="icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
     <link rel="shortcut icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
@@ -57,13 +57,13 @@
             <div class="page-title">
               <div class="row">
                 <div class="col-sm-12 col-12">
-                  <h2>User Management</h2>
+                  <h2>File Management</h2>
                   <p class="mb-0 text-title-gray">Welcome back! Let’s start from where you left.</p>
                 </div>
               </div>
               <div class="row mt-3">
                   <div class="col-auto">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addUserModal">Add User</button>
+                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addUserModal">Add File</button>
                   </div>
               </div>
             </div>
@@ -74,7 +74,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- Added modal-lg for larger width -->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add User</h4>
+                        <h4 class="modal-title">Add File</h4>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -264,7 +264,7 @@
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
                   <div class="card-header card-no-border pb-0">
-                    <h3>Transaction History</h3>
+                    <h3>File Table</h3>
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">

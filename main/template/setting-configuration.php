@@ -107,6 +107,10 @@
                                       <label for="edit_encoder" class="form-label">Encoder:</label>
                                       <input type="text" class="form-control" id="edit_encoder" name="barangay_encoder" required>
                                   </div>
+                                  <div class="col-md-6">
+                                      <label for="edit_scki" class="form-label">SCKI No.:</label>
+                                      <input type="text" class="form-control" id="edit_scki" name="current_scki_no" required>
+                                  </div>
                               </div>
 
                               <button type="submit" class="btn btn-primary mt-3 float-end">
@@ -139,6 +143,7 @@
                             <th>Province No.</th>
                             <th>Barangay Treasurer</th>
                             <th>Encoder</th>
+                            <th>Current SCKI No.</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -218,6 +223,7 @@
               $('#edit_province_no').val(row.find('td:eq(3)').text().trim());
               $('#edit_barangay_treasurer').val(row.find('td:eq(4)').text().trim());
               $('#edit_encoder').val(row.find('td:eq(5)').text().trim());
+              $('#edit_scki').val(row.find('td:eq(6)').text().trim());
 
               var editModal = new bootstrap.Modal(document.getElementById('editModal'));
               editModal.show();
@@ -282,6 +288,7 @@
                                   <td>${transaction.province_no || 'N/A'}</td>
                                   <td>${transaction.barangay_treasurer || 'N/A'}</td>
                                   <td>${transaction.barangay_encoder || 'N/A'}</td>
+                                  <td>${transaction.current_scki_no || 'N/A'}</td>
                                   <td>
                                       <button class="btn btn-sm btn-primary edit-btn">
                                           <i class="fas fa-edit"></i>

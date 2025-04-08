@@ -308,10 +308,21 @@
                     <div class="header-top">
                       <h3>SOIC Export History</h3>
                     </div>
+                    <div class="card-body pt-0 manage-invoice">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="table display table-bordernone mt-0" id="file-history" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Filename</th>
+                            <th>Date Generated</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  <div class="card-body latest-activity">
-                    <ul>
-                    </ul>
                   </div>
                 </div>
               </div>
@@ -407,6 +418,7 @@
     $(document).ready(function () {
         // Initial fetch on page load
         fetchTransactions();
+        fetchGeneratedReport();
         setCurrentDate();
         fetchPrograms();
         fetchProgramsForEdit();
@@ -695,6 +707,44 @@
                     });
                 } else {
                     tbody.append(`<tr><td colspan="14" class="text-center">No transactions found.</td></tr>`);
+                }
+            }
+        });
+    }
+
+    // 🟢 Fetch generated reports from the server
+    function fetchGeneratedReport() {
+        $.ajax({
+            url: 'mysql/fetch_generated_report.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let tbody = $("#file-history tbody");
+                tbody.empty();
+
+                if (data.length > 0) {
+                    data.forEach(reports => {
+                        let row = `
+                            <tr>
+                                <td>
+                                    ${reports.filename ? `<a href="mysql/${reports.filename}" target="_blank">${reports.filename.split('/').pop()}</a>` : 'N/A'}
+                                </td>
+                                <td>
+                                    ${reports.created_at ? new Date(reports.created_at).toLocaleString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    }) : 'N/A'}
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                } else {
+                    tbody.append(`<tr><td colspan="14" class="text-center">No Generated File found.</td></tr>`);
                 }
             }
         });

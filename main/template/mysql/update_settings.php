@@ -15,6 +15,7 @@ try {
         $barangay_treasurer = $_POST['barangay_treasurer'] ?? '';
         $province_no = $_POST['province_no'] ?? '';
         $barangay_encoder = $_POST['barangay_encoder'] ?? '';
+        $current_scki_no = $_POST['current_scki_no'] ?? '';
 
         // SQL Update Query (Using Named Parameters)
         $sql = "UPDATE settings
@@ -23,7 +24,8 @@ try {
                     barangay_province = :barangay_province,
                     barangay_treasurer = :barangay_treasurer,
                     province_no = :province_no,
-                    barangay_encoder = :barangay_encoder
+                    barangay_encoder = :barangay_encoder,
+                    current_scki_no = :current_scki_no
                 WHERE id = :id";
 
         $stmt = $pdo->prepare($sql);
@@ -35,6 +37,7 @@ try {
         $stmt->bindParam(':barangay_treasurer', $barangay_treasurer);
         $stmt->bindParam(':province_no', $province_no);
         $stmt->bindParam(':barangay_encoder', $barangay_encoder);
+        $stmt->bindParam(':current_scki_no', $current_scki_no);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Execute Query

@@ -107,112 +107,119 @@ class PDF extends FPDF
 $pdf = new PDF();
 $pdf->SetFont('Arial', 'B', 12);
 
-if (isset($_GET['ids']) && !empty($_GET['ids'])) {
-    $ids = explode(',', $_GET['ids']); // Convert comma-separated IDs into an array
-    $ids = array_map('intval', $ids); // Ensure IDs are integers
+try {
 
-    // Prepare SQL query with placeholders
-    $placeholders = implode(',', array_fill(0, count($ids), '?'));
-    $sql = "SELECT * FROM financial_transaction WHERE id IN ($placeholders)";
+    if (isset($_GET['ids']) && !empty($_GET['ids'])) {
+        $ids = explode(',', $_GET['ids']); // Convert comma-separated IDs into an array
+        $ids = array_map('intval', $ids); // Ensure IDs are integers
 
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($ids);
-        $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Prepare SQL query with placeholders
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "SELECT * FROM financial_transaction WHERE id IN ($placeholders)";
 
-        if (!empty($transactions)) {
-                // Determine the range of months with the year
-                $months = array_map(function ($transaction) {
-                    return date('F Y', strtotime($transaction['date'])); // Extracts both Month and Year
-                }, $transactions);
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($ids);
+            $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                $months = array_unique($months);
-                sort($months, SORT_NATURAL); // Sorts alphabetically but keeps the year in order
+            if (!empty($transactions)) {
+                    // Determine the range of months with the year
+                    $months = array_map(function ($transaction) {
+                        return date('F Y', strtotime($transaction['date'])); // Extracts both Month and Year
+                    }, $transactions);
 
-                // Get the first and last month-year
-                $month_range = count($months) > 1 ? $months[0] . ' - ' . end($months) : $months[0];
+                    $months = array_unique($months);
+                    sort($months, SORT_NATURAL); // Sorts alphabetically but keeps the year in order
 
-                // Add a page after calculating month_range
-                $pdf->AddPage('L');
+                    // Get the first and last month-year
+                    $month_range = count($months) > 1 ? $months[0] . ' - ' . end($months) : $months[0];
 
-                // Set table headers
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->SetFillColor(200, 200, 200);
-                $pdf->Cell(22, 6, 'Date', 1, 0, 'C', true);
-                $pdf->Cell(20, 6, 'Cheque No', 1, 0, 'C', true);
-                $pdf->Cell(25, 6, 'Voucher No', 1, 0, 'C', true);
-                $pdf->Cell(25, 6, 'Fund', 1, 0, 'C', true);
-                $pdf->Cell(35, 6, 'Payee', 1, 0, 'C', true);
-                $pdf->Cell(30, 6, 'Particulars', 1, 0, 'C', true);
-                $pdf->Cell(25, 6, 'Gross Amt', 1, 0, 'C', true);
-                $pdf->Cell(15, 6, 'VAT %', 1, 0, 'C', true);
-                $pdf->Cell(15, 6, 'EVAT %', 1, 0, 'C', true);
-                $pdf->Cell(20, 6, 'VAT Amt', 1, 0, 'C', true);
-                $pdf->Cell(20, 6, 'EVAT Amt', 1, 0, 'C', true);
-                $pdf->Cell(25, 6, 'Net Amt', 1, 1, 'C', true);
+                    // Add a page after calculating month_range
+                    $pdf->AddPage('L');
 
-                // Set table data
-                $pdf->SetFont('Arial', '', 8);
-                $total_gross_amount = 0;
-                $total_vat = 0;
-                $total_evat = 0;
-                $total_net_amount = 0;
+                    // Set table headers
+                    $pdf->SetFont('Arial', 'B', 8);
+                    $pdf->SetFillColor(200, 200, 200);
+                    $pdf->Cell(22, 6, 'Date', 1, 0, 'C', true);
+                    $pdf->Cell(20, 6, 'Cheque No', 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, 'Voucher No', 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, 'Fund', 1, 0, 'C', true);
+                    $pdf->Cell(35, 6, 'Payee', 1, 0, 'C', true);
+                    $pdf->Cell(30, 6, 'Particulars', 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, 'Gross Amt', 1, 0, 'C', true);
+                    $pdf->Cell(15, 6, 'VAT %', 1, 0, 'C', true);
+                    $pdf->Cell(15, 6, 'EVAT %', 1, 0, 'C', true);
+                    $pdf->Cell(20, 6, 'VAT Amt', 1, 0, 'C', true);
+                    $pdf->Cell(20, 6, 'EVAT Amt', 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, 'Net Amt', 1, 1, 'C', true);
 
-                foreach ($transactions as $row) {
-                    $gross_amount = $row['gross_amount'];
-                    $vat_amount = $row['vat_amount'];
-                    $evat_amount = $row['evat_amount'];
-                    $net_amount = $gross_amount - $vat_amount - $evat_amount;
+                    // Set table data
+                    $pdf->SetFont('Arial', '', 8);
+                    $total_gross_amount = 0;
+                    $total_vat = 0;
+                    $total_evat = 0;
+                    $total_net_amount = 0;
 
-                    $pdf->Cell(22, 5, date("M j, Y", strtotime($row['date'])), 1, 0, 'C');
-                    $pdf->Cell(20, 5, $row['cheque_no'], 1, 0, 'C');
-                    $pdf->Cell(25, 5, $row['dv_no'], 1, 0, 'C');
-                    $pdf->Cell(25, 5, $row['fund'], 1, 0, 'C');
-                    $pdf->Cell(35, 5, $row['payee'], 1, 0, 'C');
-                    $pdf->Cell(30, 5, $row['particulars'], 1, 0, 'C');
-                    $pdf->Cell(25, 5, 'P ' . number_format($gross_amount, 2), 1, 0, 'C');
-                    $pdf->Cell(15, 5, number_format($row['vat'], 2), 1, 0, 'C');
-                    $pdf->Cell(15, 5, number_format($row['evat'], 2), 1, 0, 'C');
-                    $pdf->Cell(20, 5, 'P ' . number_format($vat_amount, 2), 1, 0, 'C');
-                    $pdf->Cell(20, 5, 'P ' . number_format($evat_amount, 2), 1, 0, 'C');
-                    $pdf->Cell(25, 5, 'P ' . number_format($net_amount, 2), 1, 1, 'C');
+                    foreach ($transactions as $row) {
+                        $gross_amount = $row['gross_amount'];
+                        $vat_amount = $row['vat_amount'];
+                        $evat_amount = $row['evat_amount'];
+                        $net_amount = $gross_amount - $vat_amount - $evat_amount;
 
-                    // Add to totals
-                    $total_gross_amount += $gross_amount;
-                    $total_vat += $vat_amount;
-                    $total_evat += $evat_amount;
-                    $total_net_amount += $net_amount;
-                }
+                        $pdf->Cell(22, 5, date("M j, Y", strtotime($row['date'])), 1, 0, 'C');
+                        $pdf->Cell(20, 5, $row['cheque_no'], 1, 0, 'C');
+                        $pdf->Cell(25, 5, $row['dv_no'], 1, 0, 'C');
+                        $pdf->Cell(25, 5, $row['fund'], 1, 0, 'C');
+                        $pdf->Cell(35, 5, $row['payee'], 1, 0, 'C');
+                        $pdf->Cell(30, 5, $row['particulars'], 1, 0, 'C');
+                        $pdf->Cell(25, 5, 'P ' . number_format($gross_amount, 2), 1, 0, 'C');
+                        $pdf->Cell(15, 5, number_format($row['vat'], 2), 1, 0, 'C');
+                        $pdf->Cell(15, 5, number_format($row['evat'], 2), 1, 0, 'C');
+                        $pdf->Cell(20, 5, 'P ' . number_format($vat_amount, 2), 1, 0, 'C');
+                        $pdf->Cell(20, 5, 'P ' . number_format($evat_amount, 2), 1, 0, 'C');
+                        $pdf->Cell(25, 5, 'P ' . number_format($net_amount, 2), 1, 1, 'C');
 
-                // Add a blank row for spacing
-                $pdf->Cell(272, 5, '', 0, 1, 'R');
+                        // Add to totals
+                        $total_gross_amount += $gross_amount;
+                        $total_vat += $vat_amount;
+                        $total_evat += $evat_amount;
+                        $total_net_amount += $net_amount;
+                    }
 
-                // Display total net amount row
-                $pdf->SetFont('Arial', 'B', 9);
+                    // Add a blank row for spacing
+                    $pdf->Cell(272, 5, '', 0, 1, 'R');
 
-                // Total Gross Amount
-                $pdf->Cell(252, 5, 'Total Gross Amount:', 0, 0, 'R'); // No border
-                $pdf->Cell(25, 5, 'P ' . number_format($total_gross_amount, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                    // Display total net amount row
+                    $pdf->SetFont('Arial', 'B', 9);
 
-                // VAT
-                $pdf->Cell(252, 5, 'Vat:', 0, 0, 'R'); // No border
-                $pdf->Cell(25, 5, 'P ' . number_format($total_vat, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                    // Total Gross Amount
+                    $pdf->Cell(252, 5, 'Total Gross Amount:', 0, 0, 'R'); // No border
+                    $pdf->Cell(25, 5, 'P ' . number_format($total_gross_amount, 2), 0, 1, 'R'); // Only amount in a bordered cell
 
-                // EVAT
-                $pdf->Cell(252, 5, 'eVat:', 0, 0, 'R'); // No border
-                $pdf->Cell(25, 5, 'P ' . number_format($total_evat, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                    // VAT
+                    $pdf->Cell(252, 5, 'Vat:', 0, 0, 'R'); // No border
+                    $pdf->Cell(25, 5, 'P ' . number_format($total_vat, 2), 0, 1, 'R'); // Only amount in a bordered cell
 
-                // Total Net Amount
-                $pdf->Cell(252, 5, 'Total Net Amount:', 0, 0, 'R'); // No border
-                $pdf->Cell(25, 5, 'P ' . number_format($total_net_amount, 2), 0, 1, 'R'); // Only amount in a bordered cell
-            } else {
-            $pdf->Cell(0, 10, 'No transactions found.', 1, 1, 'C');
+                    // EVAT
+                    $pdf->Cell(252, 5, 'eVat:', 0, 0, 'R'); // No border
+                    $pdf->Cell(25, 5, 'P ' . number_format($total_evat, 2), 0, 1, 'R'); // Only amount in a bordered cell
+
+                    // Total Net Amount
+                    $pdf->Cell(252, 5, 'Total Net Amount:', 0, 0, 'R'); // No border
+                    $pdf->Cell(25, 5, 'P ' . number_format($total_net_amount, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                } else {
+                $pdf->Cell(0, 10, 'No transactions found.', 1, 1, 'C');
+            }
+        } catch (Exception $e) {
+            $pdf->Cell(0, 10, 'Database error: ' . $e->getMessage(), 1, 1, 'C');
         }
-    } catch (Exception $e) {
-        $pdf->Cell(0, 10, 'Database error: ' . $e->getMessage(), 1, 1, 'C');
+    } else {
+        $pdf->Cell(0, 10, 'No transactions selected.', 1, 1, 'C');
     }
-} else {
-    $pdf->Cell(0, 10, 'No transactions selected.', 1, 1, 'C');
+} catch (Exception $e) {
+    // Handle general errors
+    $pdf->AddPage(); // Add a page before writing to PDF in case of errors
+    $pdf->Cell(0, 10, 'Error fetching settings: ' . $e->getMessage(), 1, 1, 'C');
 }
 
 $pdf->Output();

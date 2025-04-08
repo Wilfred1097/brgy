@@ -276,6 +276,7 @@
                                 <label class="form-check-label" for="solid"> </label>
                               </div>
                             </th>
+                            <th>ID</th>
                             <th>Date</th>
                             <th>Cheque No.</th>
                             <th>Voucher No.</th>
@@ -630,14 +631,14 @@
 
             $("#transaction-history tbody tr:visible input[type='checkbox']:checked").each(function () {
                 let row = $(this).closest("tr"); // Get the parent row
-                let transactionId = row.find(".edit-btn").data("id"); // Get the ID from the edit button
+                let transactionId = row.find(".edit-btn").data("id"); // Get the correct ID from the edit button
 
                 if (transactionId) {
-                    selectedIds.push(transactionId);
+                    selectedIds.push(transactionId); // Collect the correct transaction ID
                 }
             });
 
-            console.log("Selected Transaction IDs:", selectedIds);
+            // console.log("Selected Transaction IDs:", selectedIds);
 
             if (selectedIds.length > 0) {
                 // Convert array to a comma-separated string
@@ -670,6 +671,7 @@
                         let row = `
                             <tr>
                                 <td><input type="checkbox" class="form-check-input"></td>
+                                <td>${transaction.transaction_id || 'N/A'}</td>  <!-- Use the new transaction_id -->
                                 <td>${new Date(transaction.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>${transaction.cheque_no || 'N/A'}</td>
                                 <td>${transaction.dv_no || 'N/A'}</td>
@@ -684,8 +686,8 @@
                                 <td>₱${transaction.evat_amount ? parseFloat(transaction.evat_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>₱${transaction.net_amount ? parseFloat(transaction.net_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary edit-btn" data-id="${transaction.id}" data-date="${transaction.date}" data-cheque="${transaction.cheque_no}" data-voucher="${transaction.dv_no}" data-fund="${transaction.fund}" data-payee="${transaction.payee}" data-particulars="${transaction.particulars}" data-vatable="${transaction.vatable}" data-gross="${transaction.gross_amount}" data-vat="${transaction.vat}" data-evat="${transaction.evat}"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-danger delete-btn" onclick="confirmDelete(${transaction.id});"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-sm btn-primary edit-btn" data-id="${transaction.transaction_id}" data-date="${transaction.date}" data-cheque="${transaction.cheque_no}" data-voucher="${transaction.dv_no}" data-fund="${transaction.fund}" data-payee="${transaction.payee}" data-particulars="${transaction.particulars}" data-vatable="${transaction.vatable}" data-gross="${transaction.gross_amount}" data-vat="${transaction.vat}" data-evat="${transaction.evat}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger delete-btn" onclick="confirmDelete(${transaction.transaction_id});"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         `;
@@ -732,36 +734,6 @@
               $("#solid").prop("checked", false);
           } else if ($("#transaction-history tbody input[type='checkbox']:checked").length === $("#transaction-history tbody input[type='checkbox']").length) {
               $("#solid").prop("checked", true);
-          }
-      });
-
-      // Log all selected row IDs when "Export Transaction" button is clicked
-      $("#export-transaction").on("click", function () {
-          let selectedIds = [];
-
-          $("#transaction-history tbody input[type='checkbox']:checked").each(function () {
-              let row = $(this).closest("tr"); // Get the parent row
-              let transactionId = row.find(".edit-btn").data("id"); // Get the ID from the edit button
-
-              if (transactionId) {
-                  selectedIds.push(transactionId);
-              }
-          });
-
-          console.log("Selected Transaction IDs:", selectedIds);
-
-          if (selectedIds.length > 0) {
-              // Convert array to a comma-separated string
-              let params = new URLSearchParams({ ids: selectedIds.join(',') });
-
-              // Open export_transaction.php in a new tab with the selected IDs
-              window.open("mysql/export_transaction.php?" + params.toString(), "_blank");
-          } else {
-              Swal.fire({
-                  title: "No Transactions Selected",
-                  text: "Please select at least one transaction to export.",
-                  icon: "warning"
-              });
           }
       });
   });

@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $fund = $_POST['fund'] ?? '';
         $payee = $_POST['payee'] ?? '';
         $particulars = $_POST['particulars'] ?? '';
-        $grossAmount = isset($_POST['gross']) ? floatval($_POST['gross']) : 0; // FIX: Correct key
+        $grossAmount = isset($_POST['gross']) ? floatval(str_replace(',', '', $_POST['gross'])) : 0;
         $vatable = isset($_POST['vatable']) ? intval($_POST['vatable']) : 0;
 
         // Default VAT & EVAT values

@@ -156,8 +156,8 @@
                                       </select>
                                   </div>
                               </div>
-                              <button type="submit" class="btn btn-success mt-2 d-flex float-end">
-                                  Submit Transaction
+                              <button type="submit" class="btn btn-primary mt-2 d-flex float-end">
+                                  Update Transaction
                               </button>
                           </form>
                       </div>
@@ -432,6 +432,9 @@
                 success: function (data) {
                     let fundSelect = $('#edit_fund');
                     fundSelect.empty().append('<option value="" disabled selected>Select a Program</option>');
+
+                    // Store the data in session storage
+                    // sessionStorage.setItem('programs', JSON.stringify(data));
 
                     // Populate the dropdown with fetched program names and amounts
                     data.forEach(sub_program => {

@@ -19,13 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $middleName = $_POST['middleName'] ?? '';
         $lastName = $_POST['lastName'] ?? '';
         $address = $_POST['address'] ?? '';
-        $dob = $_POST['dateOfBirth'] ?? '';
+        $dob = $_POST['dateOfBirth'] ?? ''; // Ensure you're sending 'dateOfBirth' from the form
         $age = $_POST['age'] ?? '';
-        $role = $_POST['role'] ?? '';
+        $position = $_POST['position'] ?? ''; // Updated to 'position'
         $gmail = $_POST['gmail'] ?? '';
-        $status = $_POST['status'] ?? '';
-        $username = $_POST['username'] ?? '';
-
+        $phoneNumber = $_POST['phone_number'] ?? ''; // Updated to 'phone_number'
+        
         // Handle image upload (if a new image is uploaded)
         if (!empty($_FILES['imageUpload']['name'])) {
             $image = $_FILES['imageUpload'];
@@ -39,18 +38,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             // Update query including image path
-            $query = "UPDATE users
-                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, dob = ?,
-                          age = ?, role = ?, gmail = ?, status = ?, username = ?, image_path = ?
+            $query = "UPDATE officials
+                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?,
+                          age = ?, position = ?, gmail = ?, phone_number = ?, image = ?
                       WHERE id = ?";
-            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $role, $gmail, $status, $username, $imagePath, $userId];
+            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $position, $gmail, $phoneNumber, $imagePath, $userId];
         } else {
             // Update query without changing the image
-            $query = "UPDATE users
-                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, dob = ?,
-                          age = ?, role = ?, gmail = ?, status = ?,username = ?
+            $query = "UPDATE officials
+                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?,
+                          age = ?, position = ?, gmail = ?, phone_number = ?
                       WHERE id = ?";
-            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $role, $gmail, $status, $username, $userId];
+            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $position, $gmail, $phoneNumber, $userId];
         }
 
         // Prepare and execute SQL update query

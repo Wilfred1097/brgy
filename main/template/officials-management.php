@@ -154,12 +154,12 @@
         </div>
         <!-- Add Officials Modal -->
 
-        <!-- Edit User Modal -->
+        <!-- Edit Officials Modal -->
         <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit User</h4>
+                        <h4 class="modal-title">Edit Officials</h4>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -167,14 +167,17 @@
                             <input type="hidden" id="editUserId" name="userId"> <!-- Hidden User ID -->
 
                             <div class="row">
+                                <!-- First Name -->
                                 <div class="col-md-4">
                                     <label class="form-label">First Name</label>
                                     <input type="text" class="form-control" id="editFirstName" name="firstName" required>
                                 </div>
+                                <!-- Middle Name -->
                                 <div class="col-md-4">
                                     <label class="form-label">Middle Name</label>
                                     <input type="text" class="form-control" id="editMiddleName" name="middleName">
                                 </div>
+                                <!-- Last Name -->
                                 <div class="col-md-4">
                                     <label class="form-label">Last Name</label>
                                     <input type="text" class="form-control" id="editLastName" name="lastName" required>
@@ -182,14 +185,17 @@
                             </div>
 
                             <div class="row mt-2">
+                                <!-- Address -->
                                 <div class="col-md-6">
                                     <label class="form-label">Address</label>
                                     <input type="text" class="form-control" id="editAddress" name="address" required>
                                 </div>
+                                <!-- Date of Birth -->
                                 <div class="col-md-3">
                                     <label class="form-label">Date of Birth</label>
                                     <input type="date" class="form-control" id="editDob" name="dateOfBirth" required>
                                 </div>
+                                <!-- Age -->
                                 <div class="col-md-3">
                                     <label class="form-label">Age</label>
                                     <input type="number" class="form-control" id="editAge" name="age" readonly>
@@ -197,13 +203,17 @@
                             </div>
 
                             <div class="row mt-2">
+                                <!-- Position -->
                                 <div class="col-md-6">
-                                    <label class="form-label">Role</label>
-                                    <select class="form-select" id="editRole" name="role">
-                                        <option value="treasurer">Treasurer</option>
-                                        <option value="encoder">Encoder</option>
+                                    <label class="form-label">Position</label>
+                                    <select class="form-select" id="editPosition" name="position"> <!-- Changed name to "position" -->
+                                        <option value="punong_barangay">Punong Barangay</option>
+                                        <option value="sb_member">Sangguniang Barangay Member</option>
+                                        <option value="sk">SK Chairperson</option>
+                                        <option value="secretary">Barangay Secretary</option>
                                     </select>
                                 </div>
+                                <!-- Gmail -->
                                 <div class="col-md-6">
                                     <label class="form-label">Gmail</label>
                                     <input type="text" class="form-control" id="editGmail" name="gmail">
@@ -211,30 +221,25 @@
                             </div>
 
                             <div class="row mt-2">
-                                <div class="col-md-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="editUsername" name="username" required>
+                                <!-- Contact Number -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Contact Number</label>
+                                    <input type="number" class="form-control" id="editPhoneNumber" name="phone_number" placeholder="Enter phone number" required>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Status</label>
-                                    <select class="form-select" id="editStatus" name="status">
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                </div>
+                                <!-- Image Upload -->
                                 <div class="col-md-6">
                                     <label class="form-label">Upload New Image</label>
                                     <input type="file" class="form-control" id="editImageUpload" name="imageUpload" accept=".png, .jpg, .jpeg">
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary mt-2 float-end" type="submit">Update User</button>
+                            <button class="btn btn-primary mt-2 float-end" type="submit">Update Officials</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Edit User Modal -->
+        <!-- Edit Officials Modal -->
 
           <!-- Container-fluid starts-->
           <div class="container-fluid default-dashboard">
@@ -342,17 +347,9 @@
             document.getElementById("editAddress").value = button.dataset.address;
             document.getElementById("editDob").value = button.dataset.dob;
             document.getElementById("editAge").value = button.dataset.age;
-            document.getElementById("editRole").value = button.dataset.role;
+            document.getElementById("editPosition").value = button.dataset.position; // Updated here
             document.getElementById("editGmail").value = button.dataset.gmail;
-            document.getElementById("editUsername").value = button.dataset.username;
-
-            // Fix Status Selection
-            let statusSelect = document.getElementById("editStatus");
-            let statusValue = button.dataset.status ? button.dataset.status.trim() : "0"; // Default to "0"
-
-            console.log("Status Value from Dataset:", statusValue); // Debugging
-
-            statusSelect.value = statusValue === "1" ? "1" : "0";
+            document.getElementById("editPhoneNumber").value = button.dataset.phone;
 
             // Show modal
             let editUserModal = new bootstrap.Modal(document.getElementById("editUserModal"));
@@ -595,8 +592,9 @@
             // Call function to fetch users when the page loads
             fetchUsers();
 
-            // Re-add the event handlers for edit button
+           // Re-add the event handlers for edit button
             $(document).on("click", ".edit-official", function() {
+                // Retrieve data attributes from the clicked edit button
                 $("#editUserId").val($(this).data("id"));
                 $("#editFirstName").val($(this).data("firstname"));
                 $("#editMiddleName").val($(this).data("middlename"));
@@ -604,9 +602,9 @@
                 $("#editAddress").val($(this).data("address"));
                 $("#editDob").val($(this).data("dob"));
                 $("#editAge").val($(this).data("age"));
-                $("#editRole").val($(this).data("role"));
+                $("#editRole").val($(this).data("position"));  // Updated to `position` based on your initial code
                 $("#editGmail").val($(this).data("gmail"));
-                $("#editUsername").val($(this).data("username"));
+                $("#editPhoneNumber").val($(this).data("phone"));  // Added to populate phone number
 
                 // Show modal
                 let editUserModal = new bootstrap.Modal(document.getElementById("editUserModal"));

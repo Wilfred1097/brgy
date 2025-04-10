@@ -106,7 +106,7 @@ class PDF extends FPDF
 }
 
 // Create PDF object using the extended class
-$pdf = new PDF();
+$pdf = new PDF('');
 $pdf->SetFont('Arial', 'B', 12);
 
 try {

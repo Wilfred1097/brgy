@@ -63,200 +63,40 @@
               </div>
               <div class="row mt-3">
                   <div class="col-auto">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addUserModal">Add File</button>
+                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addFileModal">Add File</button>
                   </div>
               </div>
             </div>
           </div>
 
-          <!-- Add User Modal -->
-         <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- Added modal-lg for larger width -->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add File</h4>
-                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                    </div>
-                    <div class="modal-body">
-                        <form id="addUserForm" enctype="multipart/form-data">
-                            <div class="row">
-                                <!-- First Name -->
-                                <div class="col-md-4">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
-                                </div>
-                                <!-- Middle Name -->
-                                <div class="col-md-4">
-                                    <label class="form-label">Middle Name</label>
-                                    <input type="text" class="form-control" id="middleName" name="middleName" placeholder="Enter middle name">
-                                </div>
-                                <!-- Last Name -->
-                                <div class="col-md-4">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <!-- Address -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" required>
-                                </div>
-                                <!-- Date of Birth -->
-                                <div class="col-md-3">
-                                    <label class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="dob" name="dateOfBirth" required>
-                                </div>
-                                <!-- Age -->
-                                <div class="col-md-3">
-                                    <label class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="age" name="age" readonly>
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <!-- Role -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Role</label>
-                                    <select class="form-select" id="role" name="role">
-                                        <option value="treasurer">Treasurer</option>
-                                        <option value="encoder">Encoder</option>
-                                    </select>
-                                </div>
-                                <!-- Gmail -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Gmail</label>
-                                    <input type="text" class="form-control" id="gmail" name="gmail" placeholder="Enter gmail">
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <!-- Username -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
-                                </div>
-                                <!-- Image Upload -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Upload Image</label>
-                                    <input type="file" class="form-control" id="imageUpload" name="imageUpload" accept=".png, .jpg, .jpeg">
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <!-- Password -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
-                                        <span class="input-group-text" onclick="togglePassword('password', 'togglePasswordIcon')">
-                                            <i data-feather="eye" id="togglePasswordIcon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Confirm Password -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Confirm Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm password">
-                                        <span class="input-group-text" onclick="togglePassword('confirmPassword', 'toggleConfirmPasswordIcon')">
-                                            <i data-feather="eye" id="toggleConfirmPasswordIcon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-primary mt-2 float-end" type="submit">Add User</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Add User Modal -->
-
-        <!-- Edit User Modal -->
-        <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <!-- Modal -->
+        <div class="modal fade" id="addFileModal" tabindex="-1" role="dialog" aria-labelledby="addFileModal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit User</h4>
-                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                        <h4 class="modal-title">Add File</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editUserForm" enctype="multipart/form-data">
-                            <input type="hidden" id="editUserId" name="userId"> <!-- Hidden User ID -->
-
+                        <form id="addFileForm" enctype="multipart/form-data">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="editFirstName" name="firstName" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Middle Name</label>
-                                    <input type="text" class="form-control" id="editMiddleName" name="middleName">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="editLastName" name="lastName" required>
+                                <div class="col-md-12">
+                                    <label class="form-label">Name of File</label>
+                                    <input type="text" class="form-control" id="fileName" name="fileName" placeholder="Enter name of file" required>
                                 </div>
                             </div>
-
                             <div class="row mt-2">
-                                <div class="col-md-6">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="editAddress" name="address" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="editDob" name="dateOfBirth" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="editAge" name="age" readonly>
+                                <div class="col-md-12">
+                                    <label class="form-label">Upload File</label>
+                                    <input type="file" class="form-control" id="fileUpload" name="fileUpload" accept=".pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg" required>
                                 </div>
                             </div>
-
-                            <div class="row mt-2">
-                                <div class="col-md-6">
-                                    <label class="form-label">Role</label>
-                                    <select class="form-select" id="editRole" name="role">
-                                        <option value="treasurer">Treasurer</option>
-                                        <option value="encoder">Encoder</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Gmail</label>
-                                    <input type="text" class="form-control" id="editGmail" name="gmail">
-                                </div>
-                            </div>
-
-                            <div class="row mt-2">
-                                <div class="col-md-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="editUsername" name="username" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Status</label>
-                                    <select class="form-select" id="editStatus" name="status">
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Upload New Image</label>
-                                    <input type="file" class="form-control" id="editImageUpload" name="imageUpload" accept=".png, .jpg, .jpeg">
-                                </div>
-                            </div>
-
-                            <button class="btn btn-primary mt-2 float-end" type="submit">Update User</button>
+                            <button class="btn btn-primary mt-2 float-end" type="submit">Add File</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Edit User Modal -->
 
           <!-- Container-fluid starts-->
           <div class="container-fluid default-dashboard">
@@ -268,18 +108,11 @@
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
-                      <table class="table display table-bordernone mt-0" id="users-table" style="width:100%">
+                      <table class="table display table-bordernone mt-0" id="files-table" style="width:100%">
                         <thead>
                           <tr>
-                            <th>Complete Name</th>
-                            <th>Address</th>
-                            <th>Date of Birth</th>
-                            <th>Age</th>
-                            <th>Position</th>
-                            <th>Gmail</th>
-                            <th>Username</th>
-                            <th>Profile</th>
-                            <th>Status</th>
+                            <th>Filename</th>
+                            <th>Date Added</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -318,9 +151,6 @@
     <script src="../assets/js/height-equal.js"></script>
     <!-- config-->
     <script src="../assets/js/config.js"></script>
-    <!-- apex-->
-    <script src="../assets/js/chart/apex-chart/apex-chart.js"></script>
-    <script src="../assets/js/chart/apex-chart/stock-prices.js"></script>
     <!-- scrollbar-->
     <script src="../assets/js/scrollbar/simplebar.js"></script>
     <script src="../assets/js/scrollbar/custom.js"></script>
@@ -346,353 +176,141 @@
     <!-- custom script -->
     <script src="../assets/js/script.js"></script>
 
+    <!-- jQuery -->
+    <script src="../assets/js/vendors/jquery/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="../assets/js/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener("click", function (event) {
-        // Check if the clicked element is an edit-user button
-        if (event.target.classList.contains("edit-user")) {
-            console.log("Edit button clicked!");
+        document.getElementById('addFileForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
 
-            let button = event.target; // Get the clicked button
-
-            // Log dataset values for debugging
-            console.log("Dataset Values:", button.dataset);
-
-            // Assign values to modal inputs
-            document.getElementById("editUserId").value = button.dataset.id;
-            document.getElementById("editFirstName").value = button.dataset.firstname;
-            document.getElementById("editMiddleName").value = button.dataset.middlename;
-            document.getElementById("editLastName").value = button.dataset.lastname;
-            document.getElementById("editAddress").value = button.dataset.address;
-            document.getElementById("editDob").value = button.dataset.dob;
-            document.getElementById("editAge").value = button.dataset.age;
-            document.getElementById("editRole").value = button.dataset.role;
-            document.getElementById("editGmail").value = button.dataset.gmail;
-            document.getElementById("editUsername").value = button.dataset.username;
-
-            // Fix Status Selection
-            let statusSelect = document.getElementById("editStatus");
-            let statusValue = button.dataset.status ? button.dataset.status.trim() : "0"; // Default to "0"
-
-            console.log("Status Value from Dataset:", statusValue); // Debugging
-
-            statusSelect.value = statusValue === "1" ? "1" : "0";
-
-            // Show modal
-            let editUserModal = new bootstrap.Modal(document.getElementById("editUserModal"));
-            editUserModal.show();
-        }
-    });
-
-    // Handle Edit User Form Submission
-    document.getElementById("editUserForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Create FormData object to handle file upload as well
-        let form = document.getElementById("editUserForm");
-        let formData = new FormData(form);
-
-        // Log each form field
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
-        // Send the data via AJAX to update_user.php
-        fetch('mysql/update_user.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Server Response:", data); // Log server response
-
-            if(data.status === "success"){
-                $('#editUserModal').modal('hide');
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: data.message,
-                    timer: 2000,
-                    showConfirmButton: true
-                }).then(() => {
-                    location.reload();  // Reload the page after the alert disappears
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message
-                });
-            }
-        })
-        .catch(error => {
-            console.error("Fetch error:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while updating the user.'
-            });
-        });
-    });
-
-    // Auto-calculate age in edit form when date changes
-    document.getElementById("editDob").addEventListener("change", function() {
-        let dob = new Date(this.value);
-        let today = new Date();
-        let age = today.getFullYear() - dob.getFullYear();
-        let monthDiff = today.getMonth() - dob.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
-        document.getElementById("editAge").value = age;
-    });
-    </script>
-
-    <script>
-      // Auto-calculate age when Date of Birth is entered
-      document.getElementById("dob").addEventListener("change", function() {
-          let dob = new Date(this.value);
-          let today = new Date();
-          let age = today.getFullYear() - dob.getFullYear();
-          let monthDiff = today.getMonth() - dob.getMonth();
-          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-              age--;
-          }
-          document.getElementById("age").value = age;
-      });
-
-      // Toggle password visibility using Feather icons
-      function togglePassword(fieldId, iconId) {
-          let field = document.getElementById(fieldId);
-          let icon = document.getElementById(iconId);
-          if (field.type === "password") {
-              field.type = "text";
-              icon.setAttribute("data-feather", "eye-off");
-          } else {
-              field.type = "password";
-              icon.setAttribute("data-feather", "eye");
-          }
-          feather.replace();
-      }
-
-      // Form submission with AJAX (using Fetch API)
-      document.getElementById("addUserForm").addEventListener("submit", function(event) {
-          event.preventDefault(); // Prevent the default form submission
-
-          // Check if password and confirm password match (client-side)
-          let password = document.getElementById("password").value;
-          let confirmPassword = document.getElementById("confirmPassword").value;
-          if (password !== confirmPassword) {
-              Swal.fire({
-                  icon: 'error',
-                  title: 'Password Mismatch',
-                  text: 'Password and Confirm Password do not match!'
-              });
-              return;
-          }
-
-          // Create FormData object to handle file upload as well
-          let form = document.getElementById("addUserForm");
-          let formData = new FormData(form);
-
-          // Send the data via AJAX to insert_user.php
-          fetch('mysql/insert_user.php', {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-               if(data.status === "success"){
-                   console.log("User added successfully", data);
-
-                   $('#addUserModal').modal('hide');
-                   $("#addUserForm")[0].reset();
-
-                   Swal.fire({
-                      icon: 'success',
-                      title: 'Success',
-                      text: data.message,
-                      timer: 2000,  // Auto-close after 2 seconds
-                      showConfirmButton: true  // Hide "OK" button
+            var formData = new FormData(this); // Get the form data
+            fetch('mysql/insert_file.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle success or error based on the response
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'Okay'
                     }).then(() => {
-                        location.reload();  // Reload the page after the alert disappears
+                        window.location.reload(); // Reload the page or update the file table
                     });
-
-               } else {
-                   console.error("Error:", data);
-                   Swal.fire({
-                       icon: 'error',
-                       title: 'Error',
-                       text: data.message
-                   });
-               }
-          })
-          .catch(error => {
-              console.error("Fetch error:", error);
-              Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'An error occurred while submitting the form.'
-              });
-          });
-      });
-
-      $(document).ready(function () {
-            function fetchUsers() {
-                $.ajax({
-                    url: "mysql/fetch_users.php",
-                    type: "GET",
-                    dataType: "json",
-                    success: function (response) {
-                        // console.log("Response received:", response); // Debug log
-
-                        if (response.status === "success") {
-                            let usersTableBody = $("#users-table tbody");
-                            usersTableBody.empty(); // Clear existing rows
-
-                            // Check if data exists and has items
-                            if (response.data && response.data.length > 0) {
-                                response.data.forEach(user => {
-                                    let row = `
-                                        <tr>
-                                            <td>${user.first_name} ${user.middle_name} ${user.last_name}</td>
-                                            <td>${user.address}</td>
-                                            <td>${new Date(user.dob).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                                            <td>${user.age}</td>
-                                            <td>${user.role === "encoder" ? "Encoder" : user.role === "treasurer" ? "Treasurer" : "Unknown"}</td>
-                                            <td>${user.gmail}</td>
-                                            <td>${user.username}</td>
-                                            <td>${user.status == 1 ? "Active" : "Inactive"}</td>
-                                            <td>
-                                                <img src="mysql/${user.image_path}" alt="Profile" class="rounded-circle event-image"
-                                                    style="cursor: pointer; width: 30px; height: auto;" data-image="mysql/${user.image_path}">
-                                            </td>
-                                            <td>
-                                                <i data-feather="edit" class="text-primary edit-user"
-                                                    data-id="${user.id}"
-                                                    data-firstname="${user.first_name}"
-                                                    data-middlename="${user.middle_name}"
-                                                    data-lastname="${user.last_name}"
-                                                    data-address="${user.address}"
-                                                    data-dob="${user.dob}"
-                                                    data-age="${user.age}"
-                                                    data-role="${user.role}"
-                                                    data-gmail="${user.gmail}"
-                                                    data-username="${user.username}"
-                                                    data-status="${user.status}"
-                                                    data-imagepath="mysql/${user.image_path}"
-                                                    style="cursor: pointer;">
-                                                </i>
-                                                <i data-feather="trash" style="cursor:pointer;" class="text-danger delete-user" data-id="${user.id}"></i>
-                                            </td>
-                                        </tr>
-                                    `;
-                                    usersTableBody.append(row); // Use jQuery append instead of innerHTML
-                                });
-
-                                // Reinitialize Feather icons after adding content
-                                feather.replace();
-                            } else {
-                                usersTableBody.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
-                            }
-                        } else {
-                            console.error("Error fetching users:", response.message);
-                            $("#users-table tbody").html('<tr><td colspan="9" class="text-center">Error loading user data</td></tr>');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX Error:", error);
-                        console.error("Status:", status);
-                        console.error("Response Text:", xhr.responseText);
-                        $("#users-table tbody").html('<tr><td colspan="9" class="text-center">Error connecting to server</td></tr>');
-                    }
-                });
-            }
-
-            // Call function to fetch users when the page loads
-            fetchUsers();
-
-            // Re-add the event handlers for edit button
-            $(document).on("click", ".edit-user", function() {
-                $("#editUserId").val($(this).data("id"));
-                $("#editFirstName").val($(this).data("firstname"));
-                $("#editMiddleName").val($(this).data("middlename"));
-                $("#editLastName").val($(this).data("lastname"));
-                $("#editAddress").val($(this).data("address"));
-                $("#editDob").val($(this).data("dob"));
-                $("#editAge").val($(this).data("age"));
-                $("#editRole").val($(this).data("role"));
-                $("#editGmail").val($(this).data("gmail"));
-                $("#editUsername").val($(this).data("username"));
-
-                // Show modal
-                let editUserModal = new bootstrap.Modal(document.getElementById("editUserModal"));
-                editUserModal.show();
-            });
-
-            // Auto-calculate age in edit form
-            $("#editDob").on("change", function() {
-                let dob = new Date(this.value);
-                let today = new Date();
-                let age = today.getFullYear() - dob.getFullYear();
-                let monthDiff = today.getMonth() - dob.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-                    age--;
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
                 }
-                $("#editAge").val(age);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while uploading the file.',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again'
+                });
             });
         });
+    </script>
+    <script>
+        // Function to fetch files and populate the table
+        function fetchFiles() {
+            fetch('mysql/get_files.php') // Adjust the path if needed
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const filesTableBody = document.querySelector('#files-table tbody');
+                        filesTableBody.innerHTML = ''; // Clear the table body
+                        
+                        // Populate the table rows
+                        data.data.forEach(file => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${file.file_name}</td>
+                                <td>${new Date(file.uploaded_at).toLocaleString('en-US', { 
+                                    year: 'numeric', 
+                                    month: '2-digit', 
+                                    day: '2-digit', 
+                                    hour: '2-digit', 
+                                    minute: '2-digit', 
+                                    hour12: true 
+                                })}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteFile(${file.id})">Delete</button>
+                                </td>
+                            `;
+                            filesTableBody.appendChild(row);
+                        });
+                    } else {
+                        console.error('Failed to fetch files:', data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching files:', error);
+                });
+        }
 
-      document.addEventListener("click", function (event) {
-          if (event.target.classList.contains("event-image")) {
-              let imageUrl = event.target.getAttribute("data-image");
-              window.open(imageUrl, '_blank');
-          }
-      });
-
-      document.addEventListener("click", function (event) {
-          if (event.target.classList.contains("delete-user")) {
-              let userId = event.target.getAttribute("data-id");
-
-              Swal.fire({
-                  title: "Are you sure?",
-                  text: "You won't be able to revert this!",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#d33",
-                  cancelButtonColor: "#3085d6",
-                  confirmButtonText: "Yes, delete it!",
-              }).then((result) => {
-                  if (result.isConfirmed) {
-                      fetch("mysql/delete_user.php", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                          body: `userId=${userId}`,
-                      })
-                      .then(response => response.json())
-                      .then(data => {
-                          if (data.status === "success") {
-                              Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
+        // Call fetchFiles to load the files when the page is loaded
+        document.addEventListener('DOMContentLoaded', fetchFiles);
+    </script>
+    <script>
+        function deleteFile(id) {
+            // Show SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This file will be permanently deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('mysql/delete_file.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({id: id})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Deleted!',
                                 text: data.message,
-                                timer: 2000,  // Auto-close after 2 seconds
-                                showConfirmButton: true  // Hide "OK" button
-                              }).then(() => {
-                                  location.reload();  // Reload the page after the alert disappears
-                              });
-                          } else {
-                              Swal.fire("Error!", data.message, "error");
-                          }
-                      })
-                      .catch(() => Swal.fire("Error!", "Something went wrong.", "error"));
-                  }
-              });
-          }
-      });
-
-      // Initialize Feather Icons
-      feather.replace();
+                                icon: 'success'
+                            }).then(() => {
+                                fetchFiles(); // Refresh the file list
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.message,
+                                icon: 'error'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting file:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while trying to delete the file.',
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
+        }
     </script>
   </body>
 </html>

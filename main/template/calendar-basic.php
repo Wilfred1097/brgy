@@ -84,7 +84,7 @@
                                   <div class="mb-3 mt-2">
                                       <input type="text" id="searchEvent" class="form-control" placeholder="Search events...">
                                   </div>
-                                    <table class="table display table-bordernone">
+                                    <table id="eventsTable" class="table display table-bordernone">
                                         <thead>
                                             <tr>
                                                 <th>Title</th>
@@ -92,7 +92,6 @@
                                                 <th>Start DateTime</th>
                                                 <th>End DateTime</th>
                                                 <th>Image</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="eventsTableBody">
@@ -259,6 +258,56 @@
     <script src="../assets/js/script.js"></script>
 
     <script>
+        function fetchEvents(successCallback = null, failureCallback = null) {
+            fetch("mysql/fetch_events.php")
+                .then(response => response.json())
+                .then(data => {
+                    const eventsTable = document.getElementById("eventsTable");
+                    const eventsTableBody = eventsTable.querySelector("tbody"); // Get tbody from the table
+
+                    if (data.status === "success") {
+                        eventsTableBody.innerHTML = ""; // Clear previous Rows
+                        let calendarEvents = data.events.map(event => ({
+                            title: event.title,
+                            description: event.description,
+                            start: event.start,
+                            end: event.end,
+                        }));
+
+                        data.events.forEach(event => {
+                            let startDateTime = formatDateTime(event.start);
+                            let endDateTime = formatDateTime(event.end);
+
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                <td>${event.title}</td>
+                                <td>${event.description}</td>
+                                <td>${startDateTime}</td>
+                                <td>${endDateTime}</td>
+                                <td>
+                                    <img src="mysql/uploads/${event.image}" alt="${event.title}" class="event-image" style="cursor: pointer; width: 30px; height: auto;" data-image="mysql/uploads/${event.image}">
+                                </td>
+                                <td>
+                                    <i class="fas fa-edit text-primary me-2 edit-event" style="cursor: pointer;" data-id="${event.id}"></i>
+                                    <i class="fas fa-trash-alt delete-event" style="cursor:pointer; color:red; margin-left:10px;" data-id="${event.id}"></i>
+                                </td>
+                            `;
+
+                            eventsTableBody.appendChild(row); // Append the new row to the tbody
+                        });
+
+                        if (successCallback) successCallback(calendarEvents);
+                    } else {
+                        console.error("Error fetching events:", data.message);
+                        if (failureCallback) failureCallback();
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    if (failureCallback) failureCallback();
+                });
+        }
+
       document.addEventListener("click", function (event) {
           if (event.target.classList.contains("edit-event")) {
               let eventId = event.target.getAttribute("data-id");

@@ -87,7 +87,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+             <!--  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
                 <div class="card growthcard">
                   <div class="card-header card-no-border pb-0">
                     <div class="header-top">
@@ -103,7 +103,7 @@
                     <div id="growth-chart"></div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
                   <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
@@ -135,7 +135,35 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xxl-6 col-xl-6 proorder-xxl-2 col-sm-12">
+              <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                <div class="card">
+                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
+                      <h3>Upcoming Events</h3>
+                      <input type="text" id="searchEvent" class="form-control w-25" placeholder="Search events...">
+                  </div>
+                  <div class="card-body transaction-history pt-0">
+                    <div class="table-responsive theme-scrollbar">
+                      <div class="mb-3 mt-2">
+                      </div>
+                      <table class="table display table-bordernone">
+                          <thead>
+                              <tr>
+                                  <th>Title</th>
+                                  <th>Description</th>
+                                  <th>Start DateTime</th>
+                                  <th>End DateTime</th>
+                                  <th>Image</th>
+                              </tr>
+                          </thead>
+                          <tbody id="eventsTableBody">
+                              <!-- Events will be dynamically inserted here -->
+                          </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        <!--       <div class="col-xxl-6 col-xl-6 proorder-xxl-2 col-sm-12">
                 <div class="card earning-card">
                   <div class="card-header pb-0 card-no-border">
                     <div class="header-top">
@@ -157,8 +185,8 @@
                     <div id="earnings-chart"></div>
                   </div>
                 </div>
-              </div>
-              <div class="col-xxl-6 col-xl-6 proorder-xxl-7 col-lg-12 box-col-12">
+              </div> -->
+              <!-- <div class="col-xxl-6 col-xl-6 proorder-xxl-7 col-lg-12 box-col-12">
                 <div class="card job-card">
                   <div class="card-header pb-0 card-no-border">
                     <div class="header-top">
@@ -265,7 +293,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- <div class="col-xxl-3 col-xl-4 proorder-xxl-9 col-md-6 box-col-5">
                 <div class="card">
@@ -358,7 +386,7 @@
               </div> -->
 
 
-              <div class="col-xxl-4 col-xl-5 proorder-xxl-4 col-md-6">
+              <!-- <div class="col-xxl-4 col-xl-5 proorder-xxl-4 col-md-6">
                 <div class="card">
                   <div class="card-header card-no-border pb-0">
                     <div class="header-top">
@@ -472,8 +500,8 @@
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="col-xxl-4 col-xl-4 proorder-xxl-10 col-md-6">
+              </div> -->
+           <!--    <div class="col-xxl-4 col-xl-4 proorder-xxl-10 col-md-6">
                 <div class="card height-equal">
                   <div class="card-header card-no-border pb-0">
                     <div class="header-top">
@@ -538,8 +566,8 @@
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="col-xxl-4 col-xl-4 proorder-xxl-11 col-md-6">
+              </div> -->
+       <!--        <div class="col-xxl-4 col-xl-4 proorder-xxl-11 col-md-6">
                 <div class="card height-equal">
                   <div class="card-header card-no-border pb-0">
                     <div class="header-top">
@@ -567,8 +595,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-xxl-12 col-xl-12 col-md-12">
+              </div> -->
+           <!--    <div class="col-xxl-12 col-xl-12 col-md-12">
                 <div class="card height-equal">
                   <div class="card-header card-no-border pb-0">
                     <h3>Manage Invoice</h3>
@@ -748,7 +776,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -802,55 +830,114 @@
     <script src="../assets/js/script.js"></script>
 
     <script>
-        $(document).ready(function () {
-            // Fetch data using AJAX
-            $.ajax({
-                url: 'mysql/fetch_transaction.php', // Fetch from PHP script
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    let tbody = $("#transactions tbody");
-                    tbody.empty(); // Clear existing table rows
+      $(document).ready(function () {
+        // Fetch events data using AJAX
+        $.ajax({
+            url: 'mysql/fetch_events.php', // Endpoint for fetching events
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let tbody = $("#eventsTableBody"); // Select the table body by ID
+                tbody.empty(); // Clear existing table rows
 
-                    if (data.length > 0) {
-                        data.forEach(transaction => {
-                            let row = `
-                                <tr>
-                                    <td>${new Date(transaction.date).toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: '2-digit'
-                                    })}</td>
-                                    <td>${transaction.cheque_no || 'N/A'}</td>
-                                    <td>${transaction.dv_no || 'N/A'}</td>
-                                    <td>${transaction.fund || 'N/A'}</td>
-                                    <td>${transaction.payee || 'N/A'}</td>
-                                    <td>${transaction.particulars || 'N/A'}</td>
-                                    <td>₱${transaction.gross_amount ? parseFloat(transaction.gross_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) : 'N/A'}</td>
-                                    <td>${transaction.vat ? parseFloat(transaction.vat).toFixed(2) + '%' : 'N/A'}</td>
-                                    <td>${transaction.evat ? parseFloat(transaction.evat).toFixed(2) + '%' : 'N/A'}</td>
-                                    <td>₱${transaction.net_amount ? parseFloat(transaction.net_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) : 'N/A'}</td>
-                                </tr>
-                            `;
-                            tbody.append(row);
-                        });
-                    } else {
-                        tbody.append(`<tr><td colspan="10" class="text-center">No transactions found.</td></tr>`);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching transactions:", error);
+                if (data.status === "success" && data.events && data.events.length > 0) {
+                    data.events.forEach(event => {
+                        let startDateTime = formatDateTime(event.start); // Format start datetime
+                        let endDateTime = formatDateTime(event.end); // Format end datetime
+
+                        let row = `
+                            <tr>
+                                <td>${event.title}</td>
+                                <td>${event.description}</td>
+                                <td>${startDateTime}</td>
+                                <td>${endDateTime}</td>
+                                <td>
+                                <a href="mysql/uploads/${event.image}" target="_blank">
+                                    <img src="mysql/uploads/${event.image}" alt="${event.title}" class="event-image" style="cursor: pointer; width: 30px; height: auto;">
+                                </a>
+                            </td>
+                            </tr>`;
+                        tbody.append(row); // Append the newly created row to the tbody
+                    });
+                } else {
+                    tbody.append(`<tr><td colspan="5" class="text-center">No events found</td></tr>`);
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching events:", error);
+                $("#eventsTableBody").append(`<tr><td colspan="5" class="text-center">Error loading events.</td></tr>`);
+            }
+        });
 
-            // Search functionality
-            $("#searchTransactions").on("keyup", function () {
-                let value = $(this).val().toLowerCase();
-                $("#transactions tbody tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                });
+        // Search functionality
+        $("#searchEvent").on("keyup", function () {
+            let value = $(this).val().toLowerCase();
+            $("#eventsTableBody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
+    });
+
+    function formatDateTime(dateTime) {
+            return new Date(dateTime).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            });
+        }
+
+    $(document).ready(function () {
+        // Fetch data using AJAX
+        $.ajax({
+            url: 'mysql/fetch_transaction.php', // Fetch from PHP script
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let tbody = $("#transactions tbody");
+                tbody.empty(); // Clear existing table rows
+
+                if (data.length > 0) {
+                    data.forEach(transaction => {
+                        let row = `
+                            <tr>
+                                <td>${new Date(transaction.date).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: '2-digit'
+                                })}</td>
+                                <td>${transaction.cheque_no || 'N/A'}</td>
+                                <td>${transaction.dv_no || 'N/A'}</td>
+                                <td>${transaction.fund || 'N/A'}</td>
+                                <td>${transaction.payee || 'N/A'}</td>
+                                <td>${transaction.particulars || 'N/A'}</td>
+                                <td>₱${transaction.gross_amount ? parseFloat(transaction.gross_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) : 'N/A'}</td>
+                                <td>${transaction.vat ? parseFloat(transaction.vat).toFixed(2) + '%' : 'N/A'}</td>
+                                <td>${transaction.evat ? parseFloat(transaction.evat).toFixed(2) + '%' : 'N/A'}</td>
+                                <td>₱${transaction.net_amount ? parseFloat(transaction.net_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) : 'N/A'}</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                } else {
+                    tbody.append(`<tr><td colspan="10" class="text-center">No transactions found.</td></tr>`);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching transactions:", error);
+            }
+        });
+
+        // Search functionality
+        $("#searchTransactions").on("keyup", function () {
+            let value = $(this).val().toLowerCase();
+            $("#transactions tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
     </script>
 
     <script>

@@ -223,6 +223,20 @@
                 </div>
             </div>
         </div>
+        <!-- VIEW IMAGE MODAL -->
+        <div class="modal fade" id="viewImageModal" tabindex="-1" aria-labelledby="viewImageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewImageModalLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="" alt="Event Image" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Page header start-->
         <?php include 'structure/footer.php'; ?>
         <!-- Page header end-->
@@ -258,55 +272,16 @@
     <script src="../assets/js/script.js"></script>
 
     <script>
-        function fetchEvents(successCallback = null, failureCallback = null) {
-            fetch("mysql/fetch_events.php")
-                .then(response => response.json())
-                .then(data => {
-                    const eventsTable = document.getElementById("eventsTable");
-                    const eventsTableBody = eventsTable.querySelector("tbody"); // Get tbody from the table
+       document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("event-image")) {
+                let imageUrl = event.target.getAttribute("data-image");
+                let imageTitle = event.target.getAttribute("data-title");
 
-                    if (data.status === "success") {
-                        eventsTableBody.innerHTML = ""; // Clear previous Rows
-                        let calendarEvents = data.events.map(event => ({
-                            title: event.title,
-                            description: event.description,
-                            start: event.start,
-                            end: event.end,
-                        }));
-
-                        data.events.forEach(event => {
-                            let startDateTime = formatDateTime(event.start);
-                            let endDateTime = formatDateTime(event.end);
-
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                <td>${event.title}</td>
-                                <td>${event.description}</td>
-                                <td>${startDateTime}</td>
-                                <td>${endDateTime}</td>
-                                <td>
-                                    <img src="mysql/uploads/${event.image}" alt="${event.title}" class="event-image" style="cursor: pointer; width: 30px; height: auto;" data-image="mysql/uploads/${event.image}">
-                                </td>
-                                <td>
-                                    <i class="fas fa-edit text-primary me-2 edit-event" style="cursor: pointer;" data-id="${event.id}"></i>
-                                    <i class="fas fa-trash-alt delete-event" style="cursor:pointer; color:red; margin-left:10px;" data-id="${event.id}"></i>
-                                </td>
-                            `;
-
-                            eventsTableBody.appendChild(row); // Append the new row to the tbody
-                        });
-
-                        if (successCallback) successCallback(calendarEvents);
-                    } else {
-                        console.error("Error fetching events:", data.message);
-                        if (failureCallback) failureCallback();
-                    }
-                })
-                .catch(error => {
-                    console.error("Fetch error:", error);
-                    if (failureCallback) failureCallback();
-                });
-        }
+                // Set the modal title and image
+                document.getElementById("viewImageModalLabel").textContent = imageTitle;
+                document.getElementById("modalImage").src = imageUrl;
+            }
+        });
 
       document.addEventListener("click", function (event) {
           if (event.target.classList.contains("edit-event")) {
@@ -433,8 +408,16 @@
                                       <td>${startDateTime}</td>
                                       <td>${endDateTime}</td>
                                       <td>
-                                          <img src="mysql/uploads/${event.image}" alt="${event.title}" class="event-image" style="cursor: pointer; width: 30px; height: auto;" data-image="mysql/uploads/${event.image}">
-                                      </td>
+                                            <img 
+                                                src="mysql/uploads/${event.image}" 
+                                                alt="${event.title}" 
+                                                class="event-image" 
+                                                style="cursor: pointer; width: 30px; height: auto;" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#viewImageModal" 
+                                                data-image="mysql/uploads/${event.image}" 
+                                                data-title="${event.title}">
+                                        </td>
                                       <td>
                                           <i class="fas fa-edit text-primary me-2 edit-event" style="cursor: pointer;" data-id="${event.id}"></i>
                                           <i class="fas fa-trash-alt delete-event" style="cursor:pointer; color:red; margin-left:10px;" data-id="${event.id}"></i>
@@ -618,15 +601,6 @@
                   });
               }
           });
-      });
-    </script>
-    <script>
-      // Assuming you have other similar code for fetching and displaying events
-      document.addEventListener("click", function (event) {
-          if (event.target.classList.contains("event-image")) {
-              let imageUrl = event.target.getAttribute("data-image");
-              window.open(imageUrl, '_blank');
-          }
       });
     </script>
   </body>

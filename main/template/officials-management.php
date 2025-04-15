@@ -276,6 +276,25 @@
             </div>
           </div>
         </div>
+        <!-- VIEW OFFICIAL PROFILE MODAL -->
+        <div class="modal fade" id="viewOfficialModal" tabindex="-1" aria-labelledby="viewOfficialModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewOfficialModalLabel">Official's Profile</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <!-- Official's Image -->
+                            <div class="col-md-12">
+                                <img id="officialImage" src="" alt="Official Image" class="img-fluid rounded-circle">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Page header start-->
         <?php include 'structure/footer.php'; ?>
         <!-- Page header end-->
@@ -407,6 +426,15 @@
                 text: 'An error occurred while updating the user.'
             });
         });
+    });
+
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("event-image")) {
+            let imageUrl = event.target.getAttribute("data-image");
+
+            // Populate the modal with the official's details
+            document.getElementById("officialImage").src = imageUrl;
+        }
     });
 
     // Auto-calculate age in edit form when date changes
@@ -545,9 +573,15 @@
                                             <td>${user.gmail}</td>
                                             <td>${user.phone_number}</td>
                                             <td>
-                                                <img src="mysql/uploads/officials/${user.image}" alt="Profile" class="rounded-circle event-image"
-                                                    style="cursor: pointer; width: 30px; height: auto;" data-image="mysql/uploads/officials/${user.image}">
-                                            </td>
+                                            <img 
+                                                src="mysql/uploads/officials/${user.image}" 
+                                                alt="Profile" 
+                                                class="rounded-circle event-image" 
+                                                style="cursor: pointer; width: 30px; height: auto;" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#viewOfficialModal" 
+                                                data-image="mysql/uploads/officials/${user.image}">
+                                        </td>
                                             <td>
                                                 <i data-feather="edit" class="text-primary edit-official"
                                                     data-id="${user.id}"
@@ -623,13 +657,6 @@
                 $("#editAge").val(age);
             });
         });
-
-      document.addEventListener("click", function (event) {
-          if (event.target.classList.contains("event-image")) {
-              let imageUrl = event.target.getAttribute("data-image");
-              window.open(imageUrl, '_blank');
-          }
-      });
 
       document.addEventListener("click", function (event) {
           if (event.target.classList.contains("delete-officials")) {

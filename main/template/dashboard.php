@@ -780,6 +780,20 @@
             </div>
           </div>
         </div>
+        <!-- VIEW EVENT IMAGE MODAL -->
+        <div class="modal fade" id="viewEventImageModal" tabindex="-1" aria-labelledby="viewEventImageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewEventImageModalLabel">Event Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="eventImageModalContent" src="" alt="Event Image" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Page header start-->
         <?php include 'structure/footer.php'; ?>
         <!-- Page header end-->
@@ -852,10 +866,15 @@
                                 <td>${startDateTime}</td>
                                 <td>${endDateTime}</td>
                                 <td>
-                                <a href="mysql/uploads/${event.image}" target="_blank">
-                                    <img src="mysql/uploads/${event.image}" alt="${event.title}" class="event-image" style="cursor: pointer; width: 30px; height: auto;">
-                                </a>
-                            </td>
+                                    <img 
+                                        src="mysql/uploads/${event.image}" 
+                                        alt="${event.title}" 
+                                        class="event-image" 
+                                        style="cursor: pointer; width: 30px; height: auto;" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#viewEventImageModal" 
+                                        data-image="mysql/uploads/${event.image}">
+                                </td>
                             </tr>`;
                         tbody.append(row); // Append the newly created row to the tbody
                     });
@@ -876,6 +895,18 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
+    });
+
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("event-image")) {
+            let imageUrl = event.target.getAttribute("data-image");
+
+            // Set the modal image source
+            document.getElementById("eventImageModalContent").src = imageUrl;
+
+            // Set the modal title (optional)
+            document.getElementById("viewEventImageModalLabel").textContent = "Event Image";
+        }
     });
 
     function formatDateTime(dateTime) {

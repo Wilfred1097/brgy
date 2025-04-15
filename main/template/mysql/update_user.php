@@ -1,6 +1,5 @@
 <?php
 require 'conn.php'; // Database connection
-session_start(); // Start session if using session variables
 
 header("Content-Type: application/json");
 
@@ -21,10 +20,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $address = $_POST['address'] ?? '';
         $dob = $_POST['dateOfBirth'] ?? ''; // Ensure you're sending 'dateOfBirth' from the form
         $age = $_POST['age'] ?? '';
-        $position = $_POST['position'] ?? ''; // Updated to 'position'
+        $role = $_POST['role'] ?? '';
         $gmail = $_POST['gmail'] ?? '';
-        $phoneNumber = $_POST['phone_number'] ?? ''; // Updated to 'phone_number'
-        
+        $username = $_POST['username'] ?? '';
+        $status = $_POST['status'] ?? '';
+
+        // Validate required fields
+        if (empty($firstName) || empty($lastName) || empty($address) || empty($dob) || empty($role) || empty($username) || empty($status)) {
+            echo json_encode(["status" => "error", "message" => "All required fields must be filled!"]);
+            exit;
+        }
+
         // Handle image upload (if a new image is uploaded)
         if (!empty($_FILES['imageUpload']['name'])) {
             $image = $_FILES['imageUpload'];
@@ -38,18 +44,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             // Update query including image path
-            $query = "UPDATE officials
-                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?,
-                          age = ?, position = ?, gmail = ?, phone_number = ?, image = ?
+            $query = "UPDATE users
+                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, dob = ?, age = ?, 
+                          role = ?, gmail = ?, username = ?, status = ?, image_path = ?
                       WHERE id = ?";
-            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $position, $gmail, $phoneNumber, $imagePath, $userId];
+            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $role, $gmail, $username, $status, $imagePath, $userId];
         } else {
             // Update query without changing the image
-            $query = "UPDATE officials
-                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?,
-                          age = ?, position = ?, gmail = ?, phone_number = ?
+            $query = "UPDATE users
+                      SET first_name = ?, middle_name = ?, last_name = ?, address = ?, dob = ?, age = ?, 
+                          role = ?, gmail = ?, username = ?, status = ?
                       WHERE id = ?";
-            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $position, $gmail, $phoneNumber, $userId];
+            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $role, $gmail, $username, $status, $userId];
         }
 
         // Prepare and execute SQL update query

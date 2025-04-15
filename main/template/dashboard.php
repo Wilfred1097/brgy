@@ -1,4 +1,20 @@
-<?php include 'structure/check_cookies.php'; ?>
+<?php
+// Include the script to check cookies
+include 'structure/check_cookies.php';
+
+// Decode the JSON-encoded cookie value
+$brgyData = json_decode($_COOKIE['brgy'], true);
+
+// Check if 'full_name' exists in the decoded data
+$firstName = "Guest"; // Default value if no cookie or first_name is found
+if (isset($_COOKIE['brgy'])) {
+    $brgyData = json_decode($_COOKIE['brgy'], true);
+    if (isset($brgyData['full_name'])) {
+        // Trim and extract the first value from full_name as first_name
+        $firstName = explode(' ', trim($brgyData['full_name']))[0];
+    }
+}
+?>
 <!DOCTYPE html >
 <html lang="en">
   <head>
@@ -75,7 +91,7 @@
                       <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
                           <div class="d-flex align-items-center">
                               <h1 class="mb-0">
-                                  Hello, Wil Fred
+                                  Hello, <?php echo htmlspecialchars($firstName); ?>
                                   <img src="../assets/images/dashboard-1/hand.png" alt=""/>
                               </h1>
                           </div>
@@ -125,6 +141,32 @@
                             <th>Vat</th>
                             <th>eVat</th>
                             <th>Net Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+                <div class="card">
+                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
+                      <h3>Cedula Transaction History</h3>
+                      <input type="text" id="searchRaoProgram" class="form-control w-25" placeholder="Search Released Cedula...">
+                  </div>
+                  <div class="card-body transaction-history pt-0">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="table display table-bordernone mt-0" id="cedula-transaction" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Gender</th>
+                            <th>Amount</th>
+                            <th>Date Added</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -991,9 +1033,6 @@
 
           // Update the span with the current date and time
           document.getElementById("currentDateTime").innerHTML = `
-              <svg class="stroke-icon">
-                  <use href="../assets/svg/icon-sprite.svg#watch"></use>
-              </svg>
               ${formattedDateTime}
           `;
       }
@@ -1003,6 +1042,45 @@
 
       // Update the time every second
       setInterval(updateDateTime, 1000);
+  </script>
+  <script>
+    fetchCedulaTransaction();
+
+        function fetchCedulaTransaction() {
+          $.ajax({
+              url: 'mysql/fetch_cedula_transaction.php',
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  let tbody = $("#cedula-transaction tbody");
+                  tbody.empty();
+
+                  if (data.length > 0) {
+                      data.forEach(cedula_transaction => {
+                          let row = `
+                              <tr>
+                                  <td>${new Date(cedula_transaction.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
+                                  <td>${cedula_transaction.name || 'N/A'}</td>
+                                  <td>${cedula_transaction.gender || 'N/A'}</td>
+                                  <td>₱${cedula_transaction.amount ? parseFloat(cedula_transaction.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
+                                  <td>${new Date(cedula_transaction.date_added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
+                              </tr>
+                          `;
+                          tbody.append(row);
+                      });
+                  } else {
+                      tbody.append(`<tr><td colspan="5" class="text-center">No programs found.</td></tr>`);
+                  }
+              }
+          });
+      }
+
+      $('#searchRaoProgram').on('keyup', function () {
+          let searchValue = $(this).val().toLowerCase();
+          $('#cedula-transaction tbody tr').filter(function () {
+              $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+          });
+      });
   </script>
   </body>
 </html>

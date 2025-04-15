@@ -403,7 +403,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Server Response:", data); // Log server response
+            // console.log("Server Response:", data); // Log server response
 
             if(data.status === "success"){
                 $('#editUserModal').modal('hide');
@@ -495,8 +495,8 @@
           let form = document.getElementById("addUserForm");
           let formData = new FormData(form);
 
-          // Send the data via AJAX to insert_user.php
-          fetch('mysql/insert_user.php', {
+          // Send the data via AJAX to add_user.php
+          fetch('mysql/add_user.php', {
               method: 'POST',
               body: formData
           })

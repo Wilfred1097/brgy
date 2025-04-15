@@ -185,7 +185,7 @@
             event.preventDefault(); // Prevent form submission
 
             var formData = new FormData(this); // Get the form data
-            fetch('mysql/insert_file.php', {
+            fetch('mysql/add_file.php', {
                 method: 'POST',
                 body: formData
             })

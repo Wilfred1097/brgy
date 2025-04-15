@@ -54,7 +54,6 @@
         <div class="col-12 p-0">    
           <div class="login-card login-dark">
             <div>
-              <!-- <div><a class="logo" href="index.php"><img class="img-fluid for-light m-auto" src="assets/img/brgylogo.png" alt="looginpage" width="40%"><img class="img-fluid for-dark" src="assets/img/brgylogo.png" alt="logo" width="40%"></a></div> -->
               <div class="login-main"> 
                 <form class="theme-form" id="loginForm">
                   <h2 class="text-center">Sign in to account</h2>
@@ -72,11 +71,11 @@
                   </div>
                   <div class="form-group mb-0">
                     <div class="text-end mt-3">
-                      <button class="btn btn-danger btn-block w-100" type="submit">Sign in</button>
+                      <button class="btn btn-danger btn-block w-100" id="loginButton" type="submit">Sign in</button>
                     </div>
                   </div>
                   <div class="login-social-title">
-                    <h6><a href="index.php">Go back to Home Page</a>                 </h6>
+                    <h6><a href="index.php">Go back to Home Page</a></h6>
                   </div>
                 </form>
               </div>
@@ -103,10 +102,11 @@
 
               let username = document.getElementById("username").value;
               let password = document.getElementById("password").value;
+              let loginButton = document.getElementById("loginButton");
 
-              // Log entered credentials
-              // console.log("Entered Username:", username);
-              // console.log("Entered Password:", password);
+              // Change the login button text to "Logging in..."
+              loginButton.textContent = "Logging in...";
+              loginButton.disabled = true; // Disable the button to prevent multiple submissions
 
               fetch("main/template/mysql/login.php", {
                   method: "POST",
@@ -116,16 +116,14 @@
               .then(response => response.json())
               .then(data => {
                   if (data.status === "success") {
-                      Swal.fire({
-                          icon: "success",
-                          title: "Login Successful",
-                          text: data.message,
-                          timer: 2000,
-                          showConfirmButton: true
-                      }).then(() => {
-                          window.location.href = "./main/template/dashboard.php"; // Redirect on success
-                      });
+                      // Redirect to dashboard on successful login
+                      window.location.href = "./main/template/dashboard.php";
                   } else {
+                      // Reset button text and re-enable it
+                      loginButton.textContent = "Sign in";
+                      loginButton.disabled = false;
+
+                      // Show error message
                       Swal.fire({
                           icon: "error",
                           title: "Login Failed",
@@ -134,6 +132,10 @@
                   }
               })
               .catch(() => {
+                  // Reset button text and re-enable it
+                  loginButton.textContent = "Sign in";
+                  loginButton.disabled = false;
+
                   Swal.fire("Error!", "Something went wrong. Please try again.", "error");
               });
           });

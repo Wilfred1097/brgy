@@ -36,6 +36,14 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="rao-program.php">
+              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
+              <h6 class="f-w-600">RAO Program</h6>
+          </a>
+      </li>
+
+      <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="transaction.php">
               <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
               <h6 class="f-w-600">Transaction</h6>
@@ -44,9 +52,9 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="rao-program.php">
+          <a class="sidebar-link" href="income-report.php">
               <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
-              <h6 class="f-w-600">RAO Program</h6>
+              <h6 class="f-w-600">Income Report</h6>
           </a>
       </li>
 

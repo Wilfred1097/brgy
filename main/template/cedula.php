@@ -8,7 +8,7 @@
     <meta name="description" content="Admiro admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities."/>
     <meta name="keywords" content="admin template, Admiro admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app"/>
     <meta name="author" content="pixelstrap"/>
-    <title>Bulatok - Transaction</title>
+    <title>Bulatok - Cedula Transaction</title>
     <!-- Favicon icon-->
     <link rel="icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
     <link rel="shortcut icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
@@ -153,7 +153,7 @@
           <div class="container-fluid default-dashboard">
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-12 col-md-12 box-col-12">
-                <button id="add-rao-program" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addRaoProgramModal">Add Cedula Transaction</button>
+                <button id="add-cedula-transaction" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addRaoProgramModal">Add Cedula Transaction</button>
                 <div class="card height-equal">
                   <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
                       <h3>Cedula</h3>
@@ -161,7 +161,7 @@
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
-                      <table class="table display table-bordernone mt-0" id="rao-program" style="width:100%">
+                      <table class="table display table-bordernone mt-0" id="cedula-transaction" style="width:100%">
                         <thead>
                           <tr>
                             <th>Date</th>
@@ -352,7 +352,7 @@
         // 🟢 Filter transactions based on the search input
         $('#searchRaoProgram').on('keyup', function () {
             let searchValue = $(this).val().toLowerCase();
-            $('#rao-program tbody tr').filter(function () {
+            $('#cedula-transaction tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
             });
         });
@@ -365,7 +365,7 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                let tbody = $("#rao-program tbody");
+                let tbody = $("#cedula-transaction tbody");
                 tbody.empty();
 
                 if (data.length > 0) {

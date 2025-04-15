@@ -8,7 +8,7 @@
     <meta name="description" content="Admiro admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities."/>
     <meta name="keywords" content="admin template, Admiro admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app"/>
     <meta name="author" content="pixelstrap"/>
-    <title>Bulatok - Transaction</title>
+    <title>Bulatok - Rao Program</title>
     <!-- Favicon icon-->
     <link rel="icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
     <link rel="shortcut icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>

@@ -1,5 +1,6 @@
 <?php
 include 'conn.php'; // Include your database connection
+require 'check_cookies.php'; // Check if the cookie is present
 
 try {
     // Prepare the SQL query to retrieve all files

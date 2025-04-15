@@ -1,6 +1,7 @@
 <?php
 // Include database connection
 include 'conn.php';
+require 'check_cookies.php'; // Check if the cookie is present
 // Return JSON response with distinct field naming
 header('Content-Type: application/json');
 

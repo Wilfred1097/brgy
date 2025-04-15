@@ -1,6 +1,7 @@
 <?php
 // Include database connection
 include 'conn.php';
+require 'check_cookies.php'; // Check if the cookie is present
 
 try {
     // Query to fetch all transactions and join with rao_program to get the RAO Program name

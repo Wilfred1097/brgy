@@ -52,6 +52,14 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="cedula.php">
+              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
+              <h6 class="f-w-600">Cedula Transaction</h6>
+          </a>
+      </li>
+
+      <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="officials-management.php">
               <i class="fa-solid fa-users"></i> <!-- Font Awesome Icon for Transactions -->
               <h6 class="f-w-600">Officials Profile</h6>

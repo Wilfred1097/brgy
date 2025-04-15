@@ -1,5 +1,6 @@
 <?php
 require 'conn.php'; // Include the database connection
+require 'check_cookies.php'; // Check if the cookie is present
 
 header("Content-Type: application/json");
 

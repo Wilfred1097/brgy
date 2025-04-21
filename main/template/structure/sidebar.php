@@ -52,6 +52,15 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="barangay-transaction.php">
+              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
+              <h6 class="f-w-600">Barangay Transaction</h6>
+          </a>
+      </li>
+
+
+      <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="income-report.php">
               <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
               <h6 class="f-w-600">Income Report</h6>
@@ -89,7 +98,7 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
           <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="file-management.php">
               <i class="fa-solid fa-folder"></i> <!-- Manage Files Icon -->
-              <h6 class="f-w-600">Manage Files</h6>
+              <h6 class="f-w-600">File Management</h6>
           </a>
       </li>
 

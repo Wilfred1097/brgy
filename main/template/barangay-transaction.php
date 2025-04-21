@@ -8,7 +8,7 @@
     <meta name="description" content="Admiro admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities."/>
     <meta name="keywords" content="admin template, Admiro admin template, best javascript admin, dashboard template, bootstrap admin template, responsive admin template, web app"/>
     <meta name="author" content="pixelstrap"/>
-    <title>Bulatok - Transaction</title>
+    <title>Bulatok - Barangay Transaction</title>
     <!-- Favicon icon-->
     <link rel="icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
     <link rel="shortcut icon" href="./../../assets/img/brgylogo.png" type="image/x-icon"/>
@@ -57,14 +57,14 @@
             <div class="page-title">
               <div class="row">
                 <div class="col-sm-12 col-12">
-                  <h2>Transaction Management</h2>
+                  <h2>Barangay Transaction Management</h2>
                   <p class="mb-0 text-title-gray">Welcome back! Let’s start from where you left.</p>
                 </div>
               </div>
               <div class="row mt-3">
                   <!-- Buttons on the Left -->
                   <div class="col-auto">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add Transaction</button>
+                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add Barangay Transaction</button>
                   </div>
                   <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>

@@ -46,6 +46,14 @@
           <li><a href="#officials">Officials</a></li>
           <li><a href="#services">Events</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdownFiles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Downloadable Files
+              </a>
+              <ul class="dropdown-menu" id="filesDropdown" aria-labelledby="dropdownFiles">
+                  <!-- File links will be inserted here by JS -->
+              </ul>
+          </li>
           <li><a href="login-page.php">Login</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -433,6 +441,35 @@
           }
       });
   }
+</script>
+<script>
+    function fetchFiles() {``
+        fetch('main/template/mysql/get_files.php') // Adjust the path if needed
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const filesDropdown = document.querySelector('#filesDropdown');
+                    filesDropdown.innerHTML = ''; // Clear the dropdown
+                    
+                    // Populate the dropdown items
+                    data.data.forEach(file => {
+                        const dropdownItem = document.createElement('li');
+                        dropdownItem.innerHTML = `
+                            <a class="dropdown-item" href="main/template/mysql/${file.file_path}" target="_blank">${file.file_name}</a>
+                        `;
+                        filesDropdown.appendChild(dropdownItem);
+                    });
+                } else {
+                    console.error('Failed to fetch files:', data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching files:', error);
+            });
+    }
+
+    // Call fetchFiles to load the files when the page is loaded
+    document.addEventListener('DOMContentLoaded', fetchFiles);
 </script>
 </body>
 

@@ -193,7 +193,7 @@
                 <div class="card height-equal">
                   <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
                       <h3>Cedula</h3>
-                      <input type="text" id="searchIncomeReportProgram" class="form-control w-25" placeholder="Search Released Cedula...">
+                      <input type="text" id="searchIncomeReportProgram" class="form-control w-25" placeholder="Search Income Report...">
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
@@ -422,7 +422,7 @@
         // 🟢 Filter transactions based on the search input
         $('#searchIncomeReportProgram').on('keyup', function () {
             let searchValue = $(this).val().toLowerCase();
-            $('#cedula-transaction tbody tr').filter(function () {
+            $('#income-reports tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
             });
         });

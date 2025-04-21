@@ -4,7 +4,7 @@ require 'conn.php'; // Include your database connection file
 
 // Fetch barangay details from the database
 try {
-    $stmt = $pdo->query("SELECT * FROM settings LIMIT 1"); // Assuming there's only one settings row
+    $stmt = $pdo->query("SELECT * FROM settings WHERE 1"); // Assuming there's only one settings row
     $settings = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($settings) {
@@ -106,12 +106,18 @@ class PDF extends FPDF
 }
 
 // Create PDF object using the extended class
-$pdf = new PDF('');
+$pdf = new PDF('L', 'mm', 'A4'); // 'L' for landscape, 'mm' for millimeters, 'A4' for A4 size
 $pdf->SetFont('Arial', 'B', 12);
 
+// Define the upload directory at the beginning of the script
+$upload_dir = 'uploads/transactions/';
+
 try {
+    // Your existing code for fetching settings and generating the PDF...
+
     if (isset($_GET['ids']) && !empty($_GET['ids'])) {
-        $ids = explode(',', $_GET['ids']); // Convert comma-separated IDs into an array
+        // Convert comma-separated IDs into an array
+        $ids = explode(',', $_GET['ids']); 
         $ids = array_map('intval', $ids); // Ensure IDs are integers
 
         // Prepare SQL query with placeholders
@@ -129,7 +135,9 @@ try {
             $stmt->execute($ids);
             $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            // Check if transactions are found
             if (!empty($transactions)) {
+                // Your logic for adding pages and inputting transaction details goes here...
                 // Determine the range of months with the year
                 $months = array_map(function ($transaction) {
                     return date('F Y', strtotime($transaction['date'])); // Extracts both Month and Year
@@ -140,13 +148,12 @@ try {
 
                 // Get the first and last month-year
                 $month_range = count($months) > 1 ? $months[0] . ' - ' . end($months) : $months[0];
-
-                // Add a page after calculating month_range
-                $pdf->AddPage('L');
+                // Add a page for the summary of financial transactions
+                $pdf->AddPage();
 
                 // Set table headers
                 $pdf->SetFont('Arial', 'B', 8);
-                $pdf->SetFillColor(200, 200, 200);
+                $pdf->SetFillColor(200, 200, 200); // Set fill color for headers
                 $pdf->Cell(22, 6, 'Date', 1, 0, 'C', true);
                 $pdf->Cell(21, 6, 'Cheque No', 1, 0, 'C', true);
                 $pdf->Cell(21, 6, 'Voucher No', 1, 0, 'C', true);
@@ -156,8 +163,6 @@ try {
                 $pdf->Cell(25, 6, 'Gross Amt', 1, 0, 'C', true);
                 $pdf->Cell(15, 6, 'VAT %', 1, 0, 'C', true);
                 $pdf->Cell(15, 6, 'EVAT %', 1, 0, 'C', true);
-                // $pdf->Cell(15, 6, 'VAT Amt', 1, 0, 'C', true);
-                // $pdf->Cell(15, 6, 'EVAT Amt', 1, 0, 'C', true);
                 $pdf->Cell(25, 6, 'Net Amount', 1, 1, 'C', true);
 
                 // Set table data
@@ -168,9 +173,9 @@ try {
                 $total_net_amount = 0;
 
                 foreach ($transactions as $row) {
-                    $gross_amount = $row['gross_amount'];
-                    $vat_amount = $row['vat_amount'];
-                    $evat_amount = $row['evat_amount'];
+                    $gross_amount = $row['gross_amount'] ?? 0;
+                    $vat_amount = $row['vat_amount'] ?? 0; 
+                    $evat_amount = $row['evat_amount'] ?? 0; 
                     $net_amount = $gross_amount - $vat_amount - $evat_amount;
 
                     $pdf->Cell(22, 5, date("M j, Y", strtotime($row['date'])), 1, 0, 'C');
@@ -180,10 +185,8 @@ try {
                     $pdf->Cell(49, 5, $row['payee'], 1, 0, 'C');
                     $pdf->Cell(35, 5, $row['particulars'], 1, 0, 'C');
                     $pdf->Cell(25, 5, 'P ' . number_format($gross_amount, 2), 1, 0, 'C');
-                    $pdf->Cell(15, 5, number_format($row['vat'], 2), 1, 0, 'C');
-                    $pdf->Cell(15, 5, number_format($row['evat'], 2), 1, 0, 'C');
-                    // $pdf->Cell(15, 5, 'P ' . number_format($vat_amount, 2), 1, 0, 'C');
-                    // $pdf->Cell(15, 5, 'P ' . number_format($evat_amount, 2), 1, 0, 'C');
+                    $pdf->Cell(15, 5, number_format($vat_amount / $gross_amount * 100, 2), 1, 0, 'C'); // VAT % calculation
+                    $pdf->Cell(15, 5, number_format($evat_amount / $gross_amount * 100, 2), 1, 0, 'C'); // EVAT % calculation
                     $pdf->Cell(25, 5, 'P ' . number_format($net_amount, 2), 1, 1, 'C');
 
                     // Add to totals
@@ -196,75 +199,79 @@ try {
                 // Add a blank row for spacing
                 $pdf->Cell(272, 5, '', 0, 1, 'R');
 
-                // Display total net amount row
-                $pdf->SetFont('Arial', '', 8);
-
-                // Total Gross Amount
-                $pdf->Cell(252, 4, 'Total Gross Amount:', 0, 0, 'R'); // No border
+                // Display total calculations
                 $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(25, 4, 'P ' . number_format($total_gross_amount, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                $pdf->Cell(252, 4, 'Total Gross Amount:', 0, 0, 'R'); 
+                $pdf->Cell(25, 4, 'P ' . number_format($total_gross_amount, 2), 0, 1, 'R'); 
 
-                // VAT
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(252, 4, 'Vat:', 0, 0, 'R'); // No border
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(25, 4, 'P ' . number_format($total_vat, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                $pdf->Cell(252, 4, 'Total VAT Amount:', 0, 0, 'R'); 
+                $pdf->Cell(25, 4, 'P ' . number_format($total_vat, 2), 0, 1, 'R'); 
 
-                // EVAT
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(252, 4, 'eVat:', 0, 0, 'R'); // No border
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(25, 4, 'P ' . number_format($total_evat, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                $pdf->Cell(252, 4, 'Total eVAT Amount:', 0, 0, 'R'); 
+                $pdf->Cell(25, 4, 'P ' . number_format($total_evat, 2), 0, 1, 'R'); 
 
-                // Total Net Amount
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->Cell(252, 4, 'Total Net Amount:', 0, 0, 'R'); // No border
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(25, 4, 'P ' . number_format($total_net_amount, 2), 0, 1, 'R'); // Only amount in a bordered cell
+                $pdf->Cell(252, 4, 'Total Net Amount:', 0, 0, 'R'); 
+                $pdf->Cell(25, 4, 'P ' . number_format($total_net_amount, 2), 0, 1, 'R'); 
 
-                // Count total pages
-                $pdf->totalPages = $pdf->PageNo(); // The current page number is the last page (page count)
-
-                // Increment the SCKI number in the database
-                $update_query = "UPDATE settings SET current_scki_no = current_scki_no + 1 WHERE id = 1";
-                $update_stmt = $pdo->prepare($update_query);
-                $update_stmt->execute();
-
-                // Now get the updated current_scki_no
-                $current_scki_no;
-
-                // Set the path for saving the PDF
-                $upload_dir = 'uploads/transactions/';
-                $file_name = $upload_dir . $current_scki_no . '.pdf';
+                // Save the PDF or display it, depending on your workflow 
 
                 // Ensure the uploads directory exists
                 if (!file_exists($upload_dir)) {
                     mkdir($upload_dir, 0777, true);
                 }
 
-                // Save the PDF to the specified path
-                $pdf->Output('F', $file_name); // Save the file to the specified path
+                // Increment current_scki_no before using it
+                $new_scki_no = $current_scki_no + 1; // Increment the current SCKI number
 
                 // Prepare to insert into generated_reports table
-                $generated_data = json_encode($transactions); // Convert transactions data to JSON or use any other format
-                $insert_query = "INSERT INTO generated_reports (filename, generated_data) VALUES (?, ?)";
-                $insert_stmt = $pdo->prepare($insert_query);
-                $insert_stmt->execute([$file_name, $generated_data]);
+                $file_name = $upload_dir . $current_scki_no . '.pdf'; // Use the new SCKI number for the filename
 
+                // First, save the PDF with the complete content (including the new SCKI no if applicable)
+                try {
+                    // Now save the PDF file with the new SCKI number
+                    $pdf->Output('F', $file_name); // Save the PDF file to the server
+
+                    // Update the database with the new SCKI number
+                    $update_stmt = $pdo->prepare("UPDATE settings SET current_scki_no = ? WHERE id = ?"); // Update the SCKI number
+                    $update_stmt->execute([$new_scki_no, 1]); // Ensure you pass the correct setting ID
+
+                    // Insert the filename into the generated_reports table
+                    try {
+                        $insert_report_stmt = $pdo->prepare("INSERT INTO generated_reports (filename) VALUES (?)");
+                        $insert_report_stmt->execute([$file_name]); // Save the filename in the database
+                    } catch (Exception $e) {
+                        // If you encounter an error while saving the filename, handle that error
+                        die('Error saving report filename: ' . $e->getMessage()); // Or use other error handling
+                    }
+
+                } catch (Exception $e) {
+                    // Handle errors during PDF creation or saving
+                    die('Error saving the PDF file: ' . $e->getMessage());
+                }
+
+                // After saving, output the PDF once
+                $pdf->Output(); // This sends the content to the browser as output or download
+                
             } else {
+                // Handle no transactions found
+                $pdf->AddPage(); 
                 $pdf->Cell(0, 10, 'No transactions found.', 1, 1, 'C');
             }
         } catch (Exception $e) {
+            // Handle database errors by adding error message to PDF
+            $pdf->AddPage();
             $pdf->Cell(0, 10, 'Database error: ' . $e->getMessage(), 1, 1, 'C');
         }
     } else {
+        $pdf->AddPage();
         $pdf->Cell(0, 10, 'No transactions selected.', 1, 1, 'C');
     }
 } catch (Exception $e) {
     // Handle general errors
-    $pdf->AddPage(); // Add a page before writing to PDF in case of errors
+    $pdf->AddPage();
     $pdf->Cell(0, 10, 'Error fetching settings: ' . $e->getMessage(), 1, 1, 'C');
 }
 
+// Output the PDF only at the end after handling all messages
 $pdf->Output();
 ?>

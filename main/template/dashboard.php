@@ -103,23 +103,30 @@ if (isset($_COOKIE['brgy'])) {
                   </div>
                 </div>
               </div>
-             <!--  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
+              <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                  <div class="card growthcard">
+                      <div class="card-header card-no-border pb-0">
+                      <div class="header-top">
+                        <h3>Cedula Transactions Reports Over Last 7 Days</h3>
+                      </div>
+                      </div>
+                      <div class="card-body pb-0">
+                          <div id="cedula-chart"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                 <div class="card growthcard">
                   <div class="card-header card-no-border pb-0">
                     <div class="header-top">
-                      <h3>Monthly Revenue Growth</h3>
-                      <ul class="simple-wrapper nav nav-pills" id="myTab" role="tablist">
-                        <li class="nav-item"><a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#yearly" role="tab" aria-selected="true">Yearly</a></li>
-                        <li class="nav-item"><a class="nav-link" id="profile-tabs" data-bs-toggle="tab" href="#monthly" role="tab" aria-selected="false">Monthly</a></li>
-                        <li class="nav-item"><a class="nav-link active" id="contact-tab" data-bs-toggle="tab" href="#weekly" role="tab" aria-selected="false">Weekly</a></li>
-                      </ul>
+                      <h3>Income Reports Over Last 7 Days</h3>
                     </div>
                   </div>
                   <div class="card-body pb-0">
-                    <div id="growth-chart"></div>
+                    <div id="income-report-chart"></div>
                   </div>
                 </div>
-              </div> -->
+              </div>
               <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
                   <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
@@ -1080,6 +1087,114 @@ if (isset($_COOKIE['brgy'])) {
           $('#cedula-transaction tbody tr').filter(function () {
               $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
           });
+      });
+  </script>
+  <script>
+    // Function to fetch data from the PHP file
+      function fetchCedulaAnalytics() {
+          fetch('mysql/fetch_cedula_analytics.php')
+              .then(response => response.json())
+              .then(data => {
+                  // Create the chart after data is fetched
+                  renderChart(data);
+              })
+              .catch(error => console.error('Error fetching data:', error));
+      }
+
+      // Function to format date from 'YYYY-MM-DD' to 'Month Day, Year'
+      function formatDate(dateString) {
+          const options = { month: 'short', day: 'numeric' };
+          return new Date(dateString).toLocaleDateString('en-US', options);
+      }
+
+      // Function to render the Apex chart
+      function renderChart(data) {
+          const categories = data.map(item => formatDate(item.transaction_date)); // Convert dates
+          const seriesData = data.map(item => item.total_amount);
+
+          const options = {
+              chart: {
+                  type: 'line',
+                  height: 350,
+              },
+              series: [{
+                  name: 'Transaction Amount',
+                  data: seriesData,
+              }],
+              xaxis: {
+                  categories: categories, // Use formatted dates
+                  title: {
+                      text: '',
+                  },
+              },
+              yaxis: {
+                  title: {
+                      text: 'Total Amount',
+                  },
+              }
+          };
+
+          const chart = new ApexCharts(document.querySelector("#cedula-chart"), options);
+          chart.render();
+      }
+
+      // Call the function to fetch data when the page loads
+      document.addEventListener('DOMContentLoaded', function () {
+          fetchCedulaAnalytics();
+      });
+  </script>
+  <script>
+    // Function to fetch data from the income report PHP file
+      function fetchIncomeReportAnalytics() {
+          fetch('mysql/fetch_income_reports_analytics.php')
+              .then(response => response.json())
+              .then(data => {
+                  // Create the chart after data is fetched
+                  renderIncomeReportChart(data);
+              })
+              .catch(error => console.error('Error fetching income report data:', error));
+      }
+
+      // Function to format date from 'YYYY-MM-DD' to 'Month Day, Year'
+      function formatDate(dateString) {
+          const options = { month: 'short', day: 'numeric' };
+          return new Date(dateString).toLocaleDateString('en-US', options);
+      }
+
+      // Function to render the Apex chart for income reports
+      function renderIncomeReportChart(data) {
+          const categories = data.map(item => formatDate(item.transaction_date)); // Convert dates
+          const seriesData = data.map(item => item.total_amount);
+
+          const options = {
+              chart: {
+                  type: 'line',
+                  height: 350,
+              },
+              series: [{
+                  name: 'Income Amount',
+                  data: seriesData,
+              }],
+              xaxis: {
+                  categories: categories, // Use formatted dates
+                  title: {
+                      text: '',
+                  },
+              },
+              yaxis: {
+                  title: {
+                      text: 'Total Amount',
+                  },
+              }
+          };
+
+          const chart = new ApexCharts(document.querySelector("#income-report-chart"), options);
+          chart.render();
+      }
+
+      // Call the function to fetch data when the page loads
+      document.addEventListener('DOMContentLoaded', function () {
+          fetchIncomeReportAnalytics();
       });
   </script>
   </body>

@@ -207,7 +207,6 @@
                             <th>Amount</th>
                             <th>Doc Stamp</th>
                             <th>RDC Number</th>
-                            <th>Date Added</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -449,7 +448,6 @@
                                 <td>₱${incomeReports.amount ? parseFloat(incomeReports.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>${incomeReports.doc_stamp || 'N/A'}</td>
                                 <td>${incomeReports.rcd_number || 'N/A'}</td>
-                                <td>${new Date(incomeReports.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary edit-btn income-edit-btn"
                                       data-id="${incomeReports.id}"

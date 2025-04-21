@@ -169,7 +169,6 @@
                                       <th>Gender</th>
                                       <th>Amount</th>
                                       <th>Amount</th>
-                                      <th>Date Added</th>
                                       <th class="action-column">Action</th>
                                   </tr>
                               </thead>
@@ -378,7 +377,6 @@
                                 <td>${cedula_transaction.gender || 'N/A'}</td>
                                 <td>₱${cedula_transaction.amount !== null && cedula_transaction.amount !== undefined ? parseFloat(cedula_transaction.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>${cedula_transaction.amount || 'N/A'}</td>
-                                <td>${new Date(cedula_transaction.date_added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary edit-btn rao-edit-btn"
                                       data-id="${cedula_transaction.id}"

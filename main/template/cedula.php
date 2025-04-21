@@ -160,23 +160,24 @@
                       <input type="text" id="searchRaoProgram" class="form-control w-25" placeholder="Search Released Cedula...">
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
-                    <div class="table-responsive theme-scrollbar">
-                      <table class="table display table-bordernone mt-0" id="cedula-transaction" style="width:100%">
-                        <thead>
-                          <tr>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Gender</th>
-                            <th>Amount</th>
-                            <th>Date Added</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                      </table>
-                    </div>
+                      <div class="table-responsive theme-scrollbar">
+                          <table class="table display table-bordernone mt-0" id="cedula-transaction" style="width:100%">
+                              <thead>
+                                  <tr>
+                                      <th>Date</th>
+                                      <th>Name</th>
+                                      <th>Gender</th>
+                                      <th>Amount</th>
+                                      <th>Amount</th>
+                                      <th>Date Added</th>
+                                      <th class="action-column">Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <!-- Assuming data will be inserted here by your JavaScript -->
+                              </tbody>
+                          </table>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -375,7 +376,8 @@
                                 <td>${new Date(cedula_transaction.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>${cedula_transaction.name || 'N/A'}</td>
                                 <td>${cedula_transaction.gender || 'N/A'}</td>
-                                <td>₱${cedula_transaction.amount ? parseFloat(cedula_transaction.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
+                                <td>₱${cedula_transaction.amount !== null && cedula_transaction.amount !== undefined ? parseFloat(cedula_transaction.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
+                                <td>${cedula_transaction.amount || 'N/A'}</td>
                                 <td>${new Date(cedula_transaction.date_added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary edit-btn rao-edit-btn"
@@ -393,8 +395,12 @@
                         tbody.append(row);
                     });
                 } else {
-                    tbody.append(`<tr><td colspan="5" class="text-center">No programs found.</td></tr>`);
+                    tbody.append(`<tr><td colspan="6" class="text-center">No transactions found.</td></tr>`); // Update to colspan="6" to match column count
                 }
+            },
+            error: function (xhr, status, error) {
+                console.error("An error occurred while fetching transactions: ", error);
+                // Optionally handle error display
             }
         });
     }

@@ -258,6 +258,21 @@
         </div>
         <!-- Edit User Modal -->
 
+        <!-- Image Modal -->
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modalTitle">Profile Image</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="" alt="Profile Image" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
           <!-- Container-fluid starts-->
           <div class="container-fluid default-dashboard">
             <div class="row">
@@ -553,9 +568,10 @@
                             // Check if data exists and has items
                             if (response.data && response.data.length > 0) {
                                 response.data.forEach(user => {
+                                    let fullName = `${user.first_name} ${user.middle_name ? user.middle_name + ' ' : ''}${user.last_name}`;
                                     let row = `
                                         <tr>
-                                            <td>${user.first_name} ${user.middle_name} ${user.last_name}</td>
+                                            <td>${fullName}</td>
                                             <td>${user.address}</td>
                                             <td>${new Date(user.dob).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                                             <td>${user.age}</td>
@@ -644,11 +660,23 @@
         });
 
       document.addEventListener("click", function (event) {
-          if (event.target.classList.contains("event-image")) {
-              let imageUrl = event.target.getAttribute("data-image");
-              window.open(imageUrl, '_blank');
-          }
-      });
+            if (event.target.classList.contains("event-image")) {
+                let imageUrl = event.target.getAttribute("data-image");
+                
+                // Retrieve the complete name (modify as necessary based on your HTML structure)
+                let fullName = event.target.closest('tr').querySelector('td:nth-child(1)').innerText;
+
+                // Set the source of the image in the modal
+                document.getElementById("modalImage").src = imageUrl;
+
+                // Set the modal title to the complete name
+                document.getElementById("modalTitle").innerText = fullName;
+
+                // Show the image modal
+                let imageModal = new bootstrap.Modal(document.getElementById("imageModal"));
+                imageModal.show();
+            }
+        });
 
       document.addEventListener("click", function (event) {
           if (event.target.classList.contains("delete-user")) {

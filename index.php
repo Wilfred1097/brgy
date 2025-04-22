@@ -333,59 +333,58 @@
 
 <script>
     // Fetch Events from the PHP API
-    fetch("main/template/mysql/fetch_events.php") // Change to the correct API file
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                const eventsContainer = document.getElementById("eventsContainer");
-                eventsContainer.innerHTML = "";
+fetch("main/template/mysql/fetch_events.php") // Change to the correct API file
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            const eventsContainer = document.getElementById("eventsContainer");
+            eventsContainer.innerHTML = "";
 
-                data.events.forEach(event => {
-                    let startDate = formatDate(event.start);
-                    let startTime = formatTime(event.start);
-                    let endDate = formatDate(event.end);
-                    let endTime = formatTime(event.end);
+            data.events.forEach((event, index) => {
+                let startDate = formatDate(event.start);
+                let startTime = formatTime(event.start);
+                let endDate = formatDate(event.end);
+                let endTime = formatTime(event.end);
 
-                    let eventCard = `
-                        <div class="col-xl-3 col-md-6 col-sm-12" data-aos="fade-up">
-                            <div class="event-card">
-                                <!-- Image Section -->
-                                <div class="event-image" style="background-image: url('main/template/mysql/uploads/${event.image}');"></div>
-
-                                <!-- Event Details -->
-                                <div class="event-content">
-                                    <h4 class="fw-bolder mb-2">${event.title}</h4>
-                                    <p class="event-description mb-2">${event.description}</p>
-                                    <p><strong>Start:</strong> ${startDate} at ${startTime}</p>
-                                    <p><strong>End:</strong> ${endDate} at ${endTime}</p>
-                                    <div class="event-actions">
-                                        <i class="fas fa-edit text-primary me-2 edit-event" style="cursor: pointer;" data-id="${event.id}"></i>
-                                        <i class="fas fa-trash-alt delete-event" style="cursor:pointer; color:red; margin-left:10px;" data-id="${event.id}"></i>
-                                    </div>
+                let eventHTML = `
+                    <div class="col-xl-3 col-md-6 col-sm-12 d-flex justify-content-center" data-aos="zoom-in" data-aos-delay="${200 + (index * 100)}">
+                        <div class="card event-card" style="width: 100%; border: none;">
+                            <div class="event-image" style="overflow: hidden; height: 200px;">
+                                <img src="main/template/mysql/uploads/${event.image}" class="img-fluid" alt="${event.title}" style="object-fit: cover; width: 100%; height: 100%;">
+                            </div>
+                            <div class="event-content text-center" style="padding: 15px;">
+                                <h4 class="fw-bolder mb-2">${event.title}</h4>
+                                <p class="event-description mb-2">${event.description}</p>
+                                <p><strong>Start:</strong> ${startDate} at ${startTime}</p>
+                                <p><strong>End:</strong> ${endDate} at ${endTime}</p>
+                                <div class="event-actions text-center">
+                                    <i class="fas fa-edit text-primary me-2 edit-event" style="cursor: pointer;" data-id="${event.id}"></i>
+                                    <i class="fas fa-trash-alt delete-event" style="cursor:pointer; color:red; margin-left:10px;" data-id="${event.id}"></i>
                                 </div>
                             </div>
                         </div>
-                    `;
+                    </div>
+                `;
 
-                    eventsContainer.innerHTML += eventCard;
-                });
-            } else {
-                console.error("No events found.");
-            }
-        })
-        .catch(error => console.error("Error fetching events:", error));
+                eventsContainer.innerHTML += eventHTML;
+            });
+        } else {
+            console.error("No events found.");
+        }
+    })
+    .catch(error => console.error("Error fetching events:", error));
 
-    // Function to format date (YYYY-MM-DD -> Month DD, YYYY)
-    function formatDate(dateString) {
-        let date = new Date(dateString);
-        return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-    }
+// Function to format date (YYYY-MM-DD -> Month DD, YYYY)
+function formatDate(dateString) {
+    let date = new Date(dateString);
+    return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
 
-    // Function to format time (HH:MM:SS -> HH:MM AM/PM)
-    function formatTime(dateString) {
-        let date = new Date(dateString);
-        return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
-    }
+// Function to format time (HH:MM:SS -> HH:MM AM/PM)
+function formatTime(dateString) {
+    let date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+}
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -416,11 +415,11 @@
                   response.data.forEach((official, index) => {
                       let officialHTML = `
                           <div class="col-xl-3 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="${200 + (index * 100)}">
-                              <div class="team-member">
-                                  <div class="member-img">
-                                      <img src="main/template/mysql/uploads/officials/${official.image}" class="img-fluid" alt="${official.first_name}">
+                              <div class="card team-member" style="width: 100%; border: none;">
+                                  <div class="member-img" style="overflow: hidden;">
+                                      <img src="main/template/mysql/uploads/officials/${official.image}" class="img-fluid" alt="${official.first_name}" style="object-fit: cover; width: 100%; height: 100%;">
                                   </div>
-                                  <div class="member-info">
+                                  <div class="member-info text-center" style="padding: 15px;">
                                       <h4>${official.first_name} ${official.middle_name} ${official.last_name}</h4>
                                       <span>${positionMap[official.position] || "Unknown"}</span>
                                   </div>

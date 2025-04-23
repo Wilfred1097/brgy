@@ -1,41 +1,39 @@
 <?php
 // Include database connection
 include 'conn.php';
-require 'check_cookies.php'; // Check if the cookie is present
+require 'check_cookies.php';
 
-// Return JSON response with distinct field naming
 header('Content-Type: application/json');
 
 try {
-    // Check if 'dv_no' parameter is available in the GET request
     if (isset($_GET['dv_no'])) {
-        $dv_no = $_GET['dv_no'];
-        
-        // Prepare the SQL query with a WHERE clause to filter starting with 'dv_no'
-        $sql = "SELECT financial_transaction.id AS transaction_id, financial_transaction.*, sub_program_with_rao_program.*
-                FROM financial_transaction
-                JOIN sub_program_with_rao_program ON financial_transaction.fund = sub_program_with_rao_program.id
-                WHERE financial_transaction.dv_no LIKE :dv_no LIMIT 10";  // Use a limit for better performance
-        
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['dv_no' => $dv_no . '%']);  // Use the user input to filter results
-
+        $dv_no = $_GET['dv_no']; // Get the value from GET parameters
     } else {
-        // No input provided, you might want to handle this accordingly
-        echo json_encode(["error" => "No input provided"]);
+        $dv_no = 124; // Assign a default value if not set
+    }
+
+    // Validate input.  Crucial for security!
+    if (!is_numeric($dv_no)) {
+        echo json_encode(["error" => "Invalid 'dv_no' format"]);
         exit;
     }
 
-    // Fetch data as an associative array
+    // Prepare the SQL query
+    $sql = "SELECT financial_transaction.id AS transaction_id, financial_transaction.*, sub_program_with_rao_program.*
+            FROM financial_transaction
+            JOIN sub_program_with_rao_program ON financial_transaction.fund = sub_program_with_rao_program.id
+            WHERE financial_transaction.dv_no LIKE :dv_no LIMIT 10";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['dv_no' => $dv_no . '%']);
+
     $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Debugging: Check if data exists
     if (empty($transactions)) {
         echo json_encode(["error" => "No data found matching your input"]);
         exit;
     }
 
-    // Return JSON response
     echo json_encode($transactions);
 } catch (PDOException $e) {
     echo json_encode(["error" => $e->getMessage()]);

@@ -569,7 +569,7 @@
                     if (response.status === "success") {
                         $('#editModal').modal('hide');
                         Swal.fire({ title: "Success!", text: response.message, icon: "success", timer: 2000, showConfirmButton: true });
-                        setTimeout(fetchTransactions, 3000);
+                        setTimeout(fetchTransactions, 500);
                     } else {
                         Swal.fire({ title: "Error!", text: response.message, icon: "error" });
                     }
@@ -595,6 +595,7 @@
 
             // Ensure gross amount is correctly parsed as a number
             formData['grossAmount'] = parseFloat(formData['grossAmount'].replace(/,/g, ''));
+            console.log(formData);
 
             $.ajax({
                 url: "mysql/add_transaction.php",
@@ -631,8 +632,8 @@
                     fundSelect.empty().append('<option value="" disabled selected>Select a Program</option>');
 
                     // Populate the dropdown with fetched program names and amounts
-                    data.forEach(sub_program => {
-                        fundSelect.append(`<option value="${sub_program.id}" data-amount="${sub_program.amount}">${sub_program.name} - ₱${parseFloat(sub_program.amount).toLocaleString()}</option>`);
+                    data.forEach(rao_program => {
+                        fundSelect.append(`<option value="${rao_program.id}" data-amount="${rao_program.amount}">${rao_program.name} - ₱${parseFloat(rao_program.amount).toLocaleString()}</option>`);
                     });
                 },
                 error: function () {
@@ -738,7 +739,7 @@
                                 <td>${new Date(transaction.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>${transaction.cheque_no || 'N/A'}</td>
                                 <td>${transaction.dv_no || 'N/A'}</td>
-                                <td>${transaction.rao_program_name || 'N/A'} - ${transaction.name || 'N/A'}</td>
+                                <td>${transaction.name || 'N/A'}</td>
                                 <td>${transaction.payee || 'N/A'}</td>
                                 <td>${transaction.particulars || 'N/A'}</td>
                                 <td>₱${transaction.gross_amount ? parseFloat(transaction.gross_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>

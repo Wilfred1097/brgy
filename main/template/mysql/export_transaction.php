@@ -123,11 +123,9 @@ try {
         // Prepare SQL query with placeholders
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
         $sql = "SELECT financial_transaction.*,
-               sub_program.name AS sub_program_name,
                rao_program.name AS rao_program_name
                 FROM financial_transaction
-                JOIN sub_program ON financial_transaction.fund = sub_program.id
-                JOIN rao_program ON sub_program.rao_program_id = rao_program.id
+                JOIN rao_program ON financial_transaction.fund = rao_program.id
                 WHERE financial_transaction.id IN ($placeholders)";
 
         try {
@@ -181,7 +179,7 @@ try {
                     $pdf->Cell(22, 5, date("M j, Y", strtotime($row['date'])), 1, 0, 'C');
                     $pdf->Cell(21, 5, $row['cheque_no'], 1, 0, 'C');
                     $pdf->Cell(21, 5, $row['dv_no'], 1, 0, 'C');
-                    $pdf->Cell(49, 5, $row['rao_program_name'] . ' - ' . $row['sub_program_name'], 1, 0, 'C');
+                    $pdf->Cell(49, 5, $row['rao_program_name'], 1, 0, 'C');
                     $pdf->Cell(49, 5, $row['payee'], 1, 0, 'C');
                     $pdf->Cell(35, 5, $row['particulars'], 1, 0, 'C');
                     $pdf->Cell(25, 5, 'P ' . number_format($gross_amount, 2), 1, 0, 'C');

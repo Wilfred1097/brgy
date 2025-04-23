@@ -372,35 +372,51 @@
                         $("#suggestions").empty(); // Clear previous suggestions
                         if (data.length > 0) {
                             $.each(data, function(index, value) {
-                                $("#suggestions").append('<a href="#" class="list-group-item list-group-item-action suggestion-item">' + value.dv_no + '</a>');
+                                $("#suggestions").append('<a href="#" class="list-group-item list-group-item-action suggestion-item" data-dv-no="' + value.dv_no + '" data-cheque-no="' + value.cheque_no + '" data-project-amount="' + value.amount + '">' + value.dv_no + '</a>');
                             });
                             $("#suggestions").show(); // Show suggestions
                         } else {
                             $("#suggestions").hide(); // Hide if no suggestions
+                            $("#chequeNumber").val(""); // Clear cheque number if no matches
+                            $("#projectAmount").val(""); // Clear project amount if no matches
                         }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error fetching data:", errorThrown);
+                        $("#suggestions").hide();
+                        $("#chequeNumber").val("");
+                        $("#projectAmount").val("");
                     }
                 });
             } else {
                 $("#suggestions").hide(); // Hide suggestions if input is empty
+                $("#chequeNumber").val("");
+                $("#projectAmount").val("");
             }
         });
 
-        // Handle click on suggestion
         $(document).on("click", ".suggestion-item", function(e) {
             e.preventDefault();
-            var selectedDvNo = $(this).text();
-            $("#voucherNo").val(selectedDvNo); // Set the selected value in the input
+            var selectedDvNo = $(this).data("dv-no");
+            var chequeNo = $(this).data("cheque-no");
+            var projectAmount = $(this).data("project-amount");
+            $("#voucherNo").val(selectedDvNo);
+            $("#chequeNumber").val(chequeNo);  // Populate chequeNumber
+            $("#projectAmount").val(projectAmount); // Populate projectAmount
             console.log("Selected DV No: " + selectedDvNo);
+            console.log("Cheque Number: " + chequeNo); // Log the selected cheque number
+            console.log("Project Amount: " + projectAmount);
             $("#suggestions").hide(); // Hide the suggestions
         });
 
+
         // Hide suggestions when clicking outside
         $(document).on("click", function(e) {
-            if (!$(e.target).closest("#voucherNo").length) {
+            if (!$(e.target).closest("#voucherNo").length && !$(e.target).closest("#suggestions").length) {
                 $("#suggestions").hide(); // Hide suggestions when clicking outside
             }
         });
     });
-    </script>
+</script>
   </body>
 </html>

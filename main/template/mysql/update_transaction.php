@@ -10,13 +10,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Get data from POST request
         $id = $_POST['id'] ?? '';
         $date = $_POST['date'] ?? '';
-        $chequeNumber = $_POST['cheque'] ?? ''; // FIX: Correct key
-        $voucherNo = $_POST['voucher'] ?? '';   // FIX: Correct key
+        $chequeNumber = $_POST['cheque'] ?? ''; // Correct key
+        $voucherNo = $_POST['voucher'] ?? '';   // Correct key
         $fund = $_POST['fund'] ?? '';
         $payee = $_POST['payee'] ?? '';
         $particulars = $_POST['particulars'] ?? '';
         $grossAmount = isset($_POST['gross']) ? floatval(str_replace(',', '', $_POST['gross'])) : 0;
         $vatable = isset($_POST['vatable']) ? intval($_POST['vatable']) : 0;
+        $pbcNo = $_POST['pbc'] ?? ''; // Retrieve PBC No.
+        $accountNumber = $_POST['accountNumber'] ?? ''; // Retrieve Account No.
 
         // Default VAT & EVAT values
         $vat = 0;
@@ -48,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 SET date = :date, cheque_no = :chequeNumber, dv_no = :voucherNo, fund = :fund,
                     payee = :payee, particulars = :particulars, gross_amount = :grossAmount,
                     vatable = :vatable, vat = :vatvalue, evat = :evatvalue,
-                    vat_amount = :vat, evat_amount = :evat, net_amount = :totalAmount
+                    vat_amount = :vat, evat_amount = :evat, net_amount = :totalAmount,
+                    pbc_no = :pbcNo, account_no = :accountNumber
                 WHERE id = :id";
 
         // Prepare statement
@@ -69,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':vat', $vat);
         $stmt->bindParam(':evat', $evat);
         $stmt->bindParam(':totalAmount', $totalAmount);
+        $stmt->bindParam(':pbcNo', $pbcNo); // Bind PBC No.
+        $stmt->bindParam(':accountNumber', $accountNumber); // Bind Account No.
 
         // Execute query
         if ($stmt->execute()) {

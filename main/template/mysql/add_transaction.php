@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $particulars = $_POST['particulars'] ?? '';
         $grossAmount = isset($_POST['grossAmount']) ? floatval($_POST['grossAmount']) : 0;
         $vatable = isset($_POST['vatable']) ? intval($_POST['vatable']) : 0;
+        $pbcNo = $_POST['pbcNo'] ?? ''; // Get PBC No.
+        $accountNumber = $_POST['accountNumber'] ?? ''; // Get Account No.
 
         // Default VAT & EVAT values
         $vat = 0;
@@ -50,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // SQL Query (Use named placeholders for PDO)
-        $sql = "INSERT INTO financial_transaction (date, cheque_no, dv_no, fund, payee, particulars, gross_amount, vatable, vat, evat, vat_amount, evat_amount, net_amount)
-                VALUES (:date, :chequeNumber, :voucherNo, :fund, :payee, :particulars, :grossAmount, :vatable, :vatvalue, :evatvalue, :vat, :evat, :totalAmount)";
+        $sql = "INSERT INTO financial_transaction (date, cheque_no, dv_no, fund, payee, particulars, gross_amount, vatable, vat, evat, vat_amount, evat_amount, net_amount, pbc_no, account_no)
+                VALUES (:date, :chequeNumber, :voucherNo, :fund, :payee, :particulars, :grossAmount, :vatable, :vatvalue, :evatvalue, :vat, :evat, :totalAmount, :pbcNo, :accountNumber)";
 
         // Prepare statement
         $stmt = $pdo->prepare($sql);
@@ -70,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':vat', $vat);
         $stmt->bindParam(':evat', $evat);
         $stmt->bindParam(':totalAmount', $totalAmount);
+        $stmt->bindParam(':pbcNo', $pbcNo); // Bind PBC No.
+        $stmt->bindParam(':accountNumber', $accountNumber); // Bind Account No.
 
         // Execute query
         if ($stmt->execute()) {

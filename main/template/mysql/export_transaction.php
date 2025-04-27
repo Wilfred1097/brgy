@@ -153,7 +153,7 @@ try {
                 $pdf->SetFont('Arial', 'B', 8);
                 $pdf->SetFillColor(200, 200, 200); // Set fill color for headers
                 $pdf->Cell(22, 6, 'Date', 1, 0, 'C', true);
-                $pdf->Cell(21, 6, 'Cheque No', 1, 0, 'C', true);
+                $pdf->Cell(21, 6, 'Check No', 1, 0, 'C', true);
                 $pdf->Cell(21, 6, 'Voucher No', 1, 0, 'C', true);
                 $pdf->Cell(49, 6, 'Fund', 1, 0, 'C', true);
                 $pdf->Cell(49, 6, 'Payee', 1, 0, 'C', true);
@@ -194,22 +194,18 @@ try {
                     $total_net_amount += $net_amount;
                 }
 
-                // Add a blank row for spacing
-                $pdf->Cell(272, 5, '', 0, 1, 'R');
-
-                // Display total calculations
+                // Display total calculations without descriptions
                 $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(252, 4, 'Total Gross Amount:', 0, 0, 'R'); 
-                $pdf->Cell(25, 4, 'P ' . number_format($total_gross_amount, 2), 0, 1, 'R'); 
-
-                $pdf->Cell(252, 4, 'Total VAT Amount:', 0, 0, 'R'); 
-                $pdf->Cell(25, 4, 'P ' . number_format($total_vat, 2), 0, 1, 'R'); 
-
-                $pdf->Cell(252, 4, 'Total eVAT Amount:', 0, 0, 'R'); 
-                $pdf->Cell(25, 4, 'P ' . number_format($total_evat, 2), 0, 1, 'R'); 
-
-                $pdf->Cell(252, 4, 'Total Net Amount:', 0, 0, 'R'); 
-                $pdf->Cell(25, 4, 'P ' . number_format($total_net_amount, 2), 0, 1, 'R'); 
+                $pdf->Cell(22, 5, '', 0, 0, 'C'); // Empty cell for Date
+                $pdf->Cell(21, 5, '', 0, 0, 'C'); // Empty cell for Check No
+                $pdf->Cell(21, 5, '', 0, 0, 'C'); // Empty cell for Voucher No
+                $pdf->Cell(49, 5, '', 0, 0, 'C'); // Empty cell for Fund
+                $pdf->Cell(49, 5, '', 0, 0, 'C'); // Empty cell for Payee
+                $pdf->Cell(35, 5, '', 0, 0, 'C'); // Empty cell for Particulars
+                $pdf->Cell(25, 5, 'P ' . number_format($total_gross_amount, 2), 1, 0, 'C'); // Total Gross Amount
+                $pdf->Cell(15, 5, number_format($total_vat / $total_gross_amount * 100, 2), 1, 0, 'C'); // Total VAT %
+                $pdf->Cell(15, 5, number_format($total_evat / $total_gross_amount * 100, 2), 1, 0, 'C'); // Total eVAT %
+                $pdf->Cell(25, 5, 'P ' . number_format($total_net_amount, 2), 1, 1, 'C'); // Total Net Amount
 
                 // Save the PDF or display it, depending on your workflow 
 
@@ -227,7 +223,7 @@ try {
                 // First, save the PDF with the complete content (including the new SCKI no if applicable)
                 try {
                     // Now save the PDF file with the new SCKI number
-                    $pdf->Output('F', $file_name); // Save the PDF file to the server
+                    $pdf->Output('F', $file_name); // Save the PDF file to the server F for save I for preview
 
                     // Update the database with the new SCKI number
                     $update_stmt = $pdo->prepare("UPDATE settings SET current_scki_no = ? WHERE id = ?"); // Update the SCKI number

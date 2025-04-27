@@ -9,7 +9,7 @@ try {
     if (isset($_GET['dv_no'])) {
         $dv_no = $_GET['dv_no']; // Get the value from GET parameters
     } else {
-        $dv_no = 124; // Assign a default value if not set
+        $dv_no = 1432; // Assign a default value if not set
     }
 
     // Validate input.  Crucial for security!

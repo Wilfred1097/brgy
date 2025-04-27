@@ -68,8 +68,8 @@
                   </div>
                   <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
-                      <button id="export-disbursement" class="btn btn-primary" data-toggle="modal" data-target="#disbursementModal">
-                          Disbursement Voucher
+                      <button id="export-transmital" class="btn btn-primary" data-toggle="modal" data-target="#transmitalModal">
+                          Transmittal letter
                       </button>
                   </div>
               </div>
@@ -77,11 +77,11 @@
           </div>
 
           <!-- Disbursement Modal -->
-          <div class="modal fade" id="disbursementModal" tabindex="-1" aria-labelledby="disbursementModalLabel" aria-hidden="true">
+          <div class="modal fade" id="transmitalModal" tabindex="-1" aria-labelledby="transmitalModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
                       <div class="modal-header">
-                          <h5 class="modal-title" id="disbursementModalLabel">Disbursement Voucher</h5>
+                          <h5 class="modal-title" id="transmitalModalLabel">Disbursement Voucher</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                           </button>
@@ -124,38 +124,51 @@
                                       <label class="form-label">Date:</label>
                                       <input type="date" class="form-control" id="date" required>
                                   </div>
-                                  <!-- Cheque No -->
+                                  <!-- PBC No. -->
+                                    <div class="col-md-6 col-sm-12">
+                                        <label class="form-label">PBC No.:</label>
+                                        <input type="number" class="form-control" placeholder="enter PBC number" id="pbcNo" required>
+                                    </div>
+                              </div>
+
+                              <div class="row mt-2">
+                                <!-- Payee -->
                                   <div class="col-md-6">
-                                      <label class="form-label">Cheque No.:</label>
-                                      <input type="text" class="form-control" placeholder="enter cheque number" id="chequeNumber" required>
+                                      <label class="form-label">Payee:</label>
+                                      <input type="text" class="form-control" placeholder="enter payee name" id="payee" required>
+                                  </div>
+                                  <!-- Payee -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Account No:</label>
+                                      <input type="number" class="form-control" placeholder="enter account number" id="accountNumber" required>
                                   </div>
                               </div>
 
                               <div class="row mt-2">
+                                <!-- Cheque No -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Cheque No.:</label>
+                                      <input type="text" class="form-control" placeholder="enter cheque number" id="chequeNumber" required>
+                                  </div>
                                   <!-- Disbursement Voucher No. -->
                                   <div class="col-md-6">
                                       <label class="form-label">Disbursement Voucher No.:</label>
                                       <input type="text" class="form-control" placeholder="enter voucher number" id="voucherNo" required>
                                   </div>
-                                  <!-- Fund -->
+                              </div>
+
+                              <div class="row mt-2">
+                                <!-- Particulars -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Particulars:</label>
+                                      <input type="text" class="form-control" placeholder="enter particulars" id="particulars" required>
+                                  </div>
+                                <!-- Fund -->
                                   <div class="col-md-6">
                                       <label class="form-label">Fund:</label>
                                       <select class="form-control" id="fund" required>
                                           <option value="" disabled selected>Select a Program</option>
                                       </select>
-                                  </div>
-                              </div>
-
-                              <div class="row mt-2">
-                                  <!-- Payee -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Payee:</label>
-                                      <input type="text" class="form-control" placeholder="enter payee name" id="payee" required>
-                                  </div>
-                                  <!-- Particulars -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Particulars:</label>
-                                      <input type="text" class="form-control" placeholder="enter particulars" id="particulars" required>
                                   </div>
                               </div>
 
@@ -192,7 +205,7 @@
                                   </div>
                               </div>
                               <button type="submit" class="btn btn-primary mt-2 d-flex float-end">
-                                  Update Transaction
+                                  Add Transaction
                               </button>
                           </form>
                       </div>
@@ -202,7 +215,7 @@
           <!-- Insert Transaction Modal -->
 
           <!-- Edit Transaction Modal -->
-           <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- Added modal-lg for larger width -->
                   <div class="modal-content">
                       <div class="modal-header">
@@ -219,8 +232,19 @@
                                       <input type="date" class="form-control" id="edit_date" name="date" required>
                                   </div>
                                   <div class="col-md-6">
+                                      <label class="form-label">PBC No.:</label>
+                                      <input type="number" class="form-control" placeholder="Enter PBC number" id="edit_pbc" name="pbc" required>
+                                  </div>
+                              </div>
+
+                              <div class="row mt-2">
+                                  <div class="col-md-6">
                                       <label class="form-label">Cheque No.:</label>
                                       <input type="text" class="form-control" placeholder="Enter cheque number" id="edit_cheque" name="cheque" required>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <label class="form-label">Account No:</label>
+                                      <input type="number" class="form-control" placeholder="Enter account number" id="edit_accountNumber" name="accountNumber" required>
                                   </div>
                               </div>
 
@@ -282,7 +306,7 @@
                               </div>
 
                               <button type="submit" class="btn btn-success mt-2 d-flex float-end">
-                                  Submit Transaction
+                                  Update Transaction
                               </button>
                           </form>
                       </div>
@@ -324,10 +348,12 @@
                                 <label class="form-check-label" for="solid"> </label>
                               </div>
                             </th>
-                            <th>ID</th>
+                            <!-- <th>ID</th> -->
                             <th>Date</th>
+                            <th>PBC No.</th>
                             <th>Cheque No.</th>
                             <th>Voucher No.</th>
+                            <th>Account No.</th>
                             <th>Fund</th>
                             <th>Payee</th>
                             <th>Particulars</th>
@@ -509,6 +535,8 @@
             $('#edit_fund').val($(this).data('fund'));
             $('#edit_payee').val($(this).data('payee'));
             $('#edit_particulars').val($(this).data('particulars'));
+            $('#edit_pbc').val($(this).data('pbc'));
+            $('#edit_accountNumber').val($(this).data('account'));
 
             let vatableValue = $(this).data('vatable');
             let vatValue = $(this).data('vat') || '3';
@@ -559,7 +587,7 @@
             let formData = $(this).serializeArray();
             formData.push({ name: "vatable", value: $('#edit_vatable').is(':checked') ? 1 : 0 });
 
-            console.log(formData);
+            // console.log(formData);
 
             $.ajax({
                 url: "mysql/update_transaction.php",
@@ -735,10 +763,11 @@
                         let row = `
                             <tr>
                                 <td><input type="checkbox" class="form-check-input"></td>
-                                <td>${transaction.transaction_id || 'N/A'}</td>  <!-- Use the new transaction_id -->
                                 <td>${new Date(transaction.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
+                                <td>${transaction.pbc_no || 'N/A'}</td>
                                 <td>${transaction.cheque_no || 'N/A'}</td>
                                 <td>${transaction.dv_no || 'N/A'}</td>
+                                <td>${transaction.account_no || 'N/A'}</td>
                                 <td>${transaction.name || 'N/A'}</td>
                                 <td>${transaction.payee || 'N/A'}</td>
                                 <td>${transaction.particulars || 'N/A'}</td>
@@ -750,7 +779,7 @@
                                 <td>₱${transaction.evat_amount ? parseFloat(transaction.evat_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>₱${transaction.net_amount ? parseFloat(transaction.net_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary edit-btn" data-id="${transaction.transaction_id}" data-date="${transaction.date}" data-cheque="${transaction.cheque_no}" data-voucher="${transaction.dv_no}" data-fund="${transaction.fund}" data-payee="${transaction.payee}" data-particulars="${transaction.particulars}" data-vatable="${transaction.vatable}" data-gross="${transaction.gross_amount}" data-vat="${transaction.vat}" data-evat="${transaction.evat}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-primary edit-btn" data-id="${transaction.transaction_id}" data-pbc="${transaction.pbc_no}" data-account="${transaction.account_no}" data-date="${transaction.date}" data-cheque="${transaction.cheque_no}" data-voucher="${transaction.dv_no}" data-fund="${transaction.fund}" data-payee="${transaction.payee}" data-particulars="${transaction.particulars}" data-vatable="${transaction.vatable}" data-gross="${transaction.gross_amount}" data-vat="${transaction.vat}" data-evat="${transaction.evat}"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-sm btn-danger delete-btn" onclick="confirmDelete(${transaction.transaction_id});"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>

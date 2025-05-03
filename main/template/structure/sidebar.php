@@ -112,7 +112,7 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="chatbot.php">
+          <a class="sidebar-link" href="chatbot-configuration.php">
               <i class="fa-solid fa-robot"></i> <!-- ChatBot Icon -->
               <h6 class="f-w-600">ChatBot Configuration</h6>
           </a>

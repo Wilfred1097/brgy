@@ -57,6 +57,7 @@
     </style>
   </head>
   <body>
+    <?php include 'chatbot.php'; ?>
     <!-- page-wrapper Start-->
     <!-- tap on top starts-->
     <div class="tap-top"><i class="iconly-Arrow-Up icli"></i></div>
@@ -587,7 +588,6 @@
           });
 
           document.getElementById('modalTransactionDetails').innerHTML = `
-              <h5 class="modal-title">Transaction Details</h5>
               <div class="modal-body">
                 <div class="row">
                   <div class="col-md-6">

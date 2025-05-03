@@ -86,7 +86,8 @@
               <div class="row mt-3">
                   <!-- Buttons on the Left -->
                   <div class="col-auto">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add Barangay Transaction</button>
+                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add New Barangay Transaction</button>
+                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModalWithDV">Add Barangay Transaction with Existing DV</button>
                   </div>
                   <!-- <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
@@ -98,16 +99,195 @@
             </div>
           </div>
 
-          <!-- Insert Transaction Modal -->
+          <!-- Insert New Transaction Modal -->
           <div class="modal fade" id="addTransactionModal" tabindex="-1" role="dialog" aria-labelledby="addTransactionModal" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- Added modal-lg for larger width -->
+              <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5" role="document"> <!-- Added modal-lg for larger width -->
                   <div class="modal-content">
                       <div class="modal-header">
-                          <h4 class="modal-title">Add Barangay Transaction</h4>
+                          <h4 class="modal-title">Add New Barangay Transaction</h4>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                          <form method="POST" action="" id="financialForm">
+                          <form method="POST" action="" id="new_financialForm">
+                              <div class="row">
+                                  <!-- Disbursement Voucher No. -->
+                                  <div class="col-md-6 position-relative">
+                                      <label for="voucherNo">Disbursement Voucher No:</label>
+                                      <input type="text" id="new_voucherNo" class="form-control" placeholder="Enter voucher number">
+                                  </div>
+                                  <!-- Fund Cluster No -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Fund Cluster:</label>
+                                      <select class="form-control" id="new_fund" required>
+                                          <option value="" disabled selected>Select a Program</option>
+                                      </select>
+                                  </div>
+                              </div>
+
+                              <div class="row">
+                                  <!-- Entity Name -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Entity Name:</label>
+                                      <input type="text" class="form-control" placeholder="Enter entity name" id="new_entityName" required>
+                                  </div>
+                                  <!-- RIS Number -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">RIS Number:</label>
+                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="new_risNumber" required>
+                                  </div>
+                              </div>
+
+                              <div class="row">
+                                  <!-- Purchase Request Number -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Purchase Request No.:</label>
+                                      <input type="number" class="form-control" placeholder="Enter purchase request number" id="new_purchaseRequestNo" required>
+                                  </div>
+                                  <!-- Requisitioner -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Requisitioner:</label>
+                                      <input type="text" class="form-control" placeholder="Enter requisitioner name" id="new_requisitioner" required>
+                                  </div>
+                              </div>
+
+                              <div class="row">
+                                  <!-- Purchase Order Number -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Purchase Order No.:</label>
+                                      <input type="number" class="form-control" placeholder="Enter purchase order number" id="new_purchaseOrderNo" required>
+                                  </div>
+                                  <!-- Project Amount -->
+                                  <div class="col-md-6">
+                                      <label class="form-label">Project Amount:</label>
+                                      <input type="text" class="form-control" id="new_projectAmount" placeholder="Enter amount"  required>
+                                  </div>
+                              </div><hr>
+
+                              <div class="row">
+                                <!-- Supplier Column -->
+                                <div class="col-md-12">
+                                  <div class="row align-items-center">
+                                    <div class="col-md-12 d-flex">
+                                      <div class="me-2" style="flex: 1;">
+                                        <label for="supplierName" class="form-label">Supplier Name:</label>
+                                        <input type="text" class="form-control" id="supplierName" placeholder="Enter supplier name">
+                                      </div>
+                                      <div class="d-flex align-items-end">
+                                        <button id="addItemBtn" class="btn btn-primary mt-4">Add Item</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <!-- First Row: Item No, Unit, Description -->
+                                  <div id="supplierItemsContainer">
+                                    <div class="row mb-3 align-items-center">
+                                      <div class="col-md-2">
+                                        <label class="form-label">Item No:</label>
+                                        <input type="text" class="form-control itemNo" placeholder="Enter item number">
+                                      </div>
+                                      <div class="col-md-2">
+                                        <label class="form-label">Unit:</label>
+                                        <input type="text" class="form-control unit" placeholder="Enter unit">
+                                      </div>
+                                      <div class="col-md-4">
+                                        <label class="form-label">Description:</label>
+                                        <input type="text" class="form-control description" placeholder="Enter description">
+                                      </div>
+                                      <div class="col-md-1">
+                                        <label class="form-label">Quantity:</label>
+                                        <input type="number" class="form-control quantity" placeholder="Enter quantity">
+                                      </div>
+                                      <div class="col-md-1">
+                                        <label class="form-label">Unit Price:</label>
+                                        <input type="number" class="form-control unitPrice" step="0.01" placeholder="Enter unit price">
+                                      </div>
+                                      <div class="col-md-1">
+                                        <label class="form-label">Amount:</label>
+                                        <input type="number" class="form-control amount" step="0.01" placeholder="Enter amount">
+                                      </div>
+                                      <!-- Optional delete button here if needed -->
+                                    </div>
+                                  </div>
+                                </div><hr>
+                                <!-- Project and Theme Column -->
+                                <div class="col-md-12 p-3">
+                                  <h3>Project and Theme</h3>
+                                  
+                                  <div class="row mb-3">
+                                    <!-- Project Title and Theme -->
+                                    <div class="col-md-6">
+                                      <label for="projectTitle" class="form-label">Project Title and Theme:</label>
+                                      <input type="text" class="form-control" id="projectTitle" placeholder="Enter project title and theme">
+                                    </div>
+                                    <!-- Background and Rationale -->
+                                    <div class="col-md-6">
+                                      <label for="backgroundRationale" class="form-label">Background and Rationale:</label>
+                                      <textarea class="form-control" id="backgroundRationale" rows="1" placeholder="Enter background and rationale"></textarea>
+                                    </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                    <!-- Objectives -->
+                                    <div class="col-md-6">
+                                      <label for="objectives" class="form-label">Objectives:</label>
+                                      <textarea class="form-control" id="objectives" rows="1" placeholder="Enter objectives"></textarea>
+                                    </div>
+                                    <!-- Methodology -->
+                                    <div class="col-md-6">
+                                      <label for="methodology" class="form-label">Methodology:</label>
+                                      <textarea class="form-control" id="methodology" rows="1" placeholder="Enter methodology"></textarea>
+                                    </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                    <!-- Expected Output -->
+                                    <div class="col-md-6">
+                                      <label for="expectedOutput" class="form-label">Expected Output:</label>
+                                      <textarea class="form-control" id="expectedOutput" rows="1" placeholder="Enter expected output"></textarea>
+                                    </div>
+                                    <!-- Proponents -->
+                                    <div class="col-md-6">
+                                      <label for="proponents" class="form-label">Proponents:</label>
+                                      <textarea class="form-control" id="proponents" rows="1" placeholder="Enter proponents"></textarea>
+                                    </div>
+                                  </div>
+
+                                  <div class="row mb-3">
+                                    <!-- Venue -->
+                                    <div class="col-md-6">
+                                      <label for="venue" class="form-label">Venue:</label>
+                                      <input type="text" class="form-control" id="venue" placeholder="Enter venue">
+                                    </div>
+                                    <!-- Date -->
+                                    <div class="col-md-6">
+                                      <label for="date" class="form-label">Date:</label>
+                                      <input type="date" class="form-control" id="date">
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+
+                              <button type="submit" class="btn btn-primary d-flex float-end mb-3">
+                                  Submit Transaction
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Insert New Transaction -->
+
+          <!-- Insert Transaction with existing DVModal -->
+          <div class="modal fade" id="addTransactionModalWithDV" tabindex="-1" role="dialog" aria-labelledby="addTransactionModalWithDV" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- Added modal-lg for larger width -->
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h4 class="modal-title">Add Barangay Transaction with Existing DV</h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form method="POST" action="" id="existing_financialForm">
                               <div class="row">
                                   <!-- Disbursement Voucher No. -->
                                   <div class="col-md-6 position-relative">
@@ -118,7 +298,7 @@
                                   <!-- Fund Cluster No -->
                                   <div class="col-md-6">
                                       <label class="form-label">Fund Cluster:</label>
-                                      <select class="form-control" id="fund" required>
+                                      <select class="form-control" id="existing_fund" required>
                                           <option value="" disabled selected>Select a Program</option>
                                       </select>
                                   </div>
@@ -128,12 +308,12 @@
                                   <!-- Entity Name -->
                                   <div class="col-md-6">
                                       <label class="form-label">Entity Name:</label>
-                                      <input type="text" class="form-control" placeholder="Enter entity name" id="entityName" required>
+                                      <input type="text" class="form-control" placeholder="Enter entity name" id="existing_entityName" required>
                                   </div>
                                   <!-- RIS Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">RIS Number:</label>
-                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="risNumber" required>
+                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="existing_risNumber" required>
                                   </div>
                               </div>
 
@@ -141,12 +321,12 @@
                                   <!-- Purchase Request Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">Purchase Request No.:</label>
-                                      <input type="number" class="form-control" placeholder="Enter purchase request number" id="purchaseRequestNo" required>
+                                      <input type="number" class="form-control" placeholder="Enter purchase request number" id="existing_purchaseRequestNo" required>
                                   </div>
                                   <!-- Requisitioner -->
                                   <div class="col-md-6">
                                       <label class="form-label">Requisitioner:</label>
-                                      <input type="text" class="form-control" placeholder="Enter requisitioner name" id="requisitioner" required>
+                                      <input type="text" class="form-control" placeholder="Enter requisitioner name" id="existing_requisitioner" required>
                                   </div>
                               </div>
 
@@ -154,12 +334,12 @@
                                   <!-- Purchase Order Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">Purchase Order No.:</label>
-                                      <input type="number" class="form-control" placeholder="Enter purchase order number" id="purchaseOrderNo" required>
+                                      <input type="number" class="form-control" placeholder="Enter purchase order number" id="existing_purchaseOrderNo" required>
                                   </div>
                                   <!-- Project Amount -->
                                   <div class="col-md-6">
                                       <label class="form-label">Project Amount:</label>
-                                      <input type="text" class="form-control" id="projectAmount" required readonly>
+                                      <input type="text" class="form-control" id="existing_projectAmount" required readonly>
                                   </div>
                               </div>
 
@@ -171,87 +351,7 @@
                   </div>
               </div>
           </div>
-          <!-- Insert Transaction -->
-
-          <!-- Edit Transaction Modal -->
-          <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- Added modal-lg for larger width -->
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h4 class="modal-title">Edit Barangay Transaction</h4>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                          <form method="POST" action="" id="editTransactionForm">
-                              <input type="hidden" id="edit_id" name="id">
-
-                              <div class="row">
-                                  <!-- Disbursement Voucher No. -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Disbursement Voucher No.:</label>
-                                      <input type="text" class="form-control" placeholder="Enter voucher number" id="edit_voucher" name="voucher" required>
-                                  </div>
-                                  <!-- Fund Cluster No -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Fund Cluster:</label>
-                                      <select class="form-control" id="edit_fund_cluster" name="fund_cluster" required>
-                                          <option value="" disabled selected>Select Fund Cluster</option>
-                                          <option value="Cluster 1">Cluster 1</option>
-                                          <option value="Cluster 2">Cluster 2</option>
-                                          <option value="Cluster 3">Cluster 3</option>
-                                          <!-- Add more options as needed -->
-                                      </select>
-                                  </div>
-                              </div>
-
-                              <div class="row mt-2">
-                                  <!-- Entity Name -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Entity Name:</label>
-                                      <input type="text" class="form-control" placeholder="Enter entity name" id="edit_entity_name" name="entity_name" required>
-                                  </div>
-                                  <!-- RIS Number -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">RIS Number:</label>
-                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="edit_ris_number" name="ris_number" required>
-                                  </div>
-                              </div>
-
-                              <div class="row mt-2">
-                                  <!-- Purchase Request Number -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Purchase Request No.:</label>
-                                      <input type="number" class="form-control" placeholder="Enter purchase request number" id="edit_purchase_request_no" name="purchase_request_no" required>
-                                  </div>
-                                  <!-- Requisitioner -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Requisitioner:</label>
-                                      <input type="text" class="form-control" placeholder="Enter requisitioner name" id="edit_requisitioner" name="requisitioner" required>
-                                  </div>
-                              </div>
-
-                              <div class="row mt-2">
-                                  <!-- Purchase Order Number -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Purchase Order No.:</label>
-                                      <input type="number" class="form-control" placeholder="Enter purchase order number" id="edit_purchase_order_no" name="purchase_order_no" required>
-                                  </div>
-                                  <!-- Project Amount -->
-                                  <div class="col-md-6">
-                                      <label class="form-label">Project Amount:</label>
-                                      <input type="number" class="form-control" placeholder="Enter project amount" id="edit_project_amount" name="project_amount" required>
-                                  </div>
-                              </div>
-
-                              <button type="submit" class="btn btn-success mt-2 d-flex float-end">
-                                  Update Transaction
-                              </button>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <!-- Edit Transaction Modal -->
+          <!-- Insert Transaction with existing DV-->
 
           <!-- Container-fluid starts-->
           <div class="container-fluid default-dashboard">
@@ -270,9 +370,6 @@
                       <table class="table display table-bordernone mt-0" id="barangay-transaction-history" style="width:100%">
                         <thead>
                           <tr>
-                              
-                              <th>ID</th>
-                              <th>Date</th>
                               <th>Disbursement Voucher No.</th>
                               <th>Fund Cluster</th>
                               <th>Entity Name</th>
@@ -281,9 +378,6 @@
                               <th>Requisitioner</th>
                               <th>Purchase Order No.</th>
                               <th>Project Amount</th>
-                              <th>Payee</th>
-                              <th>Particulars</th>
-                              <th>Gross Amount</th>
                               <th>Action</th>
                           </tr>
                         </thead>
@@ -295,33 +389,26 @@
                   </div>
                 </div>
               </div>
-
-<!--               <div class="col-xxl-12 col-xl-12 col-md-12 box-col-12">
-                <div class="card">
-                  <div class="card-header card-no-border pb-0">
-                    <div class="header-top">
-                      <h3>SOIC Export History</h3>
-                    </div>
-                    <div class="card-body pt-0 manage-invoice">
-                    <div class="table-responsive theme-scrollbar">
-                      <table class="table display table-bordernone mt-0" id="file-history" style="width:100%">
-                        <thead>
-                          <tr>
-                            <th>Filename</th>
-                            <th>Date Generated</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
+
+          <div class="modal fade" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="transactionDetailsModalLabel">Transaction Details</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalTransactionDetails">
+                  <!-- Dynamic content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
         </div>
         <!-- Page header start-->
@@ -347,9 +434,6 @@
     <script src="../assets/js/height-equal.js"></script>
     <!-- config-->
     <script src="../assets/js/config.js"></script>
-    <!-- apex-->
-    <script src="../assets/js/chart/apex-chart/apex-chart.js"></script>
-    <script src="../assets/js/chart/apex-chart/stock-prices.js"></script>
     <!-- scrollbar-->
     <script src="../assets/js/scrollbar/simplebar.js"></script>
     <script src="../assets/js/scrollbar/custom.js"></script>
@@ -376,111 +460,492 @@
     <script src="../assets/js/script.js"></script>
 
     <script>
-      $(document).ready(function () {
-          fetchPrograms();
+      // Globally accessible function
+      function confirmDelete(transactionId) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("mysql/delete_barangay_transaction.php", { id: transactionId }, function (response) {
+                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                        location.reload();
+                    });
+                }, "json");
+            }
+        });
+      }
 
-          function fetchPrograms() {
-              $.ajax({
-                  url: 'mysql/fetch_programs.php',
-                  type: 'GET',
-                  dataType: 'json',
-                  success: function (data) {
-                      let fundSelect = $('#fund');
-                      fundSelect.empty().append('<option value="" disabled selected>Select a Program</option>');
+    $(document).ready(function () {
+        // --- Fetch and populate programs when page loads ---
+        fetchPrograms();
 
-                      // Populate the dropdown with fetched program names and amounts
-                      data.forEach(rao_program => {
-                          fundSelect.append(`<option value="${rao_program.id}" data-amount="${rao_program.amount}">${rao_program.name}</option>`);
-                      });
-                  },
-                  error: function () {
-                      console.error("Error fetching programs.");
-                  }
-              });
-          }
-
-          // Populate Gross Amount input when a fund is selected (Add Transaction)
-          $('#fund').change(function () {
-              let selectedOption = $(this).find('option:selected');
-              let amount = selectedOption.data('amount'); // Changed from 'projectAmount' to 'amount'
-              $('#projectAmount').val(amount ? parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : '');
-          });
-      });
-  </script>
-  <script>
-$(document).ready(function() {
-    $('#voucherNo').on('input', function() {
-        var voucherNo = $(this).val();
-        
-        if (voucherNo.length > 0) {
+        function fetchPrograms() {
             $.ajax({
-                url: 'mysql/fetch_dv.php', // Ensure this URL is correct
-                method: 'GET', // Change the method if needed
-                data: { dv_no: voucherNo }, // Ensure this matches your PHP parameter
+                url: 'mysql/fetch_programs.php',
+                type: 'GET',
                 dataType: 'json',
-                success: function(response) {
-                    $('#suggestions').empty().show();
-                    $('#fund').empty().append('<option value="" disabled selected>Select a Program</option>'); // Reset fund options
-                    
-                    // Store items with amounts for future use
-                    const items = {};
-                    
-                    if (response && Array.isArray(response) && response.length > 0) {
-                        response.forEach(function(item) {
-                            // Suggestion items for the input
-                            $('#suggestions').append('<div class="suggestion-item" style="cursor: pointer;" data-amount="' + item.rao_program_amount + '">' + item.dv_no + '</div>');
-                            
-                            // Populate the fund select with unique rao_program_names
-                            if (item.rao_program_name) {
-                                if (!items[item.dv_no]) {
-                                    items[item.dv_no] = {
-                                        rao_program_amount: item.rao_program_amount,
-                                        funds: []
-                                    };
-                                }
-                                items[item.dv_no].funds.push({
-                                    transaction_id: item.transaction_id,
-                                    rao_program_name: item.rao_program_name
-                                });
-                            }
-                        });
-
-                        // Attach click event to suggestion items
-                        $(document).on('click', '.suggestion-item', function() {
-                            var selectedDv = $(this).text().trim();
-                            
-                            // Update the input based on selected item
-                            $('#voucherNo').val(selectedDv); // Update voucherNo input
-                            $('#suggestions').hide(); // Hide suggestions
-
-                            // Now set the project amount and fund
-                            if (items[selectedDv]) {
-                                const projectAmount = items[selectedDv].rao_program_amount; // Get the amount from items
-                                $('#projectAmount').val(projectAmount ? parseFloat(projectAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : '');
-
-                                // Populate the fund select based on the selected DV number
-                                $('#fund').empty(); // Clear previous fund options
-                                items[selectedDv].funds.forEach(function(fund) {
-                                    $('#fund').append('<option value="' + fund.transaction_id + '">' + fund.rao_program_name + '</option>');
-                                });
-                            }
-                        });
-                    } else {
-                        $('#suggestions').hide();
-                    }
+                success: function (data) {
+                    let fundSelect = $('#new_fund');
+                    fundSelect.empty().append('<option value="" disabled selected>Select a Program</option>');
+                    data.forEach(rao_program => {
+                        fundSelect.append(`<option value="${rao_program.id}" data-amount="${rao_program.amount}">${rao_program.name}</option>`);
+                    });
                 },
-                error: function() {
-                    $('#suggestions').hide();
-                    console.error("An error occurred while fetching the data.");
+                error: function () {
+                    console.error("Error fetching programs.");
                 }
             });
-        } else {
-            $('#suggestions').hide();
-            $('#fund').empty().append('<option value="" disabled selected>Select a Program</option>'); // Reset options if input is cleared
-            $('#projectAmount').val(''); // Clear the project amount input
+        }
+
+        // Populate the project amount input when a fund is selected
+        $('#new_fund').change(function () {
+            let selectedOption = $(this).find('option:selected');
+            let amount = selectedOption.data('amount');
+            $('#new_projectAmount').val(amount ? parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : '');
+        });
+
+        // --- Voucher No input event for suggestions and related logic ---
+        $('#voucherNo').on('input', function() {
+            var voucherNo = $(this).val();
+
+            if (voucherNo.length > 0) {
+                $.ajax({
+                    url: 'mysql/fetch_dv.php',
+                    method: 'GET',
+                    data: { dv_no: voucherNo },
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#suggestions').empty().show();
+                        $('#new_fund').empty().append('<option value="" disabled selected>Select a Program</option>');
+                        
+                        const items = {};
+
+                        if (response && Array.isArray(response) && response.length > 0) {
+                            response.forEach(function(item) {
+                                // Suggestions for the input
+                                $('#suggestions').append('<div class="suggestion-item" style="cursor:pointer;" data-amount="' + item.rao_program_amount + '">' + item.dv_no + '</div>');
+
+                                // Store funds with amounts for the selected DV
+                                if (item.rao_program_name) {
+                                    if (!items[item.dv_no]) {
+                                        items[item.dv_no] = {
+                                            rao_program_amount: item.rao_program_amount,
+                                            funds: []
+                                        };
+                                    }
+                                    items[item.dv_no].funds.push({
+                                        transaction_id: item.transaction_id,
+                                        rao_program_name: item.rao_program_name
+                                    });
+                                }
+                            });
+
+                            // Handle suggestion click
+                            $(document).off('click', '.suggestion-item').on('click', '.suggestion-item', function() {
+                                var selectedDv = $(this).text().trim();
+                                $('#voucherNo').val(selectedDv);
+                                $('#suggestions').hide();
+
+                                if (items[selectedDv]) {
+                                    const projectAmount = items[selectedDv].rao_program_amount;
+                                    $('#new_projectAmount').val(projectAmount ? parseFloat(projectAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : '');
+                                    $('#new_fund').empty();
+                                    items[selectedDv].funds.forEach(function(fund) {
+                                        $('#new_fund').append('<option value="' + fund.transaction_id + '">' + fund.rao_program_name + '</option>');
+                                    });
+                                }
+                            });
+                        } else {
+                            $('#suggestions').hide();
+                        }
+                    },
+                    error: function() {
+                        $('#suggestions').hide();
+                        console.error("Error fetching DV data.");
+                    }
+                });
+            } else {
+                $('#suggestions').hide();
+                $('#new_fund').empty().append('<option value="" disabled selected>Select a Program</option>');
+                $('#new_projectAmount').val('');
+            }
+        });
+
+        // --- Fetch and display transactions ---
+        fetchTransactions();
+
+        // Declare globally
+        function showDetails(id, voucher_no, fund_cluster, entity_name, ris_number, purchase_request_no, requisitioner, purchase_order_no, project_amount, supplier_name, project_title, background_rationale, objectives, methodology, expected_output, proponents, venue, date, items) {
+          const itemsArray = items.split('||').map(item => {
+            return item.split(',').map(field => field.trim()).join(' | ');
+          });
+
+          document.getElementById('modalTransactionDetails').innerHTML = `
+              <h5 class="modal-title">Transaction Details</h5>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Disbursement Voucher No:</strong></label>
+                    <p>${voucher_no}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Fund Cluster:</strong></label>
+                    <p>${fund_cluster}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Entity Name:</strong></label>
+                    <p>${entity_name}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>RIS Number:</strong></label>
+                    <p>${ris_number}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Purchase Request No:</strong></label>
+                    <p>${purchase_request_no}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Requisitioner:</strong></label>
+                    <p>${requisitioner}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Purchase Order No:</strong></label>
+                    <p>${purchase_order_no}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"><strong>Project Amount:</strong></label>
+                    <p>₱${parseFloat(project_amount).toLocaleString()}</p>
+                  </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="form-label"><strong>Supplier Name:</strong></label>
+                    <p>${supplier_name}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <h6 class="form-label"><strong>Items:</strong></h6>
+                  <div class="col-md-12">
+                    <ul>
+                      ${itemsArray.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                  </div>
+                </div>
+                <hr>
+
+                <div class="col-md-12 p-3">
+                  <h3>Project and Theme</h3>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Project Title and Theme:</strong></label>
+                      <p>${project_title}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Background and Rationale:</strong></label>
+                      <p>${background_rationale}</p>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Objectives:</strong></label>
+                      <p>${objectives}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Methodology:</strong></label>
+                      <p>${methodology}</p>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Expected Output:</strong></label>
+                      <p>${expected_output}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Proponents:</strong></label>
+                      <p>${proponents}</p>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Venue:</strong></label>
+                      <p>${venue}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><strong>Date:</strong></label>
+                      <p>${date}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+
+          $('#transactionDetailsModal').modal('show');
+        }
+
+        function fetchTransactions() {
+          $.ajax({
+            url: 'mysql/fetch_barangay_transaction.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+              if (response.status !== 'success') {
+                console.error('Failed to fetch data:', response);
+                return;
+              }
+              const data = response.data; // Extract the data array
+              let tbody = $("#barangay-transaction-history tbody");
+              tbody.empty();
+
+              if (Array.isArray(data) && data.length > 0) {
+                data.forEach(transaction => {
+                  let row = `
+                    <tr>
+                      <td>${transaction.voucher_no || 'N/A'}</td>
+                      <td>${transaction.fund_cluster_name || 'N/A'}</td>
+                      <td>${transaction.entity_name || 'N/A'}</td>
+                      <td>${transaction.ris_number || 'N/A'}</td>
+                      <td>${transaction.purchase_request_no || 'N/A'}</td>
+                      <td>${transaction.requisitioner || 'N/A'}</td>
+                      <td>${transaction.purchase_order_no || 'N/A'}</td>
+                      <td>₱${parseFloat(transaction.project_amount).toLocaleString()}</td>
+                      <td>
+                        <!-- View Details Button -->
+                        <button class="btn btn-sm btn-primary view-details-btn" 
+                                data-id="${transaction.id}" 
+                                data-voucher="${transaction.voucher_no}" 
+                                data-fund="${transaction.fund_cluster_name}" 
+                                data-entity="${transaction.entity_name}" 
+                                data-ris="${transaction.ris_number}" 
+                                data-purchase-request="${transaction.purchase_request_no}" 
+                                data-requisitioner="${transaction.requisitioner}" 
+                                data-purchase-order="${transaction.purchase_order_no}" 
+                                data-amount="${transaction.project_amount}" 
+                                data-supplier="${transaction.supplier_name}" 
+                                data-title="${transaction.project_title}" 
+                                data-rationale="${transaction.background_rationale}" 
+                                data-objectives="${transaction.objectives}" 
+                                data-methodology="${transaction.methodology}" 
+                                data-output="${transaction.expected_output}" 
+                                data-proponents="${transaction.proponents}" 
+                                data-venue="${transaction.venue}" 
+                                data-date="${transaction.date}" 
+                                data-items="${transaction.items}">
+                          View Details
+                        </button>                        
+
+                        <!-- Delete Button -->
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${transaction.id});">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  `;
+
+                  tbody.append(row);
+                });
+
+                // Bind event dynamically after the table is populated
+                $('.view-details-btn').on('click', function () {
+                  const button = $(this);
+                  showDetails(
+                    button.data('id'),
+                    button.data('voucher'),
+                    button.data('fund'),
+                    button.data('entity'),
+                    button.data('ris'),
+                    button.data('purchase-request'),
+                    button.data('requisitioner'),
+                    button.data('purchase-order'),
+                    button.data('amount'),
+                    button.data('supplier'),
+                    button.data('title'),
+                    button.data('rationale'),
+                    button.data('objectives'),
+                    button.data('methodology'),
+                    button.data('output'),
+                    button.data('proponents'),
+                    button.data('venue'),
+                    button.data('date'),
+                    button.data('items')
+                  );
+                });
+              } else {
+                tbody.append(`<tr><td colspan="14" class="text-center">No transactions found.</td></tr>`);
+              }
+            },
+            error: function () {
+              console.error('Error fetching transactions.');
+            }
+          });
         }
     });
-});
 </script>
+
+<script>
+  // --- Handle form submission ---
+  $('#new_financialForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const projectAmountRaw = $('#new_projectAmount').val() || '';
+    const sanitizedAmount = projectAmountRaw.replace(/,/g, '');
+
+    // Gather supplier items
+    const supplierItems = [];
+    $('#supplierItemsContainer .row').each(function () {
+        const itemNo = $(this).find('.itemNo').val();
+        const unit = $(this).find('.unit').val();
+        const description = $(this).find('.description').val();
+        const quantity = $(this).find('.quantity').val();
+        const unitPrice = $(this).find('.unitPrice').val();
+        const amount = $(this).find('.amount').val();
+
+        // Only include rows with required values
+        if (itemNo && description) {
+            supplierItems.push({
+                item_no: itemNo,
+                unit,
+                description,
+                quantity,
+                unit_price: unitPrice,
+                amount
+            });
+        }
+    });
+
+    const data = {
+        voucher_no: $('#new_voucherNo').val(),
+        fund_cluster: $('#new_fund').val(),
+        entity_name: $('#new_entityName').val(),
+        ris_number: $('#new_risNumber').val(),
+        purchase_request_no: $('#new_purchaseRequestNo').val(),
+        requisitioner: $('#new_requisitioner').val(),
+        purchase_order_no: $('#new_purchaseOrderNo').val(),
+        project_amount: sanitizedAmount,
+        supplier_name: $('#supplierName').val(),
+        project_title: $('#projectTitle').val(),
+        background_rationale: $('#backgroundRationale').val(),
+        objectives: $('#objectives').val(),
+        methodology: $('#methodology').val(),
+        expected_output: $('#expectedOutput').val(),
+        proponents: $('#proponents').val(),
+        venue: $('#venue').val(),
+        date: $('#date').val(),
+        items: JSON.stringify(supplierItems) // Convert to JSON string
+    };
+
+    // console.log(data);
+    fetch('mysql/add_new_brgy_transaction.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status === 'success') {
+            $('#addTransactionModal').modal('hide');
+            Swal.fire({
+                title: 'Success!',
+                text: result.message,
+                icon: 'success',
+                zIndex: 9999
+            }).then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire('Error!', result.message, 'error');
+        }
+    })
+    .catch(error => {
+        Swal.fire('Error!', 'An error occurred: ' + error, 'error');
+    });
+  });
+
+  // --- Handle add item button ---
+  document.getElementById('addItemBtn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default button behavior
+
+    const container = document.querySelector('#supplierItemsContainer');
+    const newRow = document.createElement('div');
+    newRow.className = 'row mb-3 align-items-center';
+
+    // Helper to create input columns
+    function createInputCol(labelText, inputType, inputClass, placeholder, colSize = 2, stepValue = null) {
+      const colDiv = document.createElement('div');
+      colDiv.className = `col-md-${colSize}`;
+
+      const label = document.createElement('label');
+      label.className = 'form-label';
+      label.innerText = labelText;
+
+      const input = document.createElement('input');
+      input.type = inputType;
+      input.className = `form-control ${inputClass}`;
+      input.placeholder = placeholder;
+
+      if (stepValue !== null) {
+        input.step = stepValue;
+      }
+
+      colDiv.appendChild(label);
+      colDiv.appendChild(input);
+      return colDiv;
+    }
+
+    const itemNoCol = createInputCol('Item No:', 'text', 'itemNo', 'Enter item number', 2);
+    const unitCol = createInputCol('Unit:', 'text', 'unit', 'Enter unit', 2);
+    const descriptionCol = createInputCol('Description:', 'text', 'description', 'Enter description', 4);
+    const quantityCol = createInputCol('Quantity:', 'number', 'quantity', 'Enter quantity', 1);
+    const unitPriceCol = createInputCol('Unit Price:', 'number', 'unitPrice', 'Enter unit price', 1, '0.01');
+    const amountCol = createInputCol('Amount:', 'number', 'amount', 'Enter amount', 1, '0.01');
+
+    const deleteCol = document.createElement('div');
+    deleteCol.className = 'col-md-1 d-flex justify-content-center';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn btn-danger mt-4';
+    deleteBtn.title = 'Delete this row';
+    deleteBtn.innerHTML = 'Remove';
+
+    deleteBtn.addEventListener('click', () => {
+      container.removeChild(newRow);
+    });
+
+    deleteCol.appendChild(deleteBtn);
+
+    newRow.appendChild(itemNoCol);
+    newRow.appendChild(unitCol);
+    newRow.appendChild(descriptionCol);
+    newRow.appendChild(quantityCol);
+    newRow.appendChild(unitPriceCol);
+    newRow.appendChild(amountCol);
+    newRow.appendChild(deleteCol);
+
+    container.appendChild(newRow);
+  });
+</script>
+
   </body>
 </html>
+

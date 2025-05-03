@@ -19,10 +19,21 @@ try {
     }
 
     // Prepare the SQL query
-    $sql = "SELECT financial_transaction.id AS transaction_id, financial_transaction.*, sub_program_with_rao_program.*
-            FROM financial_transaction
-            JOIN sub_program_with_rao_program ON financial_transaction.fund = sub_program_with_rao_program.id
-            WHERE financial_transaction.dv_no LIKE :dv_no LIMIT 10";
+    $sql = "SELECT
+                financial_transaction.id AS transaction_id,
+                financial_transaction.dv_no,
+                financial_transaction.particulars,
+                financial_transaction.fund,
+                financial_transaction.net_amount,
+                rao_program.id AS rao_program_id,
+                rao_program.name AS rao_program_name,
+                rao_program.amount AS rao_program_amount
+            FROM
+                financial_transaction
+            JOIN rao_program ON financial_transaction.fund = rao_program.id
+            WHERE
+                financial_transaction.dv_no LIKE :dv_no
+            LIMIT 10";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['dv_no' => $dv_no . '%']);

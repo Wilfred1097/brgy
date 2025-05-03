@@ -68,7 +68,7 @@
                   </div>
                   <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
-                      <button id="export-transmital" class="btn btn-primary" data-toggle="modal" data-target="#transmitalModal">
+                      <button id="export-transmital" class="btn btn-primary">
                           Transmittal letter
                       </button>
                   </div>
@@ -78,34 +78,52 @@
 
           <!-- Disbursement Modal -->
           <div class="modal fade" id="transmitalModal" tabindex="-1" aria-labelledby="transmitalModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title" id="transmitalModalLabel">Disbursement Voucher</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                          </button>
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="transmitalModalLabel">Disbursement Voucher</h5>
+                </div>
+                <div class="modal-body">
+                  <!-- Container for RCD rows -->
+                  <div id="rcd-container">
+                    <!-- First RCD input row -->
+                    <div class="row rcd-row mb-3">
+                      <div class="col">
+                        <div class="form-group">
+                          <label for="rcd">RCD</label>
+                          <input type="text" class="form-control" name="rcd" placeholder="00-00-000">
+                        </div>
                       </div>
-                      <div class="modal-body">
-                          <div class="form-group">
-                              <label for="payee">Payee</label>
-                              <input type="text" class="form-control" id="payee" placeholder="Enter Payee Name">
-                          </div>
-                          <div class="form-group">
-                              <label for="tin">TIN</label>
-                              <input type="text" class="form-control" id="tin" placeholder="Enter TIN">
-                          </div>
-                          <div class="form-group">
-                              <label for="to">To</label>
-                              <input type="text" class="form-control" id="to" placeholder="Enter To">
-                          </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <label for="rcd-date">Date</label>
+                          <input type="date" class="form-control" name="rcd-date">
+                        </div>
                       </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary" id="submit-disbursement">Submit</button>
+                      <div class="col">
+                        <div class="form-group">
+                          <label for="rcd-amount">Amount</label>
+                          <input type="number" class="form-control" name="rcd-amount" placeholder="Enter Amount">
+                        </div>
                       </div>
+                    </div>
                   </div>
+                  <!-- Container for Additional Reports -->
+                  <div id="other-report-container" class="mb-3"></div>
+
+                  <!-- Buttons -->
+                  <div class="d-flex justify-content-start mb-3">
+                    <button type="button" class="btn btn-secondary me-2" id="add-rcd-btn">Add Another RCD</button>
+                    <button type="button" class="btn btn-secondary" id="add-other-report-btn">Add Other Report</button>
+                  </div>
+                </div>
+                <!-- inside your transmitalModal -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="submit-transmital">Generate Transmittal Letter</button>
+                </div>
               </div>
+            </div>
           </div>
 
           <!-- Insert Transaction Modal -->
@@ -166,7 +184,7 @@
                                 <!-- Fund -->
                                   <div class="col-md-6">
                                       <label class="form-label">Fund:</label>
-                                      <select class="form-control" id="fund" required>
+                                      <select class="form-control" id="fundfund" required>
                                           <option value="" disabled selected>Select a Program</option>
                                       </select>
                                   </div>
@@ -400,6 +418,33 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-xxl-12 col-xl-12 col-md-12 box-col-12">
+                <div class="card">
+                  <div class="card-header card-no-border pb-0">
+                    <div class="header-top">
+                      <h3>Transmital Export History</h3>
+                    </div>
+                    <div class="card-body pt-0 manage-invoice">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="table display table-bordernone mt-0" id="transmital-history" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Filename</th>
+                            <th>Date Generated</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+
+
             </div>
           </div>
 
@@ -488,11 +533,30 @@
           }
     </script>
 
+    <!-- JavaScript to handle adding new RCD rows -->
+    <script>
+      document.getElementById('add-rcd-btn').addEventListener('click', function() {
+        // Get the container
+        const container = document.getElementById('rcd-container');
+
+        // Clone the first RCD row
+        const firstRow = container.querySelector('.rcd-row');
+        const newRow = firstRow.cloneNode(true);
+
+        // Optionally, clear input values in the cloned row
+        newRow.querySelectorAll('input').forEach(input => input.value = '');
+
+        // Append the new row
+        container.appendChild(newRow);
+      });
+    </script>
+
     <script>
     $(document).ready(function () {
         // Initial fetch on page load
         fetchTransactions();
         fetchGeneratedReport();
+        fetchGeneratedTransmital();
         setCurrentDate();
         fetchPrograms();
         fetchProgramsForEdit();
@@ -746,6 +810,75 @@
                 });
             }
         });
+
+        // Handle Export Transmittal button click
+        $(document).on('click', '#submit-transmital', function() {
+          let selectedIds = [];
+
+          // Gather the IDs of all checked transactions
+          $("#transaction-history tbody input[type='checkbox']:checked").each(function () {
+            let row = $(this).closest("tr");
+            let transactionId = row.find(".edit-btn").data("id");
+            if (transactionId) {
+              selectedIds.push(transactionId);
+            }
+          });
+
+          if (selectedIds.length > 0) {
+            // Collect RCD data
+            const rcdEntries = [];
+            $('#rcd-container .rcd-row').each(function() {
+              const rcd = $(this).find('input[name="rcd"]').val();
+              const rcdDate = $(this).find('input[name="rcd-date"]').val();
+              const rcdAmount = $(this).find('input[name="rcd-amount"]').val();
+
+              rcdEntries.push({
+                rcd: rcd,
+                date: rcdDate,
+                amount: rcdAmount
+              });
+            });
+
+            // Collect Additional Reports data
+            const reportEntries = [];
+            $('#other-report-container .row').each(function() {
+              const reportType = $(this).find('input[name="report_type[]"]').val();
+              const periodCovered = $(this).find('input[name="period_covered[]"]').val();
+
+              reportEntries.push({
+                report_type: reportType,
+                period_covered: periodCovered
+              });
+            });
+
+            // Serialize and encode report entries
+            const reportDataEncoded = encodeURIComponent(JSON.stringify(reportEntries));
+            const rcdDataEncoded = encodeURIComponent(JSON.stringify(rcdEntries));
+
+            // Prepare URL parameters
+            const params = new URLSearchParams({
+              ids: selectedIds.join(','),
+              rcdData: rcdDataEncoded,
+              reportData: reportDataEncoded
+            });
+
+            // Open the export URL with all data
+            window.open("mysql/export_transmital.php?" + params.toString(), "_blank");
+          } else {
+            Swal.fire({
+              title: "No Transactions Selected",
+              text: "Please select at least one transaction to export.",
+              icon: "warning"
+            });
+          }
+
+          // Close modal
+          var modalEl = document.getElementById('transmitalModal');
+          var modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) {
+            modal.hide();
+          }
+        });
     });
 
     // 🟢 Fetch transactions from the server
@@ -831,6 +964,48 @@
         });
     }
 
+  // 🟢 Fetch generated transmital reports from the server
+    function fetchGeneratedTransmital() {
+        $.ajax({
+            url: 'mysql/fetch_generated_transmital.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let tbody = $("#transmital-history tbody");
+                tbody.empty();
+
+                if (data.length > 0) {
+                    data.forEach(reports => {
+                        let row = `
+                            <tr>
+                                <td>
+                                    ${reports.filename ? `<a href="mysql/uploads/transmital/${reports.filename}" target="_blank">${reports.filename.split('/').pop()}</a>` : 'N/A'}
+                                </td>
+                                <td>
+                                    ${
+                                      reports.export_date
+                                        ? new Date(reports.export_date).toLocaleString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                          })
+                                        : 'N/A'
+                                    }
+                                  </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                } else {
+                    tbody.append(`<tr><td colspan="14" class="text-center">No Generated File found.</td></tr>`);
+                }
+            }
+        });
+    }
+
     // 🟢 Confirm & Delete Transaction
     function confirmDelete(transactionId) {
         Swal.fire({
@@ -890,6 +1065,50 @@
           });
       }
   });
+  </script>
+  <script>
+    // Attach event listener to the "Transmittal letter" button
+    $('#export-transmital').on('click', function(event) {
+        const selectedCheckboxes = $('#transaction-history tbody input[type="checkbox"]:checked');
+
+        if (selectedCheckboxes.length === 0) {
+            // No rows selected, show alert
+            Swal.fire({
+                title: "No Transaction Selected",
+                text: "Please select at least one transaction before generating the transmittal letter.",
+                icon: "warning"
+            });
+            // Do not open modal
+        } else {
+            // Rows are selected - open modal programmatically
+            var modalEl = document.getElementById('transmitalModal');
+            var modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+    });
+  </script>
+  <script>
+    // When "Add Other Report" is clicked
+    $('#add-other-report-btn').on('click', function() {
+      const container = $('#other-report-container');
+
+      // Create a new row with two inputs
+      const newRow = `
+        <div class="row mb-3 align-items-end">
+          <!-- Type of Report -->
+          <div class="col-md-6">
+            <label class="form-label">Type of Report</label>
+            <input type="text" class="form-control" name="report_type[]" placeholder="Enter type of report">
+          </div>
+          <!-- Period Covered (Month & Year) -->
+          <div class="col-md-6">
+            <label class="form-label">Period Covered</label>
+            <input type="month" class="form-control" name="period_covered[]" placeholder="Month and Year">
+          </div>
+        </div>
+      `;
+      container.append(newRow);
+    });
   </script>
   </body>
 </html>

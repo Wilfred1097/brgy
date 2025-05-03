@@ -34,14 +34,26 @@
     <link rel="stylesheet" href="../assets/css/style.css"/>
     <link id="color" rel="stylesheet" href="../assets/css/color-1.css" media="screen"/>
     <style type="text/css">
-      .suggestion-list {
-            max-height: 200px; /* Limit the height for overflow */
-            overflow-y: auto;  /* Scroll if there are too many suggestions */
-            background: white; /* White background for the suggestions */
-            border: 1px solid #ccc; /* Border styling */
-            border-radius: 0.25rem;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Light shadow for aesthetics */
-        }
+      #suggestions {
+          display: none; /* Start hidden */
+          position: absolute; /* Overlay */
+          background: white; /* Background color */
+          z-index: 1000; /* Layer above other elements */
+          border: 1px solid #ccc; /* Optional border */
+          width: 100%; /* Match width of parent */
+          max-height: 200px; /* Limit height */
+          overflow-y: auto; /* Scroll if needed */
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+      }
+
+      .suggestion-item {
+          padding: 8px; /* Padding */
+          cursor: pointer; /* Pointer cursor */
+      }
+
+      .suggestion-item:hover {
+          background: #f0f0f0; /* Highlight on hover */
+      }
     </style>
   </head>
   <body>
@@ -76,12 +88,12 @@
                   <div class="col-auto">
                       <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add Barangay Transaction</button>
                   </div>
-                  <div class="col-auto">
+                  <!-- <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
                       <button id="export-disbursement" class="btn btn-primary" data-toggle="modal" data-target="#disbursementModal">
                           Disbursement Voucher
                       </button>
-                  </div>
+                  </div> -->
               </div>
             </div>
           </div>
@@ -99,16 +111,16 @@
                               <div class="row">
                                   <!-- Disbursement Voucher No. -->
                                   <div class="col-md-6 position-relative">
-                                      <label for="voucherNo">Voucher No:</label>
+                                      <label for="voucherNo">Disbursement Voucher No:</label>
                                       <input type="text" id="voucherNo" class="form-control" placeholder="Enter voucher number">
-                                      <div id="suggestions" class="suggestion-list list-group position-absolute" style="z-index: 1000; display: none; width: 30%;">
-                                          <!-- Suggestions will be appended here -->
-                                      </div>
+                                      <div id="suggestions" class="suggestions mt-2" style="display: none; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; background: white;"></div>
                                   </div>
                                   <!-- Fund Cluster No -->
                                   <div class="col-md-6">
                                       <label class="form-label">Fund Cluster:</label>
-                                      <input type="text" class="form-control" id="chequeNumber" readonly>
+                                      <select class="form-control" id="fund" required>
+                                          <option value="" disabled selected>Select a Program</option>
+                                      </select>
                                   </div>
                               </div>
 
@@ -121,7 +133,7 @@
                                   <!-- RIS Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">RIS Number:</label>
-                                      <input type="text" class="form-control" placeholder="Enter RIS number" id="risNumber" required>
+                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="risNumber" required>
                                   </div>
                               </div>
 
@@ -129,7 +141,7 @@
                                   <!-- Purchase Request Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">Purchase Request No.:</label>
-                                      <input type="text" class="form-control" placeholder="Enter purchase request number" id="purchaseRequestNo" required>
+                                      <input type="number" class="form-control" placeholder="Enter purchase request number" id="purchaseRequestNo" required>
                                   </div>
                                   <!-- Requisitioner -->
                                   <div class="col-md-6">
@@ -142,24 +154,24 @@
                                   <!-- Purchase Order Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">Purchase Order No.:</label>
-                                      <input type="text" class="form-control" placeholder="Enter purchase order number" id="purchaseOrderNo" required>
+                                      <input type="number" class="form-control" placeholder="Enter purchase order number" id="purchaseOrderNo" required>
                                   </div>
                                   <!-- Project Amount -->
                                   <div class="col-md-6">
                                       <label class="form-label">Project Amount:</label>
-                                      <input type="text" class="form-control" id="projectAmount" readonly>
+                                      <input type="text" class="form-control" id="projectAmount" required readonly>
                                   </div>
                               </div>
 
                               <button type="submit" class="btn btn-primary mt-2 d-flex float-end">
-                                  Update Transaction
+                                  Submit Transaction
                               </button>
                           </form>
                       </div>
                   </div>
               </div>
           </div>
-          <!-- Insert Transaction Modal -->
+          <!-- Insert Transaction -->
 
           <!-- Edit Transaction Modal -->
           <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -182,7 +194,13 @@
                                   <!-- Fund Cluster No -->
                                   <div class="col-md-6">
                                       <label class="form-label">Fund Cluster:</label>
-                                      <input type="text" class="form-control" placeholder="Enter fund cluster number" id="edit_fund_cluster" name="fund_cluster" required>
+                                      <select class="form-control" id="edit_fund_cluster" name="fund_cluster" required>
+                                          <option value="" disabled selected>Select Fund Cluster</option>
+                                          <option value="Cluster 1">Cluster 1</option>
+                                          <option value="Cluster 2">Cluster 2</option>
+                                          <option value="Cluster 3">Cluster 3</option>
+                                          <!-- Add more options as needed -->
+                                      </select>
                                   </div>
                               </div>
 
@@ -195,7 +213,7 @@
                                   <!-- RIS Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">RIS Number:</label>
-                                      <input type="text" class="form-control" placeholder="Enter RIS number" id="edit_ris_number" name="ris_number" required>
+                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="edit_ris_number" name="ris_number" required>
                                   </div>
                               </div>
 
@@ -203,7 +221,7 @@
                                   <!-- Purchase Request Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">Purchase Request No.:</label>
-                                      <input type="text" class="form-control" placeholder="Enter purchase request number" id="edit_purchase_request_no" name="purchase_request_no" required>
+                                      <input type="number" class="form-control" placeholder="Enter purchase request number" id="edit_purchase_request_no" name="purchase_request_no" required>
                                   </div>
                                   <!-- Requisitioner -->
                                   <div class="col-md-6">
@@ -216,17 +234,17 @@
                                   <!-- Purchase Order Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">Purchase Order No.:</label>
-                                      <input type="text" class="form-control" placeholder="Enter purchase order number" id="edit_purchase_order_no" name="purchase_order_no" required>
+                                      <input type="number" class="form-control" placeholder="Enter purchase order number" id="edit_purchase_order_no" name="purchase_order_no" required>
                                   </div>
                                   <!-- Project Amount -->
                                   <div class="col-md-6">
                                       <label class="form-label">Project Amount:</label>
-                                      <input type="text" class="form-control" placeholder="Enter project amount" id="edit_project_amount" name="project_amount" required>
+                                      <input type="number" class="form-control" placeholder="Enter project amount" id="edit_project_amount" name="project_amount" required>
                                   </div>
                               </div>
 
                               <button type="submit" class="btn btn-success mt-2 d-flex float-end">
-                                  Submit Transaction
+                                  Update Transaction
                               </button>
                           </form>
                       </div>
@@ -278,7 +296,7 @@
                 </div>
               </div>
 
-              <div class="col-xxl-12 col-xl-12 col-md-12 box-col-12">
+<!--               <div class="col-xxl-12 col-xl-12 col-md-12 box-col-12">
                 <div class="card">
                   <div class="card-header card-no-border pb-0">
                     <div class="header-top">
@@ -301,7 +319,7 @@
                   </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -358,65 +376,111 @@
     <script src="../assets/js/script.js"></script>
 
     <script>
-    $(document).ready(function() {
-        $("#voucherNo").on("input", function() {
-            var input = $(this).val();
+      $(document).ready(function () {
+          fetchPrograms();
 
-            if (input.length >= 1) { // Start suggesting when the input has 1 or more characters
-                $.ajax({
-                    url: 'mysql/fetch_dv.php',
-                    method: 'GET',
-                    data: { dv_no: input }, // Send the input value to the server
-                    dataType: 'json',
-                    success: function(data) {
-                        $("#suggestions").empty(); // Clear previous suggestions
-                        if (data.length > 0) {
-                            $.each(data, function(index, value) {
-                                $("#suggestions").append('<a href="#" class="list-group-item list-group-item-action suggestion-item" data-dv-no="' + value.dv_no + '" data-cheque-no="' + value.cheque_no + '" data-project-amount="' + value.amount + '">' + value.dv_no + '</a>');
-                            });
-                            $("#suggestions").show(); // Show suggestions
-                        } else {
-                            $("#suggestions").hide(); // Hide if no suggestions
-                            $("#chequeNumber").val(""); // Clear cheque number if no matches
-                            $("#projectAmount").val(""); // Clear project amount if no matches
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error("Error fetching data:", errorThrown);
-                        $("#suggestions").hide();
-                        $("#chequeNumber").val("");
-                        $("#projectAmount").val("");
+          function fetchPrograms() {
+              $.ajax({
+                  url: 'mysql/fetch_programs.php',
+                  type: 'GET',
+                  dataType: 'json',
+                  success: function (data) {
+                      let fundSelect = $('#fund');
+                      fundSelect.empty().append('<option value="" disabled selected>Select a Program</option>');
+
+                      // Populate the dropdown with fetched program names and amounts
+                      data.forEach(rao_program => {
+                          fundSelect.append(`<option value="${rao_program.id}" data-amount="${rao_program.amount}">${rao_program.name}</option>`);
+                      });
+                  },
+                  error: function () {
+                      console.error("Error fetching programs.");
+                  }
+              });
+          }
+
+          // Populate Gross Amount input when a fund is selected (Add Transaction)
+          $('#fund').change(function () {
+              let selectedOption = $(this).find('option:selected');
+              let amount = selectedOption.data('amount'); // Changed from 'projectAmount' to 'amount'
+              $('#projectAmount').val(amount ? parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : '');
+          });
+      });
+  </script>
+  <script>
+$(document).ready(function() {
+    $('#voucherNo').on('input', function() {
+        var voucherNo = $(this).val();
+        
+        if (voucherNo.length > 0) {
+            $.ajax({
+                url: 'mysql/fetch_dv.php', // Ensure this URL is correct
+                method: 'GET', // Change the method if needed
+                data: { dv_no: voucherNo }, // Ensure this matches your PHP parameter
+                dataType: 'json',
+                success: function(response) {
+                    $('#suggestions').empty().show();
+                    $('#fund').empty().append('<option value="" disabled selected>Select a Program</option>'); // Reset fund options
+                    
+                    // Store items with amounts for future use
+                    const items = {};
+                    
+                    if (response && Array.isArray(response) && response.length > 0) {
+                        response.forEach(function(item) {
+                            // Suggestion items for the input
+                            $('#suggestions').append('<div class="suggestion-item" style="cursor: pointer;" data-amount="' + item.rao_program_amount + '">' + item.dv_no + '</div>');
+                            
+                            // Populate the fund select with unique rao_program_names
+                            if (item.rao_program_name) {
+                                if (!items[item.dv_no]) {
+                                    items[item.dv_no] = {
+                                        rao_program_amount: item.rao_program_amount,
+                                        funds: []
+                                    };
+                                }
+                                items[item.dv_no].funds.push({
+                                    transaction_id: item.transaction_id,
+                                    rao_program_name: item.rao_program_name
+                                });
+                            }
+                        });
+
+                        // Attach click event to suggestion items
+                        $(document).on('click', '.suggestion-item', function() {
+                            var selectedDv = $(this).text().trim();
+                            
+                            // Update the input based on selected item
+                            $('#voucherNo').val(selectedDv); // Update voucherNo input
+                            $('#suggestions').hide(); // Hide suggestions
+
+                            // Now set the project amount and fund
+                            if (items[selectedDv]) {
+                                const projectAmount = items[selectedDv].rao_program_amount; // Get the amount from items
+                                $('#projectAmount').val(projectAmount ? parseFloat(projectAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : '');
+
+                                // Populate the fund select based on the selected DV number
+                                $('#fund').empty(); // Clear previous fund options
+                                items[selectedDv].funds.forEach(function(fund) {
+                                    $('#fund').append('<option value="' + fund.transaction_id + '">' + fund.rao_program_name + '</option>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('#suggestions').hide();
                     }
-                });
-            } else {
-                $("#suggestions").hide(); // Hide suggestions if input is empty
-                $("#chequeNumber").val("");
-                $("#projectAmount").val("");
-            }
-        });
-
-        $(document).on("click", ".suggestion-item", function(e) {
-            e.preventDefault();
-            var selectedDvNo = $(this).data("dv-no");
-            var chequeNo = $(this).data("cheque-no");
-            var projectAmount = $(this).data("project-amount");
-            $("#voucherNo").val(selectedDvNo);
-            $("#chequeNumber").val(chequeNo);  // Populate chequeNumber
-            $("#projectAmount").val(projectAmount); // Populate projectAmount
-            console.log("Selected DV No: " + selectedDvNo);
-            console.log("Cheque Number: " + chequeNo); // Log the selected cheque number
-            console.log("Project Amount: " + projectAmount);
-            $("#suggestions").hide(); // Hide the suggestions
-        });
-
-
-        // Hide suggestions when clicking outside
-        $(document).on("click", function(e) {
-            if (!$(e.target).closest("#voucherNo").length && !$(e.target).closest("#suggestions").length) {
-                $("#suggestions").hide(); // Hide suggestions when clicking outside
-            }
-        });
+                },
+                error: function() {
+                    $('#suggestions').hide();
+                    console.error("An error occurred while fetching the data.");
+                }
+            });
+        } else {
+            $('#suggestions').hide();
+            $('#fund').empty().append('<option value="" disabled selected>Select a Program</option>'); // Reset options if input is cleared
+            $('#projectAmount').val(''); // Clear the project amount input
+        }
     });
+});
 </script>
   </body>
 </html>

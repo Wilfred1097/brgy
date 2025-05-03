@@ -82,37 +82,48 @@
                                       <input type="text" class="form-control" id="edit_barangay_name" name="barangay_name" required>
                                   </div>
                                   <div class="col-md-6">
-                                      <label for="edit_barangay_city" class="form-label">Barangay City:</label>
-                                      <input type="text" class="form-control" id="edit_barangay_city" name="barangay_city" required>
+                                      <label for="edit_barangay_captain" class="form-label">Barangay Captain:</label>
+                                      <input type="text" class="form-control" id="edit_barangay_captain" name="barangay_captain" required>
                                   </div>
                               </div>
 
                               <div class="row mt-2">
+                                <div class="col-md-6">
+                                      <label for="edit_barangay_city" class="form-label">Barangay City:</label>
+                                      <input type="text" class="form-control" id="edit_barangay_city" name="barangay_city" required>
+                                  </div>
                                   <div class="col-md-6">
                                       <label for="edit_barangay_province" class="form-label">Barangay Province:</label>
                                       <input type="text" class="form-control" id="edit_barangay_province" name="barangay_province" required>
                                   </div>
-                                  <div class="col-md-6">
-                                      <label for="edit_province_no" class="form-label">Province No.:</label>
-                                      <input type="text" class="form-control" id="edit_province_no" name="province_no" required>
-                                  </div>
                               </div>
 
                               <div class="row mt-2">
+                                <div class="col-md-6">
+                                      <label for="edit_province_no" class="form-label">Province No.:</label>
+                                      <input type="text" class="form-control" id="edit_province_no" name="province_no" required>
+                                  </div>
                                   <div class="col-md-6">
+                                      <label for="edit_city_accountant" class="form-label">City Accountant:</label>
+                                      <input type="text" class="form-control" id="edit_city_accountant" name="city_accountant" required>
+                                  </div>
+
+                              </div>
+
+                              <div class="row mt-2">
+                                  <div class="col-md-5">
                                       <label for="edit_barangay_treasurer" class="form-label">Barangay Treasurer:</label>
                                       <input type="text" class="form-control" id="edit_barangay_treasurer" name="barangay_treasurer" required>
                                   </div>
-                                  <div class="col-md-6">
+                                  <div class="col-md-5">
                                       <label for="edit_encoder" class="form-label">Encoder:</label>
                                       <input type="text" class="form-control" id="edit_encoder" name="barangay_encoder" required>
                                   </div>
-                                  <div class="col-md-6">
+                                  <div class="col-md-2">
                                       <label for="edit_scki" class="form-label">SCKI No.:</label>
                                       <input type="text" class="form-control" id="edit_scki" name="current_scki_no" required>
                                   </div>
                               </div>
-
                               <button type="submit" class="btn btn-primary mt-3 float-end">
                                   Update Details
                               </button>
@@ -138,10 +149,12 @@
                         <thead>
                           <tr>
                             <th>Barangay Name</th>
+                            <th>Barangay Captain</th>
                             <th>Barangay City</th>
                             <th>Barangay Province</th>
                             <th>Province No.</th>
                             <th>Barangay Treasurer</th>
+                            <th>City Accountant</th>
                             <th>Encoder</th>
                             <th>Current SCKI No.</th>
                             <th>Action</th>
@@ -218,12 +231,14 @@
 
               // Bind table row data to modal inputs
               $('#edit_barangay_name').val(row.find('td:eq(0)').text().trim());
-              $('#edit_barangay_city').val(row.find('td:eq(1)').text().trim());
-              $('#edit_barangay_province').val(row.find('td:eq(2)').text().trim());
-              $('#edit_province_no').val(row.find('td:eq(3)').text().trim());
-              $('#edit_barangay_treasurer').val(row.find('td:eq(4)').text().trim());
-              $('#edit_encoder').val(row.find('td:eq(5)').text().trim());
-              $('#edit_scki').val(row.find('td:eq(6)').text().trim());
+              $('#edit_barangay_captain').val(row.find('td:eq(1)').text().trim());
+              $('#edit_barangay_city').val(row.find('td:eq(2)').text().trim());
+              $('#edit_barangay_province').val(row.find('td:eq(3)').text().trim());
+              $('#edit_province_no').val(row.find('td:eq(4)').text().trim());
+              $('#edit_barangay_treasurer').val(row.find('td:eq(5)').text().trim());
+              $('#edit_city_accountant').val(row.find('td:eq(6)').text().trim());
+              $('#edit_encoder').val(row.find('td:eq(7)').text().trim());
+              $('#edit_scki').val(row.find('td:eq(8)').text().trim());
 
               var editModal = new bootstrap.Modal(document.getElementById('editModal'));
               editModal.show();
@@ -283,10 +298,12 @@
                           let row = `
                               <tr>
                                   <td>${transaction.barangay_name || 'N/A'}</td>
+                                  <td>${transaction.barangay_captain || 'N/A'}</td>
                                   <td>${transaction.barangay_city || 'N/A'}</td>
                                   <td>${transaction.barangay_province || 'N/A'}</td>
                                   <td>${transaction.province_no || 'N/A'}</td>
                                   <td>${transaction.barangay_treasurer || 'N/A'}</td>
+                                  <td>${transaction.city_accountant || 'N/A'}</td>
                                   <td>${transaction.barangay_encoder || 'N/A'}</td>
                                   <td>${transaction.current_scki_no || 'N/A'}</td>
                                   <td>

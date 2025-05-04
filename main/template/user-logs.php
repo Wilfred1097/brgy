@@ -70,12 +70,13 @@
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0">
+                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
                     <h3>User Logs</h3>
+                    <input type="text" id="searchUser" class="form-control w-25" placeholder="Search user...">
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
-                      <table class="table display table-bordernone mt-0" id="files-table" style="width:100%">
+                      <table class="table display table-bordernone mt-0" id="user-table" style="width:100%">
                         <thead>
                           <tr>
                             <th>User Name</th>
@@ -175,7 +176,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        const filesTableBody = document.querySelector('#files-table tbody');
+                        const filesTableBody = document.querySelector('#user-table tbody');
                         filesTableBody.innerHTML = ''; // Clear the table body
 
                         // Populate the table rows
@@ -202,6 +203,14 @@
                     console.error('Error fetching files:', error);
                 });
         }
+
+        // 🟢 Filter transactions based on the search input
+        $('#searchUser').on('keyup', function () {
+            let searchValue = $(this).val().toLowerCase();
+            $('#user-table tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
 
         // Call fetchFiles to load the files when the page is loaded
         document.addEventListener('DOMContentLoaded', fetchFiles);

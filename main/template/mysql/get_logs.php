@@ -1,5 +1,6 @@
 <?php
 include 'conn.php'; // Include your database connection
+require 'check_cookies.php'; // Check if the cookie is present
 
 try {
     // Prepare the SQL query to retrieve all logs
@@ -11,7 +12,8 @@ try {
                                 login_logs.*
                             FROM
                                 login_logs
-                            JOIN users ON users.id = login_logs.user_id");
+                            JOIN users ON users.id = login_logs.user_id
+                            ORDER BY login_logs.id DESC");
     $stmt->execute();
 
     // Fetch all results

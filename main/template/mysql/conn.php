@@ -1,8 +1,13 @@
 <?php
-$host = "localhost";  // Change if using a remote database
-$dbname = "barangay_db"; // Your database name
-$username = "root";    // Your database username
-$password = "";        // Your database password
+// $host = "153.92.15.53";
+// $dbname = "u605048123_brgyadmin";
+// $username = "u605048123_admin2025";
+// $password = "Ee10FPFn+3";
+
+$host = "localhost";
+$dbname = "barangay_db";
+$username = "root";
+$password = "";
 
 try {
     $pdo = new PDO("mysql:dbname=$dbname;charset=utf8", $username, $password);

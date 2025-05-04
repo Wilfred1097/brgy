@@ -19,6 +19,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute([$username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // Define helper functions outside the logic blocks
+        function getUserIP() {
+            if (!empty($_SERVER['HTTP_CLIENT_IP'])) return $_SERVER['HTTP_CLIENT_IP'];
+            elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) return explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+            else return $_SERVER['REMOTE_ADDR'];
+        }
+
+        function getLocation($ip) {
+
+            // Skip local IPs
+            if ($ip === '127.0.0.1' || $ip === '::1') {
+                return ['city' => 'Localhost', 'region' => null, 'country' => null];
+            }
+            
+            $location = @json_decode(file_get_contents("http://ip-api.com/json/{$ip}"));
+            if ($location && $location->status === "success") {
+                return [
+                    'city' => $location->city,
+                    'region' => $location->regionName,
+                    'country' => $location->country
+                ];
+            }
+            return ['city' => null, 'region' => null, 'country' => null];
+        }
+
         if ($user) {
             // Check if the account is inactive
             if ($user['status'] == 0) {
@@ -26,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit;
             }
 
-            // Verify password
+            // ✅ Verify password before logging login attempt
             if (password_verify($password, $user['password'])) {
                 $_SESSION['role'] = $user['role']; // Store role in session
 
@@ -36,11 +61,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     "role" => $user['role'],
                     "username" => $user['username'],
                     "gmail" => $user['gmail'],
-                    "full_name" => trim("{$user['first_name']} {$user['middle_name']} {$user['last_name']}"), // Combine names
+                    "full_name" => trim("{$user['first_name']} {$user['middle_name']} {$user['last_name']}"),
                     "image_path" => $user['image_path']
                 ]);
 
                 setcookie("brgy", $userData, time() + (7 * 24 * 60 * 60), "/");
+
+                // ✅ Log login info only on successful login
+                $ip = getUserIP();
+                $location = getLocation($ip);
+                $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+                $logStmt = $pdo->prepare("INSERT INTO login_logs (user_id, ip_address, city, region, country, device_info) VALUES (?, ?, ?, ?, ?, ?)");
+                $logStmt->execute([
+                    $user['id'],
+                    $ip,
+                    $location['city'],
+                    $location['region'],
+                    $location['country'],
+                    $userAgent
+                ]);
 
                 echo json_encode(["status" => "success", "message" => "Login successful!"]);
             } else {

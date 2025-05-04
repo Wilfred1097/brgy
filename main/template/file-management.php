@@ -104,9 +104,17 @@
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0">
+                  <div class="row p-2 m-2">
+                  <!-- Title - full width on mobile, half width on larger screens -->
+                  <div class="col-12 col-md-6 mb-3 mb-md-0">
                     <h3>File Table</h3>
                   </div>
+                  
+                  <!-- Search box - full width on mobile, half width on larger screens -->
+                  <div class="col-12 col-md-6">
+                    <input type="text" id="searchFile" class="form-control" placeholder="Search File...">
+                  </div>
+                </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
                       <table class="table display table-bordernone mt-0" id="files-table" style="width:100%">
@@ -239,10 +247,10 @@
                                 <td>${file.file_name}</td>
                                 <td>${new Date(file.uploaded_at).toLocaleString('en-US', { 
                                     year: 'numeric', 
-                                    month: '2-digit', 
-                                    day: '2-digit', 
-                                    hour: '2-digit', 
-                                    minute: '2-digit', 
+                                    month: 'long',      // Changed from '2-digit' to 'long' to display full month name
+                                    day: 'numeric',     // Changed from '2-digit' to 'numeric' to remove leading zeros
+                                    hour: 'numeric',    // Changed from '2-digit' to 'numeric' for natural hour display
+                                    minute: '2-digit',  // Kept as '2-digit' to ensure minutes always show as two digits
                                     hour12: true 
                                 })}</td>
                                 <td>
@@ -259,6 +267,13 @@
                     console.error('Error fetching files:', error);
                 });
         }
+
+        $('#searchFile').on('keyup', function () {
+            let searchValue = $(this).val().toLowerCase();
+            $('#files-table tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
 
         // Call fetchFiles to load the files when the page is loaded
         document.addEventListener('DOMContentLoaded', fetchFiles);

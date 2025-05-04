@@ -192,9 +192,17 @@
               <div class="col-xxl-12 col-xl-12 proorder-xxl-12 col-md-12 box-col-12">
                 <button id="add-cedula-transaction" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addIncomeReportModal">Add Income Report</button>
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
+                  <div class="row">
+                    <!-- Title - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
                       <h3>Cedula</h3>
-                      <input type="text" id="searchIncomeReportProgram" class="form-control w-25" placeholder="Search Income Report...">
+                    </div>
+                    
+                    <!-- Search box - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6">
+                      <label for="searchTransactions" class="form-label">Search Transactions</label>
+                      <input type="text" id="searchIncomeReportProgram" class="form-control" placeholder="Search Income Report...">
+                    </div>
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">

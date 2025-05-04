@@ -69,9 +69,8 @@
                   </div>
                   <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
-                      <button id="export-transmital" class="btn btn-primary">
-                          Transmittal letter
-                      </button>
+                      <button id="export-transmital" class="btn btn-primary">Transmittal letter</button>
+                      <button id="export-imcd" class="btn btn-primary">IMCD</button>
                   </div>
               </div>
             </div>
@@ -339,22 +338,36 @@
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
-                      <h3>Transaction History</h3>
-                      <div class="d-flex align-items-center w-50 justify-content-center">
-                          <div class="mx-2 text-left">
-                              <label for="startDate" class="form-label">Start Date</label>
-                              <input type="date" id="startDate" class="form-control w-100" placeholder="From Start Date">
-                          </div>
-                          <div class="mx-2 text-left">
-                              <label for="endDate" class="form-label">End Date</label>
-                              <input type="date" id="endDate" class="form-control w-100" placeholder="To End Date">
-                          </div>
+                  <div class="card-header card-no-border pb-0">
+                    <!-- Title row - always visible -->
+                    <div class="row mb-3">
+                      <div class="col-12">
+                        <h3>Transaction History</h3>
                       </div>
-                      <div class="text-left">
-                          <label for="searchTransactions" class="form-label">Search Transactions</label>
-                          <input type="text" id="searchTransactions" class="form-control w-100" placeholder="Search transactions...">
+                    </div>
+                    
+                    <!-- Filter and search row - stacks on mobile -->
+                    <div class="row">
+                      <!-- Date filters - full width on mobile, half width on larger screens -->
+                      <div class="col-12 col-md-6 mb-3">
+                        <div class="row">
+                          <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" id="startDate" class="form-control w-100" placeholder="From Start Date">
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" id="endDate" class="form-control w-100" placeholder="To End Date">
+                          </div>
+                        </div>
                       </div>
+                      
+                      <!-- Search box - full width on mobile, half width on larger screens -->
+                      <div class="col-12 col-md-6 mb-3">
+                        <label for="searchTransactions" class="form-label">Search Transactions</label>
+                        <input type="text" id="searchTransactions" class="form-control w-100" placeholder="Search transactions...">
+                      </div>
+                    </div>
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
@@ -1109,6 +1122,100 @@
         </div>
       `;
       container.append(newRow);
+    });
+  </script>
+  <script>
+    // Handle Export IMCD button click
+    $(document).ready(function() {
+        $('#export-imcd').on('click', function() {
+            // Get all checked checkboxes in the transaction history table
+            let selectedCheckboxes = $('#transaction-history tbody input[type="checkbox"]:checked');
+            
+            // Check if any rows are selected
+            if (selectedCheckboxes.length === 0) {
+                // No rows selected, show alert
+                Swal.fire({
+                    title: "No Transactions Selected",
+                    text: "Please select at least one transaction to export IMCD.",
+                    icon: "warning"
+                });
+            } else {
+                // Rows are selected, collect their details
+                let selectedTransactions = [];
+                
+                selectedCheckboxes.each(function() {
+                    let row = $(this).closest("tr"); // Get the parent row
+                    
+                    // Get the edit button to extract transaction_id
+                    let editButton = row.find(".edit-btn");
+                    let transactionId = editButton.data("id");
+                    
+                    // Extract data from table cells (adjust the indices to match your table structure)
+                    // Date is in column 2, Cheque is in column 4, Particulars is in column 9, Gross amount is in column 10
+                    let date = row.find("td:eq(1)").text().trim();
+                    let chequeNo = row.find("td:eq(3)").text().trim();
+                    let particulars = row.find("td:eq(8)").text().trim();
+                    
+                    // For gross amount, remove currency symbol and commas
+                    let grossAmountText = row.find("td:eq(9)").text().trim();
+                    let grossAmount = grossAmountText.replace('₱', '').replace(/,/g, '');
+                    
+                    // Create transaction object
+                    let transaction = {
+                        transaction_id: transactionId,
+                        date: date,
+                        cheque_no: chequeNo,
+                        particulars: particulars,
+                        gross_amount: grossAmount
+                    };
+                    
+                    selectedTransactions.push(transaction);
+                });
+                
+                // Log the selected transactions to console
+                console.log("Selected Transactions for IMCD:", selectedTransactions);
+                
+                // Alternatively, you can log each transaction individually
+                console.log("Individual Transaction Details:");
+                selectedTransactions.forEach((transaction, index) => {
+                    console.log(`Transaction ${index + 1}:`, 
+                        `ID: ${transaction.transaction_id}`,
+                        `Date: ${transaction.date}`,
+                        `Cheque No: ${transaction.cheque_no}`,
+                        `Particulars: ${transaction.particulars}`,
+                        `Gross Amount: ${transaction.gross_amount}`
+                    );
+                });
+                
+                // Show info alert
+                Swal.fire({
+                    title: "IMCD Export",
+                    text: `Preparing to export ${selectedTransactions.length} transaction(s)`,
+                    icon: "info"
+                });
+                
+                // If you want to proceed with the actual export:
+                // const formData = new FormData();
+                // formData.append('transactions', JSON.stringify(selectedTransactions));
+                
+                // fetch('mysql/export_imcd.php', {
+                //     method: 'POST',
+                //     body: formData
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     if (data.success) {
+                //         window.open(data.fileUrl, '_blank');
+                //     } else {
+                //         Swal.fire('Error', data.message, 'error');
+                //     }
+                // })
+                // .catch(error => {
+                //     console.error('Error:', error);
+                //     Swal.fire('Error', 'Failed to generate IMCD export', 'error');
+                // });
+            }
+        });
     });
   </script>
   </body>

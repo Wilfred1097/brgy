@@ -70,9 +70,16 @@
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
-                    <h3>User Logs</h3>
-                    <input type="text" id="searchUser" class="form-control w-25" placeholder="Search user...">
+                  <div class="row p-2 m-2">
+                    <!-- Title - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                      <h3>User Logs</h3>
+                    </div>
+                    
+                    <!-- Search box - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6">
+                      <input type="text" id="searchUser" class="form-control" placeholder="Search user...">
+                    </div>
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">

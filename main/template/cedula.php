@@ -156,10 +156,18 @@
               <div class="col-xxl-12 col-xl-12 proorder-xxl-12 col-md-12 box-col-12">
                 <button id="add-cedula-transaction" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addRaoProgramModal">Add Cedula Transaction</button>
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
-                      <h3>Cedula</h3>
-                      <input type="text" id="searchRaoProgram" class="form-control w-25" placeholder="Search Released Cedula...">
+                  <div class="row">
+                  <!-- Title - full width on mobile, half width on larger screens -->
+                  <div class="col-12 col-md-6 mb-3 mb-md-0">
+                    <h3>Cedula</h3>
                   </div>
+                  
+                  <!-- Search box - full width on mobile, half width on larger screens -->
+                  <div class="col-12 col-md-6">
+                    <label for="searchTransactions" class="form-label">Search Transactions</label>
+                    <input type="text" id="searchRaoProgram" class="form-control" placeholder="Search Released Cedula...">
+                  </div>
+                </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                       <div class="table-responsive theme-scrollbar">
                           <table class="table display table-bordernone mt-0" id="cedula-transaction" style="width:100%">

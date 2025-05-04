@@ -130,9 +130,16 @@ if (isset($_COOKIE['brgy'])) {
               </div>
               <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
+                  <div class="row p-2 m-2">
+                    <!-- Title - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
                       <h3>Transaction History</h3>
-                      <input type="text" id="searchTransactions" class="form-control w-25" placeholder="Search transactions...">
+                    </div>
+                    
+                    <!-- Search box - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6">
+                      <input type="text" id="searchTransactions" class="form-control" placeholder="Search transactions...">
+                    </div>
                   </div>
                   <div class="card-body transaction-history pt-0">
                     <div class="table-responsive theme-scrollbar">
@@ -161,9 +168,16 @@ if (isset($_COOKIE['brgy'])) {
               </div>
               <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
+                  <div class="row p-2 m-2">
+                    <!-- Title - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
                       <h3>Cedula Transaction History</h3>
-                      <input type="text" id="searchRaoProgram" class="form-control w-25" placeholder="Search Released Cedula...">
+                    </div>
+                    
+                    <!-- Search box - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6">
+                      <input type="text" id="searchRaoProgram" class="form-control" placeholder="Search Released Cedula...">
+                    </div>
                   </div>
                   <div class="card-body transaction-history pt-0">
                     <div class="table-responsive theme-scrollbar">
@@ -187,9 +201,16 @@ if (isset($_COOKIE['brgy'])) {
               </div>
               <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
+                  <div class="row p-2 m-2">
+                    <!-- Title - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
                       <h3>Upcoming Events</h3>
-                      <input type="text" id="searchEvent" class="form-control w-25" placeholder="Search events...">
+                    </div>
+                    
+                    <!-- Search box - full width on mobile, half width on larger screens -->
+                    <div class="col-12 col-md-6">
+                      <input type="text" id="searchEvent" class="form-control" placeholder="Search events...">
+                    </div>
                   </div>
                   <div class="card-body transaction-history pt-0">
                     <div class="table-responsive theme-scrollbar">

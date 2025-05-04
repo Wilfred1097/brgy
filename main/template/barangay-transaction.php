@@ -88,7 +88,7 @@
                   <!-- Buttons on the Left -->
                   <div class="col-auto">
                       <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add New Barangay Transaction</button>
-                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModalWithDV">Add Barangay Transaction with Existing DV</button>
+                      <!-- <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModalWithDV">Add Barangay Transaction with Existing DV</button> -->
                   </div>
                   <!-- <div class="col-auto">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
@@ -376,12 +376,19 @@
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0 d-flex justify-content-between align-items-center">
-                      <h3>Barangay Transaction History</h3>
-                      <div class="text-left">
-                          <label for="searchTransactions" class="form-label">Search Transactions</label>
-                          <input type="text" id="searchTransactions" class="form-control w-100" placeholder="Search transactions...">
+                  <div class="card-header card-no-border pb-0">
+                    <div class="row">
+                      <!-- Title - full width on mobile, half width on larger screens -->
+                      <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <h3>Barangay Transaction History</h3>
                       </div>
+                      
+                      <!-- Search box - full width on mobile, half width on larger screens -->
+                      <div class="col-12 col-md-6">
+                        <label for="searchTransactions" class="form-label">Search Transactions</label>
+                        <input type="text" id="searchTransactions" class="form-control w-100" placeholder="Search transactions...">
+                      </div>
+                    </div>
                   </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
@@ -990,6 +997,14 @@
             }
           });
         }
+
+        // 🟢 Filter transactions based on the search input
+        $('#searchTransactions').on('keyup', function () {
+            let searchValue = $(this).val().toLowerCase();
+            $('#barangay-transaction-history tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+            });
+        });
     });
 </script>
 

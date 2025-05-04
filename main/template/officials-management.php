@@ -247,9 +247,17 @@
             <div class="row">
               <div class="col-xxl-12 col-xl-12 proorder-xxl-5 col-md-12 box-col-12">
                 <div class="card height-equal">
-                  <div class="card-header card-no-border pb-0">
-                    <h3>Officials List</h3>
-                  </div>
+                  <div class="row p-2">
+                      <!-- Title - full width on mobile, half width on larger screens -->
+                      <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <h3>Officials List</h3>
+                      </div>
+                      
+                      <!-- Search box - full width on mobile, half width on larger screens -->
+                      <div class="col-12 col-md-6">
+                        <input type="text" id="searchOfficials" class="form-control" placeholder="Search Officials...">
+                      </div>
+                    </div>
                   <div class="card-body pt-0 manage-invoice filled-checkbox">
                     <div class="table-responsive theme-scrollbar">
                       <table class="table display table-bordernone mt-0" id="users-table" style="width:100%">
@@ -623,6 +631,13 @@
                     }
                 });
             }
+
+            $('#searchOfficials').on('keyup', function () {
+                let searchValue = $(this).val().toLowerCase();
+                $('#users-table tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+                });
+            });
 
             // Call function to fetch users when the page loads
             fetchUsers();

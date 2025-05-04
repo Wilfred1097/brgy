@@ -26,6 +26,8 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
           </a>
       </li>
 
+      <!-- Show User Management only if the role is Treasurer -->
+      <?php if ($userRole === "treasurer"): ?>
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="Calendar-basic.php">
@@ -49,6 +51,8 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
               <h6 class="f-w-600">Transaction</h6>
           </a>
       </li>
+      <!-- Show User Management only if the role is Treasurer -->
+      <?php endif; ?>
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
@@ -58,7 +62,8 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
           </a>
       </li>
 
-
+      <!-- Show User Management only if the role is Treasurer -->
+      <?php if ($userRole === "treasurer"): ?>
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="income-report.php">
@@ -83,8 +88,6 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
           </a>
       </li>
 
-      <!-- Show User Management only if the role is Treasurer -->
-      <?php if ($userRole === "treasurer"): ?>
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="user-management.php">
@@ -92,7 +95,6 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
               <h6 class="f-w-600">User Management</h6>
           </a>
       </li>
-      <?php endif; ?>
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
@@ -117,6 +119,7 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
               <h6 class="f-w-600">ChatBot Configuration</h6>
           </a>
       </li>
+      <?php endif; ?>
 
     </ul>
   </div>

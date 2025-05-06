@@ -63,11 +63,13 @@
                 </div>
               </div>
               <div class="row mt-3">
-                  <!-- Buttons on the Left -->
-                  <div class="col-auto">
+                  <!-- Button on the Left -->
+                  <div class="col">
                       <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add Transaction</button>
                   </div>
-                  <div class="col-auto">
+                  
+                  <!-- Buttons on the Right -->
+                  <div class="col text-end">
                       <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
                       <button id="export-transmital" class="btn btn-primary">Transmittal letter</button>
                       <button id="export-imcd" class="btn btn-primary">IMCD</button>
@@ -145,7 +147,7 @@
                                   <!-- PBC No. -->
                                     <div class="col-md-6 col-sm-12">
                                         <label class="form-label">PBC No.:</label>
-                                        <input type="number" class="form-control" placeholder="enter PBC number" id="pbcNo" required>
+                                        <input type="text" class="form-control" placeholder="enter PBC number" id="pbcNo" required>
                                     </div>
                               </div>
 
@@ -158,7 +160,7 @@
                                   <!-- Payee -->
                                   <div class="col-md-6">
                                       <label class="form-label">Account No:</label>
-                                      <input type="number" class="form-control" placeholder="enter account number" id="accountNumber" required>
+                                      <input type="text" class="form-control" placeholder="enter account number" id="accountNumber" required>
                                   </div>
                               </div>
 
@@ -184,7 +186,7 @@
                                 <!-- Fund -->
                                   <div class="col-md-6">
                                       <label class="form-label">Fund:</label>
-                                      <select class="form-control" id="fundfund" required>
+                                      <select class="form-control" id="fund" required>
                                           <option value="" disabled selected>Select a Program</option>
                                       </select>
                                   </div>
@@ -196,25 +198,36 @@
                                       <label class="form-label">Gross Amount:</label>
                                       <input type="text" class="form-control" placeholder="select program" id="grossAmount" readonly="">
                                   </div>
+                                  <!-- Cash Advance -->
+                                  <div class="col-md-3 col-sm-3">
+                                      <label for="cash-advance" class="form-label">Cash Advance:</label>
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="checkbox" id="cash-advance" onclick="toggleVatEvatFields()">
+                                          <label class="form-check-label" for="cashAdvanceCheckbox">Yes</label>
+                                      </div>
+                                  </div>
                                   <!-- Vatable -->
-                                  <div class="col-md-2 col-sm-4">
+                                  <div class="col-md-3 col-sm-3">
                                       <label for="vatable" class="form-label">Vatable:</label>
                                       <div class="form-check">
                                           <input class="form-check-input" type="checkbox" id="vatable" onclick="toggleVatEvatFields()">
                                           <label class="form-check-label" for="vatableCheckbox">Yes</label>
                                       </div>
                                   </div>
+                              </div>
+
+                              <div class="row mt-2">
                                   <!-- VAT -->
-                                  <div class="col-md-2 col-sm-4">
+                                  <div class="col-md-6 col-sm-6">
                                       <label for="vat">VAT:</label>
                                       <select class="form-control" id="vat" disabled>
+                                          <option value="1">1%</option>
                                           <option value="3">3%</option>
                                           <option value="5">5%</option>
-                                          <option value="12">12%</option>
                                       </select>
                                   </div>
                                   <!-- VEVAT -->
-                                  <div class="col-md-2 col-sm-4">
+                                  <div class="col-md-6 col-sm-6">
                                       <label for="evat">EVAT:</label>
                                       <select class="form-control" id="evat" disabled>
                                           <option value="1">1%</option>
@@ -251,7 +264,7 @@
                                   </div>
                                   <div class="col-md-6">
                                       <label class="form-label">PBC No.:</label>
-                                      <input type="number" class="form-control" placeholder="Enter PBC number" id="edit_pbc" name="pbc" required>
+                                      <input type="text" class="form-control" placeholder="Enter PBC number" id="edit_pbc" name="pbc" required>
                                   </div>
                               </div>
 
@@ -262,7 +275,7 @@
                                   </div>
                                   <div class="col-md-6">
                                       <label class="form-label">Account No:</label>
-                                      <input type="number" class="form-control" placeholder="Enter account number" id="edit_accountNumber" name="accountNumber" required>
+                                      <input type="text" class="form-control" placeholder="Enter account number" id="edit_accountNumber" name="accountNumber" required>
                                   </div>
                               </div>
 
@@ -308,9 +321,9 @@
                                   <div class="col-md-2">
                                       <label for="edit_vat">VAT:</label>
                                       <select class="form-control" id="edit_vat" name="vat" disabled>
-                                          <option value="3">3%</option>
-                                          <option value="5">5%</option>
-                                          <option value="12">12%</option>
+                                          <option value="1">1%</option>
+                                          <option value="2">2%</option>
+                                          <option value="5">52%</option>
                                       </select>
                                   </div>
 
@@ -538,13 +551,14 @@
 
     <script type="text/javascript">
       function toggleVatEvatFields() {
-              let vatSelect = document.getElementById("vat");
-              let evatSelect = document.getElementById("evat");
-              let vatableCheckbox = document.getElementById("vatable");
 
-              vatSelect.disabled = !vatableCheckbox.checked;
-              evatSelect.disabled = !vatableCheckbox.checked;
-          }
+          let vatSelect = document.getElementById("vat");
+          let evatSelect = document.getElementById("evat");
+          let vatableCheckbox = document.getElementById("vatable");
+
+          vatSelect.disabled = !vatableCheckbox.checked;
+          evatSelect.disabled = !vatableCheckbox.checked;
+      }
     </script>
 
     <!-- JavaScript to handle adding new RCD rows -->
@@ -700,7 +714,7 @@
             }
 
             // Ensure gross amount is correctly parsed as a number
-            formData['grossAmount'] = parseFloat(formData['grossAmount'].replace(/,/g, ''));
+            // formData['grossAmount'] = parseFloat(formData['grossAmount'].replace(/,/g, ''));
             console.log(formData);
 
             $.ajax({
@@ -1140,80 +1154,34 @@
                     icon: "warning"
                 });
             } else {
-                // Rows are selected, collect their details
-                let selectedTransactions = [];
+                // Collect the transaction IDs from all selected rows
+                let selectedIds = [];
                 
                 selectedCheckboxes.each(function() {
                     let row = $(this).closest("tr"); // Get the parent row
+                    let transactionId = row.find(".edit-btn").data("id"); // Get ID from the edit button
                     
-                    // Get the edit button to extract transaction_id
-                    let editButton = row.find(".edit-btn");
-                    let transactionId = editButton.data("id");
-                    
-                    // Extract data from table cells (adjust the indices to match your table structure)
-                    // Date is in column 2, Cheque is in column 4, Particulars is in column 9, Gross amount is in column 10
-                    let date = row.find("td:eq(1)").text().trim();
-                    let chequeNo = row.find("td:eq(3)").text().trim();
-                    let particulars = row.find("td:eq(8)").text().trim();
-                    
-                    // For gross amount, remove currency symbol and commas
-                    let grossAmountText = row.find("td:eq(9)").text().trim();
-                    let grossAmount = grossAmountText.replace('₱', '').replace(/,/g, '');
-                    
-                    // Create transaction object
-                    let transaction = {
-                        transaction_id: transactionId,
-                        date: date,
-                        cheque_no: chequeNo,
-                        particulars: particulars,
-                        gross_amount: grossAmount
-                    };
-                    
-                    selectedTransactions.push(transaction);
+                    if (transactionId) {
+                        selectedIds.push(transactionId);
+                    }
                 });
                 
-                // Log the selected transactions to console
-                console.log("Selected Transactions for IMCD:", selectedTransactions);
+                // Log the selected IDs to console for debugging
+                console.log("Selected Transaction IDs for IMCD:", selectedIds);
                 
-                // Alternatively, you can log each transaction individually
-                console.log("Individual Transaction Details:");
-                selectedTransactions.forEach((transaction, index) => {
-                    console.log(`Transaction ${index + 1}:`, 
-                        `ID: ${transaction.transaction_id}`,
-                        `Date: ${transaction.date}`,
-                        `Cheque No: ${transaction.cheque_no}`,
-                        `Particulars: ${transaction.particulars}`,
-                        `Gross Amount: ${transaction.gross_amount}`
-                    );
-                });
-                
-                // Show info alert
-                Swal.fire({
-                    title: "IMCD Export",
-                    text: `Preparing to export ${selectedTransactions.length} transaction(s)`,
-                    icon: "info"
-                });
-                
-                // If you want to proceed with the actual export:
-                // const formData = new FormData();
-                // formData.append('transactions', JSON.stringify(selectedTransactions));
-                
-                // fetch('mysql/export_imcd.php', {
-                //     method: 'POST',
-                //     body: formData
-                // })
-                // .then(response => response.json())
-                // .then(data => {
-                //     if (data.success) {
-                //         window.open(data.fileUrl, '_blank');
-                //     } else {
-                //         Swal.fire('Error', data.message, 'error');
-                //     }
-                // })
-                // .catch(error => {
-                //     console.error('Error:', error);
-                //     Swal.fire('Error', 'Failed to generate IMCD export', 'error');
-                // });
+                if (selectedIds.length > 0) {
+                    // Convert array to a comma-separated string to pass as URL parameter
+                    let params = new URLSearchParams({ ids: selectedIds.join(',') });
+                    
+                    // Show brief processing message
+                    window.open("mysql/export_imcd.php?" + params.toString(), "_blank");
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Could not retrieve any transaction IDs.",
+                        icon: "error"
+                    });
+                }
             }
         });
     });

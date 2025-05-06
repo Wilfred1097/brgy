@@ -121,7 +121,8 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Position</label>
                                     <select class="form-select" id="position" name="position">
-                                        <option value="punong_barangay" selected="">Punong Barangay</option>
+                                        <option value="" selected="" disabled>Select Position</option>
+                                        <option value="punong_barangay">Punong Barangay</option>
                                         <option value="sb_member">Sangguniang Barangay Member</option>
                                         <option value="sk">SK Chairperson</option>
                                         <option value="secretary">Barangay Secretary</option>
@@ -399,7 +400,7 @@
         }
 
         // Send the data via AJAX to update_user.php
-        fetch('mysql/update_user.php', {
+        fetch('mysql/update_official.php', {
             method: 'POST',
             body: formData
         })
@@ -552,85 +553,106 @@
 
       $(document).ready(function () {
             function fetchUsers() {
-                $.ajax({
-                    url: "mysql/fetch_officials.php",
-                    type: "GET",
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.status === "success") {
-                            let usersTableBody = $("#users-table tbody");
-                            usersTableBody.empty(); // Clear existing rows
+    $.ajax({
+        url: "mysql/fetch_officials.php",
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (response.status === "success") {
+                let usersTableBody = $("#users-table tbody");
+                usersTableBody.empty(); // Clear existing rows
 
-                            // Define position mapping
-                            const positionMap = {
-                                "punong_barangay": "Punong Barangay",
-                                "sb_member": "Sangguniang Barangay Member",
-                                "sk": "SK Chairperson",
-                                "secretary": "Barangay Secretary"
-                            };
-
-                            // Check if data exists and has items
-                            if (response.data && response.data.length > 0) {
-                                response.data.forEach(user => {
-                                    let row = `
-                                        <tr>
-                                            <td>${user.first_name} ${user.middle_name} ${user.last_name}</td>
-                                            <td>${user.address}</td>
-                                            <td>${new Date(user.date_of_birth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                                            <td>${user.age}</td>
-                                            <td>${positionMap[user.position] || "Unknown"}</td>
-                                            <td>${user.gmail}</td>
-                                            <td>${user.phone_number}</td>
-                                            <td>
-                                            <img 
-                                                src="mysql/uploads/officials/${user.image}" 
-                                                alt="Profile" 
-                                                class="rounded-circle event-image" 
-                                                style="cursor: pointer; width: 30px; height: auto;" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#viewOfficialModal" 
-                                                data-image="mysql/uploads/officials/${user.image}">
-                                        </td>
-                                            <td>
-                                                <i data-feather="edit" class="text-primary edit-official"
-                                                    data-id="${user.id}"
-                                                    data-firstname="${user.first_name}"
-                                                    data-middlename="${user.middle_name}"
-                                                    data-lastname="${user.last_name}"
-                                                    data-address="${user.address}"
-                                                    data-dob="${user.date_of_birth}"
-                                                    data-age="${user.age}"
-                                                    data-position="${user.position}"
-                                                    data-gmail="${user.gmail}"
-                                                    data-phone="${user.phone_number}"
-                                                    data-image="mysql/uploads/officials/${user.image}"
-                                                    style="cursor: pointer;">
-                                                </i>
-                                                <i data-feather="trash" style="cursor:pointer;" class="text-danger delete-officials" data-id="${user.id}"></i>
-                                            </td>
-                                        </tr>
-                                    `;
-                                    usersTableBody.append(row);
-                                });
-
-                                // Reinitialize Feather icons after adding content
-                                feather.replace();
-                            } else {
-                                usersTableBody.append('<tr><td colspan="9" class="text-center">No officials found</td></tr>');
-                            }
-                        } else {
-                            console.error("Error fetching officials:", response.message);
-                            $("#users-table tbody").html('<tr><td colspan="9" class="text-center">Error loading officials data</td></tr>');
+                // Define position mapping
+                const positionMap = {
+                    "punong_barangay": "Punong Barangay",
+                    "sb_member": "Sangguniang Barangay Member",
+                    "sk": "SK Chairperson",
+                    "secretary": "Barangay Secretary"
+                };
+                
+                // Check if Punong Barangay already exists
+                let punongBarangayExists = false;
+                
+                // Check if data exists and has items
+                if (response.data && response.data.length > 0) {
+                    // First check if Punong Barangay exists
+                    response.data.forEach(user => {
+                        if (user.position === "punong_barangay") {
+                            punongBarangayExists = true;
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX Error:", error);
-                        console.error("Status:", status);
-                        console.error("Response Text:", xhr.responseText);
-                        $("#users-table tbody").html('<tr><td colspan="9" class="text-center">Error connecting to server</td></tr>');
-                    }
-                });
+                    });
+                    
+                    // Then render the table
+                    response.data.forEach(user => {
+                        let row = `
+                            <tr>
+                                <td>${user.first_name} ${user.middle_name} ${user.last_name}</td>
+                                <td>${user.address}</td>
+                                <td>${new Date(user.date_of_birth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                <td>${user.age}</td>
+                                <td>${positionMap[user.position] || "Unknown"}</td>
+                                <td>${user.gmail}</td>
+                                <td>${user.phone_number}</td>
+                                <td>
+                                <img 
+                                    src="mysql/uploads/officials/${user.image}" 
+                                    alt="Profile" 
+                                    class="rounded-circle event-image" 
+                                    style="cursor: pointer; width: 30px; height: auto;" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#viewOfficialModal" 
+                                    data-image="mysql/uploads/officials/${user.image}">
+                            </td>
+                                <td>
+                                    <i data-feather="edit" class="text-primary edit-official"
+                                        data-id="${user.id}"
+                                        data-firstname="${user.first_name}"
+                                        data-middlename="${user.middle_name}"
+                                        data-lastname="${user.last_name}"
+                                        data-address="${user.address}"
+                                        data-dob="${user.date_of_birth}"
+                                        data-age="${user.age}"
+                                        data-position="${user.position}"
+                                        data-gmail="${user.gmail}"
+                                        data-phone="${user.phone_number}"
+                                        data-image="mysql/uploads/officials/${user.image}"
+                                        style="cursor: pointer;">
+                                    </i>
+                                    <i data-feather="trash" style="cursor:pointer;" class="text-danger delete-officials" data-id="${user.id}"></i>
+                                </td>
+                            </tr>
+                        `;
+                        usersTableBody.append(row);
+                    });
+
+                    // Reinitialize Feather icons after adding content
+                    feather.replace();
+                } else {
+                    usersTableBody.append('<tr><td colspan="9" class="text-center">No officials found</td></tr>');
+                }
+                
+                // Disable the Punong Barangay option if one already exists
+                const punongBarangayOption = $("#position option[value='punong_barangay']");
+                if (punongBarangayExists) {
+                    punongBarangayOption.attr('disabled', true);
+                    punongBarangayOption.text('Punong Barangay (Already appointed)');
+                } else {
+                    punongBarangayOption.attr('disabled', false);
+                    punongBarangayOption.text('Punong Barangay');
+                }
+            } else {
+                console.error("Error fetching officials:", response.message);
+                $("#users-table tbody").html('<tr><td colspan="9" class="text-center">Error loading officials data</td></tr>');
             }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", error);
+            console.error("Status:", status);
+            console.error("Response Text:", xhr.responseText);
+            $("#users-table tbody").html('<tr><td colspan="9" class="text-center">Error connecting to server</td></tr>');
+        }
+    });
+}
 
             $('#searchOfficials').on('keyup', function () {
                 let searchValue = $(this).val().toLowerCase();

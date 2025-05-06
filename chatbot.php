@@ -35,12 +35,13 @@
     #chat-body {
       display: flex;
       flex-direction: column;
-      height: 300px;
+      height: 390px;
+      width: 300px;
     }
 
     #chat-messages {
       flex: 1;
-      padding: 10px;
+      padding: 15px;
       overflow-y: auto;
       font-size: 14px;
     }
@@ -82,12 +83,12 @@
 
   <!-- Chat Button -->
   <div id="chat-button">
-    <button class="btn btn-primary rounded-pill px-4" onclick="toggleChat()">💬 Chat</button>
+    <button class="btn btn-danger rounded-pill px-4" onclick="toggleChat()">💬 Chat</button>
   </div>
 
   <!-- Chat Popup -->
   <div id="chat-popup" class="shadow">
-    <div id="chat-header" class="bg-primary text-white">
+    <div id="chat-header" class="bg-danger text-white">
       Barangay Process FAQs
       <span onclick="toggleChat()" style="cursor: pointer;">✖</span>
     </div>
@@ -119,7 +120,7 @@
         setTimeout(() => {
           const botMsg = document.createElement("div");
           botMsg.className = "message bot";
-          botMsg.textContent = "Thanks for your message!";
+          botMsg.textContent = "Thanks for your message! please choose a FAQs above.";
           document.getElementById("chat-messages").appendChild(botMsg);
           scrollToBottom();
         }, 1000);
@@ -157,9 +158,9 @@
           const questionContainer = document.createElement("div");
           data.forEach(item => {
             const btn = document.createElement("button");
-            btn.className = "btn btn-primary btn-sm mb-2";
+            btn.className = "btn btn-danger btn-sm mb-2";
             btn.style.textAlign = "left";
-            btn.style.width = "100%";
+            btn.style.width = "75%";
             btn.textContent = item.questions;
             btn.onclick = () => {
               displayUserMessage(item.questions);

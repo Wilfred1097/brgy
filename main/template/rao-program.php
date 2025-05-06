@@ -127,7 +127,7 @@
                         </div>
                         <div class="mb-3">
                           <label for="subProgramName" class="form-label">Program Name</label>
-                          <input type="text" class="form-control" id="subProgramName" placeholder="Enter program name" required>
+                          <input type="text" class="form-control" id="subProgramName" placeholder="Enter sub-program name" required>
                         </div>
                         <div class="mb-3">
                           <label for="subAmount" class="form-label">Amount</label>
@@ -237,6 +237,7 @@
                           <tr>
                             <th>Program Name</th>
                             <th>Amount</th>
+                            <th>Remaining Amount</th>
                             <th>Year</th>
                             <th>Date Added</th>
                             <th>Action</th>
@@ -589,6 +590,7 @@
                         let row = `
                             <tr>
                                 <td>${rao_program.name || 'N/A'}</td>
+                                <td>₱${rao_program.amount ? parseFloat(rao_program.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>₱${rao_program.amount ? parseFloat(rao_program.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>${rao_program.year || 'N/A'}</td>
                                 <td>${new Date(rao_program.date_added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>

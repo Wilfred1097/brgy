@@ -192,7 +192,7 @@
               <div class="col-xxl-12 col-xl-12 proorder-xxl-12 col-md-12 box-col-12">
                 <button id="add-cedula-transaction" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addIncomeReportModal">Add Income Report</button>
                 <div class="card height-equal">
-                  <div class="row">
+                  <div class="row m-2">
                     <!-- Title - full width on mobile, half width on larger screens -->
                     <div class="col-12 col-md-6 mb-3 mb-md-0">
                       <h3>Cedula</h3>
@@ -388,6 +388,15 @@
           const amount = $('#editIncomeAmount').val();
           const docStamp = $('#editDocStamp').val();
           const rcdNumber = $('#editRcdNumber').val();
+
+          console.log("ID: ", id);
+          console.log("date: ", date);
+          console.log("orNumber: ", orNumber);
+          console.log("name: ", name);
+          console.log("transactionType: ", transactionType);
+          console.log("amount: ", amount);
+          console.log("docStamp: ", docStamp);
+          console.log("rcdNumber: ", rcdNumber);
 
           // AJAX request to update the Income Report
           $.ajax({

@@ -30,7 +30,7 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
       <?php if ($userRole === "treasurer"): ?>
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="Calendar-basic.php">
+          <a class="sidebar-link" href="calendar-basic.php">
               <i class="fa-solid fa-calendar-days"></i> <!-- Font Awesome Icon for Calendar -->
               <h6 class="f-w-600">Events</h6>
           </a>

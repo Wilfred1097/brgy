@@ -35,12 +35,13 @@
     #chat-body {
       display: flex;
       flex-direction: column;
-      height: 300px;
+      height: 390px;
+      width: 300px;
     }
 
     #chat-messages {
       flex: 1;
-      padding: 10px;
+      padding: 15px;
       overflow-y: auto;
       font-size: 14px;
     }
@@ -119,7 +120,7 @@
         setTimeout(() => {
           const botMsg = document.createElement("div");
           botMsg.className = "message bot";
-          botMsg.textContent = "Thanks for your message!";
+          botMsg.textContent = "Thanks for your message! please choose a FAQs above.";
           document.getElementById("chat-messages").appendChild(botMsg);
           scrollToBottom();
         }, 1000);
@@ -159,7 +160,7 @@
             const btn = document.createElement("button");
             btn.className = "btn btn-primary btn-sm mb-2";
             btn.style.textAlign = "left";
-            btn.style.width = "100%";
+            btn.style.width = "75%";
             btn.textContent = item.questions;
             btn.onclick = () => {
               displayUserMessage(item.questions);

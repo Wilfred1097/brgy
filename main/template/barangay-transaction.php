@@ -134,7 +134,7 @@
                                   <!-- RIS Number -->
                                   <div class="col-md-6">
                                       <label class="form-label">RIS Number:</label>
-                                      <input type="number" class="form-control" placeholder="Enter RIS number" id="new_risNumber" required>
+                                      <input type="text" class="form-control" placeholder="Enter RIS number" id="new_risNumber" required>
                                   </div>
                               </div>
 
@@ -147,7 +147,9 @@
                                   <!-- Requisitioner -->
                                   <div class="col-md-6">
                                       <label class="form-label">Requisitioner:</label>
-                                      <input type="text" class="form-control" placeholder="Enter requisitioner name" id="new_requisitioner" required>
+                                      <select class="form-control" id="new_requisitioner" required>
+                                          <option value="" disabled selected>Select Requisitioner</option>
+                                      </select>
                                   </div>
                               </div>
 
@@ -509,6 +511,7 @@
     $(document).ready(function () {
         // --- Fetch and populate programs when page loads ---
         fetchPrograms();
+        fetchOfficials();
 
         function fetchPrograms() {
             $.ajax({
@@ -520,6 +523,24 @@
                     fundSelect.empty().append('<option value="" disabled selected>Select a Program</option>');
                     data.forEach(rao_program => {
                         fundSelect.append(`<option value="${rao_program.id}" data-amount="${rao_program.amount}">${rao_program.name}</option>`);
+                    });
+                },
+                error: function () {
+                    console.error("Error fetching programs.");
+                }
+            });
+        }
+
+        function fetchOfficials() {
+            $.ajax({
+                url: 'mysql/fetch_officials_name.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    let fundSelect = $('#new_requisitioner');
+                    fundSelect.empty().append('<option value="" disabled selected>Select Requisitioner</option>');
+                    data.forEach(officials_name => {
+                        fundSelect.append(`<option value="${officials_name.first_name} ${officials_name.last_name}">${officials_name.first_name} ${officials_name.last_name}</option>`);
                     });
                 },
                 error: function () {

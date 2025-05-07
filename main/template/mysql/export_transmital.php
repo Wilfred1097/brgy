@@ -149,7 +149,7 @@ foreach ($transactions as $trans) {
     $pdf->Cell(13, 5, $trans['dv_no'], 1, 0, 'C');
     $pdf->Cell(24, 5, $trans['date'], 1, 0, 'C'); // or check check_date
     $pdf->Cell(18, 5, $trans['cheque_no'], 1, 0, 'C');
-    $pdf->Cell(50, 5, '', 1, 0, 'C');
+    $pdf->Cell(50, 5, $trans['payee'], 1, 0, 'C');
     $pdf->Cell(22, 5, number_format($trans['net_amount'], 2), 1, 0, 'C');
     $pdf->Cell(31, 5, $trans['date'], 1, 0, 'C'); // or pbc_date
     $pdf->Cell(11, 5, $trans['pbc_no'], 1, 1, 'C');

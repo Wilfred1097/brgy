@@ -110,7 +110,7 @@
           <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="400">
             <div class="service-item position-relative">
               <div class="icon"><i class="bi bi-bullseye icon"></i></div>
-              <h4>objectives</a></h4>
+              <h4>Objectives</a></h4>
               <p>Ensure transparent and accountable governance.<br>Provide quality public services to all residents.<br>Encourage active community participation in all initiatives.<br>Maintain a safe and clean environment for future generations.</p>
             </div>
           </div><!-- End About Item -->
@@ -161,7 +161,7 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>Stay connected with us for any concerns or community matters.</p>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -183,7 +183,7 @@
                 <i class="bi bi-telephone flex-shrink-0"></i>
                 <div>
                   <h3>Call Us</h3>
-                  <p>+63 953 894 6017</p>
+                  <p>0953 894 6017</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -191,7 +191,7 @@
                 <i class="bi bi-envelope flex-shrink-0"></i>
                 <div>
                   <h3>Email Us</h3>
-                  <p>info@barangaybulatok.com</p>
+                  <p>brgy.bulatok@gmail.com</p>
                 </div>
               </div><!-- End Info Item -->
 

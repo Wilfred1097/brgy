@@ -70,7 +70,7 @@
             <div class="modal-dialog modal-dialog-centered modal-md">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="addRaoProgramModalLabel">RAO Program</h5>
+                  <h5 class="modal-title" id="addRaoProgramModalLabel">Add RAO Program</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -78,14 +78,21 @@
                     <!-- RAO Program Form-->
                     <div class="col-md-12">
                       <form id="raoProgramForm">
-                        <h4 class="fw-bolder mb-3">RAO Program</h4>
                         <div class="mb-3">
                           <label for="raoYear" class="form-label">Year</label>
                           <select class="form-control" id="raoYear" required>
                             <option value="" disabled selected>Select Year</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
                             <option value="2025">2025</option>
                             <option value="2026">2026</option>
                             <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
                           </select>
                         </div>
                         <div class="mb-3">
@@ -161,9 +168,17 @@
                           <label for="editRaoYear" class="form-label">Year</label>
                           <select class="form-control" id="editRaoYear" required>
                             <option value="" disabled>Select Year</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
                             <option value="2025">2025</option>
                             <option value="2026">2026</option>
                             <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
                           </select>
                         </div>
                         <div class="mb-3">
@@ -392,7 +407,11 @@
                     raoProgramSelect.empty();
                     raoProgramSelect.append('<option value="" disabled selected>Select RAO Program</option>');
                     data.forEach(rao_program => {
-                        let option = `<option value="${rao_program.id}" data-amount="${rao_program.amount}">${rao_program.name}</option>`;
+                        let option = `<option value="${rao_program.id}" 
+                                            data-amount="${rao_program.amount}" 
+                                            data-remaining-amount="${rao_program.remaining_amount}">
+                                        ${rao_program.name}
+                                     </option>`;
                         raoProgramSelect.append(option);
                     });
                 },
@@ -412,16 +431,26 @@
             event.preventDefault();
             const raoProgramSelect = document.getElementById('raoProgramSelect');
             const raoProgramId = raoProgramSelect.value;
-            const raoProgramAmount = parseFloat(raoProgramSelect.options[raoProgramSelect.selectedIndex].getAttribute('data-amount'));
+            const raoProgramRemainingAmount = parseFloat(raoProgramSelect.options[raoProgramSelect.selectedIndex].getAttribute('data-remaining-amount'));
             const programName = document.getElementById('subProgramName').value;
             const amount = parseFloat(document.getElementById('subAmount').value);
 
-            // Validate the amount
-            if (amount > raoProgramAmount) {
+            // Add validation to check if raoProgramRemainingAmount is a valid number
+            if (isNaN(raoProgramRemainingAmount)) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'The amount for the Sub Program cannot be greater than the selected RAO Program.',
+                    text: 'Could not determine remaining amount for the selected RAO Program.',
+                });
+                return; // Stop form submission
+            }
+
+            // Validate the amount
+            if (amount > raoProgramRemainingAmount) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: `The amount (₱${amount.toLocaleString('en-PH', { minimumFractionDigits: 2 })}) for the Sub Program cannot be greater than the remaining amount (₱${raoProgramRemainingAmount.toLocaleString('en-PH', { minimumFractionDigits: 2 })}) of the selected RAO Program.`,
                 });
                 return; // Stop form submission
             }
@@ -512,21 +541,25 @@
             });
         });
 
-        // Handle Sub Program edit form submission
+       // Handle Sub Program edit form submission
         $('#editSubProgramForm').on('submit', function(event) {
             event.preventDefault();
             const id = $('#editSubProgramId').val();
             const raoProgramId = $('#editRaoProgramSelect').val();
             const programName = $('#editSubProgramName').val();
-            const amount = $('#editSubAmount').val();
-            const raoProgramAmount = parseFloat($('#editRaoProgramSelect option:selected').data('amount'));
-
-            // Validate the amount
-            if (amount > raoProgramAmount) {
+            const newAmount = parseFloat($('#editSubAmount').val());
+            const originalAmount = parseFloat($(this).data('original-amount'));
+            const raoProgramRemainingAmount = parseFloat($('#editRaoProgramSelect option:selected').data('remaining-amount'));
+            
+            // Get the difference between the new and original amount
+            const amountDifference = newAmount - originalAmount;
+            
+            // Validate the amount change in relation to RAO program remaining amount
+            if (amountDifference > 0 && amountDifference > raoProgramRemainingAmount) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'The amount for the Sub Program cannot be greater than the selected RAO Program.',
+                    text: `Cannot increase amount by ₱${amountDifference.toLocaleString('en-PH', { minimumFractionDigits: 2 })}. The RAO Program only has ₱${raoProgramRemainingAmount.toLocaleString('en-PH', { minimumFractionDigits: 2 })} remaining.`,
                 });
                 return; // Stop form submission
             }
@@ -534,7 +567,14 @@
             $.ajax({
                 url: 'mysql/edit_sub_program.php',
                 type: 'POST',
-                data: { id, raoProgramId, programName, amount },
+                data: { 
+                    id: id, 
+                    raoProgramId: raoProgramId, 
+                    programName: programName, 
+                    newAmount: newAmount,
+                    originalAmount: originalAmount,
+                    amountDifference: amountDifference
+                },
                 success: function(response) {
                     console.log(response); // Log the response for debugging
                     Swal.fire({
@@ -545,6 +585,8 @@
                         $('#editSubProgramForm')[0].reset();
                         $('#editSubProgramModal').modal('hide');
                         fetchSub();
+                        // Also fetch RAO programs as their remaining amounts might have changed
+                        fetchRao();
                     });
                 },
                 error: function(xhr, status, error) {
@@ -552,11 +594,27 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: 'Failed to update Sub Program. Please try again.',
-                });
-            }
+                        text: xhr.responseJSON?.message || 'Failed to update Sub Program. Please try again.',
+                    });
+                }
+            });
         });
-    });
+
+        // When opening the edit modal, store the original amount
+        $(document).on('click', '.edit-btn.sub-edit-btn', function() {
+            $('#editSubProgramId').val($(this).data('id'));
+            $('#editSubProgramName').val($(this).data('name'));
+            
+            const originalAmount = parseFloat($(this).data('amount'));
+            $('#editSubAmount').val(originalAmount);
+            
+            // Store the original amount for comparison during form submission
+            $('#editSubProgramForm').data('original-amount', originalAmount);
+            
+            $('#editRaoProgramSelect').val($(this).data('rao-program-id'));
+            $('#editSubProgramModal').modal('show');
+            fetchRaoProgramsForSelect('#editRaoProgramSelect');
+        });
 
         // 🟢 Filter transactions based on the search input
         $('#searchRaoProgram').on('keyup', function () {
@@ -591,12 +649,13 @@
                             <tr>
                                 <td>${rao_program.name || 'N/A'}</td>
                                 <td>₱${rao_program.amount ? parseFloat(rao_program.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
-                                <td>₱${rao_program.amount ? parseFloat(rao_program.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
+                                <td>₱${rao_program.remaining_amount ? parseFloat(rao_program.remaining_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 }) : 'N/A'}</td>
                                 <td>${rao_program.year || 'N/A'}</td>
                                 <td>${new Date(rao_program.date_added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary edit-btn rao-edit-btn"
                                       data-id="${rao_program.id}"
+                                      data-remaining-amount="${rao_program.remaining_amount}"
                                       data-name="${rao_program.name}"
                                       data-year="${rao_program.year}"
                                       data-amount="${rao_program.amount}">
@@ -641,7 +700,7 @@
                                       data-amount="${sub_program.amount}">
                                       <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger delete-btn" onclick="confirmDeleteSub(${sub_program.id});"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-sm btn-danger delete-btn" onclick="confirmDeleteSub(${sub_program.id}, ${sub_program.amount});"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         `;
@@ -656,29 +715,61 @@
 
     // 🟢 Confirm & Delete RAO Program
     function confirmDeleteRao(programId) {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.post("mysql/delete_rao.php", { id: programId }, function (response) {
-                    Swal.fire("Deleted!", response.message, "success");
-                    fetchRao();
-                }, "json");
+        // First, check if the RAO program has any sub-programs
+        $.ajax({
+            url: "mysql/check_rao_dependencies.php",
+            type: "POST",
+            data: { id: programId },
+            dataType: "json",
+            success: function(response) {
+                if (response.has_dependencies) {
+                    // If there are sub-programs, show an error message
+                    Swal.fire({
+                        title: "Cannot Delete",
+                        text: "This RAO Program has associated Sub Programs. Please delete all Sub Programs first or reassign them to another RAO Program.",
+                        icon: "error",
+                        confirmButtonColor: "#3085d6"
+                    });
+                } else {
+                    // If no dependencies, proceed with confirmation dialog
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.post("mysql/delete_rao.php", { id: programId }, function (response) {
+                                if (response.status === "success") {
+                                    Swal.fire("Deleted!", response.message, "success");
+                                    fetchRao();
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            }, "json");
+                        }
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error checking dependencies:", error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Could not check for dependencies. Please try again.",
+                    icon: "error"
+                });
             }
         });
     }
 
     // 🟢 Confirm & Delete Sub Program
-    function confirmDeleteSub(programId) {
+    function confirmDeleteSub(programId, amount) {
         Swal.fire({
             title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            text: `You are about to delete a Sub Program with amount ₱${parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}. You won't be able to revert this!`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
@@ -686,8 +777,9 @@
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post("mysql/delete_sub.php", { id: programId }, function (response) {
+                $.post("mysql/delete_sub.php", { id: programId, amount: amount }, function (response) {
                     Swal.fire("Deleted!", response.message, "success");
+                    fetchRao();
                     fetchSub();
                 }, "json");
             }

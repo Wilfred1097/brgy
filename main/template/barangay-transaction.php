@@ -85,17 +85,17 @@
                 </div>
               </div>
               <div class="row mt-3">
-                  <!-- Buttons on the Left -->
-                  <div class="col-auto">
+                  <!-- Button on the Left -->
+                  <div class="col">
                       <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModal">Add New Barangay Transaction</button>
-                      <!-- <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#addTransactionModalWithDV">Add Barangay Transaction with Existing DV</button> -->
                   </div>
-                  <!-- <div class="col-auto">
-                      <button id="export-transaction" class="btn btn-primary">Export SOIC</button>
-                      <button id="export-disbursement" class="btn btn-primary" data-toggle="modal" data-target="#disbursementModal">
-                          Disbursement Voucher
-                      </button>
-                  </div> -->
+                  
+                  <!-- Buttons on the Right -->
+                  <div class="col text-end">
+                      <button id="export-ris" class="btn btn-primary">RIS</button>
+                      <!-- <button id="export-transmital" class="btn btn-primary">Transmittal letter</button>
+                      <button id="export-imcd" class="btn btn-primary">IMCD</button> -->
+                  </div>
               </div>
             </div>
           </div>
@@ -397,6 +397,12 @@
                       <table class="table display table-bordernone mt-0" id="barangay-transaction-history" style="width:100%">
                         <thead>
                           <tr>
+                              <th>
+                                <div class="form-check checkbox checkbox-solid-primary">
+                                  <input class="form-check-input" id="solid" type="checkbox"/>
+                                  <label class="form-check-label" for="solid"> </label>
+                                </div>
+                              </th>
                               <th>Disbursement Voucher No.</th>
                               <th>Fund Cluster</th>
                               <th>Entity Name</th>
@@ -932,6 +938,7 @@
                 data.forEach(transaction => {
                   let row = `
                     <tr>
+                      <td><input type="checkbox" class="form-check-input"></td>
                       <td>${transaction.voucher_no || 'N/A'}</td>
                       <td>${transaction.fund_cluster_name || 'N/A'}</td>
                       <td>${transaction.entity_name || 'N/A'}</td>
@@ -1025,6 +1032,12 @@
             $('#barangay-transaction-history tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
             });
+        });
+
+        // Select/Deselect all checkboxes
+        $("#solid").on("change", function () {
+            let isChecked = $(this).prop("checked");
+            $("#barangay-transaction-history tbody tr:visible input[type='checkbox']").prop("checked", isChecked);
         });
     });
 </script>
@@ -1347,6 +1360,54 @@ document.addEventListener('DOMContentLoaded', function() {
     row.find('.amount').val((quantity * unitPrice).toFixed(2));
   });
 </script>
+<script>
+    // Handle Export IMCD button click
+    $(document).ready(function() {
+        $('#export-ris').on('click', function() {
+            // Get all checked checkboxes in the transaction history table
+            let selectedCheckboxes = $('#barangay-transaction-history tbody input[type="checkbox"]:checked');
+            
+            // Check if any rows are selected
+            if (selectedCheckboxes.length === 0) {
+                // No rows selected, show alert
+                Swal.fire({
+                    title: "No Transactions Selected",
+                    text: "Please select at least one transaction to export RIS.",
+                    icon: "warning"
+                });
+            } else {
+                // Collect the transaction IDs from all selected rows
+                let selectedIds = [];
+                
+                selectedCheckboxes.each(function() {
+                    let row = $(this).closest("tr"); // Get the parent row
+                    let transactionId = row.find(".view-details-btn").data("id"); // Get ID from the edit button
+                    
+                    if (transactionId) {
+                        selectedIds.push(transactionId);
+                    }
+                });
+
+                // Log the selected IDs to console for debugging
+                console.log("Selected Transaction IDs for RIS:", selectedIds);
+                
+                if (selectedIds.length > 0) {
+                    // Convert array to a comma-separated string to pass as URL parameter
+                    let params = new URLSearchParams({ ids: selectedIds.join(',') });
+                    
+                    // Show brief processing message
+                    window.open("mysql/export_ris.php?" + params.toString(), "_blank");
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Could not retrieve any transaction IDs.",
+                        icon: "error"
+                    });
+                }
+            }
+        });
+    });
+  </script>
   </body>
 </html>
 

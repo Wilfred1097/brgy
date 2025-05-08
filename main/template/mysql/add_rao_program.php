@@ -8,13 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Prepare SQL statement
-        $sql = "INSERT INTO rao_program (year, name, amount) VALUES (:year, :programName, :amount)";
+        $sql = "INSERT INTO rao_program (year, name, amount, remaining_amount) VALUES (:year, :programName, :amount, :amount)";
         $stmt = $pdo->prepare($sql);
 
         // Bind parameters
         $stmt->bindParam(':year', $year, PDO::PARAM_INT);
         $stmt->bindParam(':programName', $programName, PDO::PARAM_STR);
         $stmt->bindParam(':amount', $amount, PDO::PARAM_STR);
+        $stmt->bindParam(':remaining_amount', $amount, PDO::PARAM_STR);
 
         // Execute statement
         if ($stmt->execute()) {

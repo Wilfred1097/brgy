@@ -1055,24 +1055,6 @@
     }
     </script>
   <script>
-      $(document).ready(function () {
-      // Select/Deselect all checkboxes
-      $("#solid").on("change", function () {
-          let isChecked = $(this).prop("checked");
-          $("#transaction-history tbody input[type='checkbox']").prop("checked", isChecked);
-      });
-
-      // Ensure if any checkbox is unchecked, the header checkbox gets unchecked too
-      $(document).on("change", "#transaction-history tbody input[type='checkbox']", function () {
-          if (!$(this).prop("checked")) {
-              $("#solid").prop("checked", false);
-          } else if ($("#transaction-history tbody input[type='checkbox']:checked").length === $("#transaction-history tbody input[type='checkbox']").length) {
-              $("#solid").prop("checked", true);
-          }
-      });
-  });
-  </script>
-  <script>
     $(document).ready(function () {
       // Handle date filtering
       $('#startDate, #endDate').on('change', function () {

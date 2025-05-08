@@ -30,11 +30,24 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
       <?php if ($userRole === "treasurer"): ?>
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="calendar-basic.php">
-              <i class="fa-solid fa-calendar-days"></i> <!-- Font Awesome Icon for Calendar -->
-              <h6 class="f-w-600">Events</h6>
+          <a class="sidebar-link" href="transaction.php">
+              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
+              <h6 class="f-w-600">Transaction</h6>
           </a>
       </li>
+      <!-- Show User Management only if the role is Treasurer -->
+      <?php endif; ?>
+
+       <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="barangay-transaction.php">
+              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
+              <h6 class="f-w-600">Barangay Transaction</h6>
+          </a>
+      </li>
+
+      <!-- Show User Management only if the role is Treasurer -->
+      <?php if ($userRole === "treasurer"): ?>
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
@@ -46,29 +59,9 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="transaction.php">
-              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
-              <h6 class="f-w-600">Transaction</h6>
-          </a>
-      </li>
-      <!-- Show User Management only if the role is Treasurer -->
-      <?php endif; ?>
-
-      <li class="sidebar-list">
-          <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="barangay-transaction.php">
-              <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
-              <h6 class="f-w-600">Barangay Transaction</h6>
-          </a>
-      </li>
-
-      <!-- Show User Management only if the role is Treasurer -->
-      <?php if ($userRole === "treasurer"): ?>
-      <li class="sidebar-list">
-          <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="income-report.php">
               <i class="fa-solid fa-money-bill-transfer"></i> <!-- Font Awesome Icon for Transactions -->
-              <h6 class="f-w-600">Income Report</h6>
+              <h6 class="f-w-600">Official Receipt</h6>
           </a>
       </li>
 
@@ -82,13 +75,21 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
 
       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="calendar-basic.php">
+              <i class="fa-solid fa-calendar-days"></i> <!-- Font Awesome Icon for Calendar -->
+              <h6 class="f-w-600">Events</h6>
+          </a>
+      </li>
+
+      <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="officials-management.php">
               <i class="fa-solid fa-users"></i> <!-- Font Awesome Icon for Transactions -->
               <h6 class="f-w-600">Officials Profile</h6>
           </a>
       </li>
 
-      <li class="sidebar-list">
+       <li class="sidebar-list">
           <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="user-management.php">
               <i class="fa-solid fa-users"></i> <!-- Font Awesome Icon for User Management -->
@@ -101,14 +102,6 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
           <a class="sidebar-link" href="file-management.php">
               <i class="fa-solid fa-folder"></i> <!-- Manage Files Icon -->
               <h6 class="f-w-600">File Management</h6>
-          </a>
-      </li>
-
-      <li class="sidebar-list">
-          <i class="fa-solid fa-thumbtack"></i>
-          <a class="sidebar-link" href="setting-configuration.php">
-              <i class="fa-solid fa-gear"></i> <!-- Settings Icon -->
-              <h6 class="f-w-600">Settings</h6>
           </a>
       </li>
 
@@ -127,8 +120,17 @@ $userRole = $_SESSION['role'] ?? 'User'; // Default to 'User' if role is not set
               <h6 class="f-w-600">User Logs</h6>
           </a>
       </li>
+
+       <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="setting-configuration.php">
+              <i class="fa-solid fa-gear"></i> <!-- Settings Icon -->
+              <h6 class="f-w-600">Settings</h6>
+          </a>
+      </li>
+
+      <!-- Show User Management only if the role is Treasurer -->
       <?php endif; ?>
-      
 
     </ul>
   </div>

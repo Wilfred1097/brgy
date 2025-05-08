@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             // Update query including image path
-            $query = "UPDATE officials SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?, age = ?, position = ?, gmail = ?, phone_number = ?, image_path = ? WHERE id = ?";
-            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $position, $gmail, $phone_number, $imagePath, $userId];
+            $query = "UPDATE officials SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?, age = ?, position = ?, gmail = ?, phone_number = ?, image = ? WHERE id = ?";
+            $params = [$firstName, $middleName, $lastName, $address, $dob, $age, $position, $gmail, $phone_number, $imageName, $userId];
         } else {
             // Update query without changing the image
             $query = "UPDATE officials SET first_name = ?, middle_name = ?, last_name = ?, address = ?, date_of_birth = ?, age = ?, position = ?, gmail = ?, phone_number = ? WHERE id = ?";

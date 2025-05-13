@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $end_date = $_POST['endDate'] ?? '';
     $end_time = $_POST['endTime'] ?? '';
     $location = $_POST['eventLocation'] ?? '';
+    $location = $_POST['eventLocation'] ?? '';
 
     // Validate required fields
     if (empty($title) || empty($description) || empty($start_date) || empty($start_time) || empty($end_date) || empty($end_time) || empty($location)) {
